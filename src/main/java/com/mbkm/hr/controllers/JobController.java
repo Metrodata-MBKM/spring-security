@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,12 +49,12 @@ public class JobController implements BaseController<Job, String> {
         }
     }
 
-    @PostMapping
+    @PostMapping("/job")
     public Job save(@RequestBody Job job) {
-        if (getById(job.getId()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Is Already Exist");
-        } else {
+        try {
             return jobService.save(job);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Is Already Exist");
         }
     }
 
@@ -67,10 +68,10 @@ public class JobController implements BaseController<Job, String> {
     }
 
     @DeleteMapping("/job/{id}")
-    public String delete(String id) {
+    public String delete(@PathVariable String id) {
         try {
             jobService.delete(id);
-            return ("Job with ID: " + id + "Deleted Successfully");
+            return ("Job with ID: " + id + " Deleted Successfully");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }

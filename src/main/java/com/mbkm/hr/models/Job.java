@@ -28,14 +28,13 @@ import lombok.Setter;
  * @author Asus
  */
 @Entity
-@Table(name = "tb_job")
+@Table(name = "jobs")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Job {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "job_id", length = 10)
     private String id;
 
@@ -47,8 +46,17 @@ public class Job {
 
     @Column(name = "max_salary")
     private double max_salary;
+    
+    
 
 //    @OneToMany(mappedBy = "job")
 //    private Set<Employee> employee;
+
+    public Job(String id, String title, double min_salary, double max_salary) {
+        this.id = id;
+        this.title = title;
+        this.min_salary = min_salary;
+        this.max_salary = max_salary;
+    }
 
 }

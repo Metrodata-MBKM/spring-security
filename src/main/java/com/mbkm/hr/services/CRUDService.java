@@ -13,11 +13,11 @@ public abstract class CRUDService<T extends JpaRepository, Object, K> {
         return repository.findAll();
     }
 
-    public Optional<T> getById(K id){
+    public Optional<Object> getById(K id){
         return repository.findById(id);
     }
 
-    public boolean save(T object){
+    public boolean save(Object object){
         try{
             repository.save(object);
             return true;

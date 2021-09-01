@@ -74,9 +74,8 @@ public class DepartmentController implements BaseController<Department, Integer>
 
 //    @Override
     @DeleteMapping("/department/{id}")
-    public String delete(@PathVariable(value="id") Integer id) {
-        if (departmentService.getById(id).isPresent()){
-            departmentService.delete(id);
+    public String delete(@PathVariable Integer id) {
+        if (departmentService.delete(id)){
             return ("Job with ID: " + id + "Deleted Successfully");
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");

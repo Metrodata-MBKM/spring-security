@@ -9,16 +9,12 @@ package com.mbkm.hr.models;
  *
  * @author Asus
  */
+import java.util.List;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,11 +42,10 @@ public class Job {
 
     @Column(name = "max_salary")
     private double max_salary;
-    
-    
 
-//    @OneToMany(mappedBy = "job")
-//    private Set<Employee> employee;
+    @OneToMany(mappedBy = "job", fetch= FetchType.EAGER)
+    @JsonBackReference
+    private Set<Employee> employee;
 
     public Job(String id, String title, double min_salary, double max_salary) {
         this.id = id;

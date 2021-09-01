@@ -5,10 +5,15 @@
  */
 package com.mbkm.hr.repositories;
 
+import com.mbkm.hr.models.Job;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 /**
  *
  * @author Asus
  */
-public interface JobRepository {
+@Repository
+public interface JobRepository extends JpaRepository<Job, String>{
     
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,14 +42,14 @@ public class JobController implements BaseController<Job, String> {
     @GetMapping("/job/{id}")
     public Job getById(String id) {
         try {
-            return (Job) jobService.getById(id).get();
+            return jobService.getById(id).get();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }
     }
 
     @PostMapping
-    public Job save(Job job) {
+    public Job save(@RequestBody Job job) {
         if (getById(job.getId()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Is Already Exist");
         } else {
@@ -57,7 +58,7 @@ public class JobController implements BaseController<Job, String> {
     }
 
     @PutMapping
-    public Job update(Job job) {
+    public Job update(@RequestBody Job job) {
         if (jobService.getById(job.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Not Found");
         } else {

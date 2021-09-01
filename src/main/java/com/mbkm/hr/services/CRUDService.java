@@ -28,7 +28,7 @@ public abstract class CRUDService<T extends JpaRepository, Object, Key> {
 
     public boolean delete(Key id){
         try{
-            repository.delete(id);
+            repository.deleteById(id);
             return true;
         }catch (Exception e){
             System.out.println(e.getMessage());

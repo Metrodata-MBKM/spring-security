@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CRUDService<T extends JpaRepository, Object, K> {
+public abstract class CRUDService<T extends JpaRepository, Object, Key> {
 
     T repository;
 
@@ -13,21 +13,20 @@ public abstract class CRUDService<T extends JpaRepository, Object, K> {
         return repository.findAll();
     }
 
-    public Optional<T> getById(K id){
+    public Optional<T> getById(Key id){
         return repository.findById(id);
     }
 
-    public boolean save(T object){
+    public Object save(Object object){
         try{
-            repository.save(object);
-            return true;
+            return (Object) repository.save(object);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return false;
+            return null;
         }
     }
 
-    public boolean delete(K id){
+    public boolean delete(Key id){
         try{
             repository.delete(id);
             return true;

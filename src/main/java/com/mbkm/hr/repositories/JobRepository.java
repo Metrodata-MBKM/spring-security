@@ -5,13 +5,15 @@
  */
 package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.models.Department;
+import com.mbkm.hr.models.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author hp
+ * @author Asus
  */
-public interface DepartmentRepository extends JpaRepository<Department, Integer>{
+@Repository
+public interface JobRepository extends JpaRepository<Job, String>{
     
 }

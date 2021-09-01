@@ -43,14 +43,14 @@ public class JobController implements BaseController<Job, String> {
         try {
             return (Job) jobService.getById(id).get();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Region with ID: " + id + " Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }
     }
 
     @PostMapping
     public Job save(Job job) {
         if (getById(job.getId()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Region with ID: " + job.getId() + " Is Already Exist");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Is Already Exist");
         } else {
             return jobService.save(job);
         }
@@ -59,7 +59,7 @@ public class JobController implements BaseController<Job, String> {
     @PutMapping
     public Job update(Job job) {
         if (jobService.getById(job.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Region with ID: " + job.getId() + " Not Found");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Not Found");
         } else {
             return jobService.save(job);
         }
@@ -69,9 +69,9 @@ public class JobController implements BaseController<Job, String> {
     public String delete(String id) {
         try {
             jobService.delete(id);
-            return ("Region with ID: " + id + "Deleted Successfully");
+            return ("Job with ID: " + id + "Deleted Successfully");
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Region with ID: " + id + " Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }
     }
 

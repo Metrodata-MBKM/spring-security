@@ -8,11 +8,13 @@ package com.mbkm.hr.services;
 import com.mbkm.hr.models.Department;
 import com.mbkm.hr.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author hp
  */
+@Service
 public class DepartmentService extends CRUDService<DepartmentRepository, Department, Integer>{
     @Autowired
     public DepartmentService(DepartmentRepository departmentRepository){

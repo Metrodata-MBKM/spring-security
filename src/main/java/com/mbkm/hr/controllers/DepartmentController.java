@@ -6,37 +6,81 @@
 package com.mbkm.hr.controllers;
 
 import com.mbkm.hr.models.Department;
+import com.mbkm.hr.services.DepartmentService;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
  * @author hp
  */
+@RestController
 public class DepartmentController implements BaseController<Department, Integer>{
+    
+    @Autowired
+    DepartmentService departmentService;
+
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
 
     @Override
+    @GetMapping("/department")
+    @ResponseBody
     public List<Department> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return departmentService.getAll();
     }
 
     @Override
+    @GetMapping("/department/{id}")
     public Department getById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return departmentService.getById(id).get();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
+        }
     }
 
     @Override
-    public Department save(Department object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @PostMapping("/department")
+    public Department save(@RequestBody Department department) {
+//        return departmentService.save(department);
+        if (departmentService.getById(department.getId()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + department.getId() + " Is Already Exist");
+        } else {
+            return departmentService.save(department);
+        }
     }
 
-    @Override
-    public Department update(Department object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    @Override
+    @PutMapping("/department/{id}")
+    public Department update(@RequestBody Department department) {
+        if (departmentService.getById(department.getId()).isPresent()) {
+            return departmentService.save(department);
+        } else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + department.getId() + " Not Found");
+        }
     }
 
-    @Override
-    public String delete(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    @Override
+    @DeleteMapping("/department/{id}")
+    public String delete(@PathVariable(value="id") Integer id) {
+        if (departmentService.getById(id).isPresent()){
+            departmentService.delete(id);
+            return ("Job with ID: " + id + "Deleted Successfully");
+        } else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
+        }
     }
     
 }

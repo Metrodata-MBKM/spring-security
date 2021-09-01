@@ -11,13 +11,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.Data;
 
 /**
  *
  * @author hp
  */
 @Entity
-@Table(name = "regions")
+@Table(name = "departments")
+@Data
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
@@ -31,5 +33,5 @@ public class Department {
     private int manager;
     
     @Column(name = "location_id", length = 30)
-    private int department;
+    private int location;
 }

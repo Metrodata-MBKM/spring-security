@@ -7,11 +7,13 @@ package com.mbkm.hr.repositories;
 
 import com.mbkm.hr.models.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author hp
  */
+@Repository
 public interface DepartmentRepository extends JpaRepository<Department, Integer>{
     
 }

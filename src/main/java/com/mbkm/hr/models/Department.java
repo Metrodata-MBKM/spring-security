@@ -5,6 +5,8 @@
  */
 package com.mbkm.hr.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,6 +36,7 @@ public class Department {
     @Column(name = "manager_id", length = 30)
     private int manager;
     
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;

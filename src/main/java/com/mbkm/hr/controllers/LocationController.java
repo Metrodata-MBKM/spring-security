@@ -64,8 +64,8 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @PutMapping("/{id}")
-    public Location update(@RequestBody Location location) {
-        if (locationService.getById(location.getId()).isPresent()) {
+    public Location update(@PathVariable("id") Integer id, @RequestBody Location location) {
+        if (locationService.getById(id).isPresent()) {
             return locationService.save(location);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");

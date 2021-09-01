@@ -66,7 +66,7 @@ public class DepartmentController implements BaseController<Department, Integer>
 
 //    @Override
     @PutMapping("/{id}")
-    public Department update(@RequestBody Department department) {
+    public Department update(@PathVariable("id") Integer id, @RequestBody Department department) {
         if (departmentService.getById(department.getId()).isPresent()) {
             return departmentService.save(department);
         } else {

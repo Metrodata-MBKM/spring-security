@@ -9,19 +9,21 @@ import com.mbkm.hr.models.Job;
 import com.mbkm.hr.services.JobService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
  * @author Asus
  */
-@Controller
-public class JobController implements BaseController<Job, String>{
+@RestController
+public class JobController implements BaseController<Job, String> {
 
     @Autowired
     JobService jobService;
@@ -38,27 +40,39 @@ public class JobController implements BaseController<Job, String>{
 
     @GetMapping("/job/{id}")
     public Job getById(String id) {
-        return (Job) jobService.getById(id).get();
+        try {
+            return (Job) jobService.getById(id).get();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Region with ID: " + id + " Not Found");
+        }
     }
 
     @PostMapping
     public Job save(Job job) {
-        return jobService.save(job);
+        if (getById(job.getId()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Region with ID: " + job.getId() + " Is Already Exist");
+        } else {
+            return jobService.save(job);
+        }
     }
 
     @PutMapping
     public Job update(Job job) {
-        return jobService.save(job);
+        if (jobService.getById(job.getId()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Region with ID: " + job.getId() + " Not Found");
+        } else {
+            return jobService.save(job);
+        }
     }
 
     @DeleteMapping("/job/{id}")
     public String delete(String id) {
-        jobService.delete(id);
-        return "Delete Successfully";
+        try {
+            jobService.delete(id);
+            return ("Region with ID: " + id + "Deleted Successfully");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Region with ID: " + id + " Not Found");
+        }
     }
-    
-    
-    
-    
-    
+
 }

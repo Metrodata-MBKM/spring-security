@@ -13,7 +13,7 @@ public abstract class CRUDService<T extends JpaRepository, Object, Key> {
         return repository.findAll();
     }
 
-    public Optional<T> getById(Key id){
+    public Optional<Object> getById(Key id){
         return repository.findById(id);
     }
 

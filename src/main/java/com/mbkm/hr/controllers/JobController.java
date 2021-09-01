@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author Asus
  */
 @RestController
+@RequestMapping("/job")
 public class JobController implements BaseController<Job, String> {
 
     @Autowired
@@ -34,14 +35,13 @@ public class JobController implements BaseController<Job, String> {
         this.jobService = jobService;
     }
 
-    @GetMapping("/job/")
-    @ResponseBody
+    @GetMapping
     public List<Job> getAll() {
         return jobService.getAll();
     }
 
-    @GetMapping("/job/{id}")
-    public Job getById(String id) {
+    @GetMapping("/{id}")
+    public Job getById(@PathVariable(value="id") String id) {
         try {
             return jobService.getById(id).get();
         } catch (Exception e) {
@@ -49,30 +49,29 @@ public class JobController implements BaseController<Job, String> {
         }
     }
 
-    @PostMapping("/job")
+    @PostMapping
     public Job save(@RequestBody Job job) {
-        try {
-            return jobService.save(job);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Is Already Exist");
-        }
-    }
-
-    @PutMapping
-    public Job update(@RequestBody Job job) {
         if (jobService.getById(job.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Not Found");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Is Already Exist");
         } else {
             return jobService.save(job);
         }
     }
 
-    @DeleteMapping("/job/{id}")
-    public String delete(@PathVariable String id) {
-        try {
-            jobService.delete(id);
+    @PatchMapping
+    public Job update(@RequestBody Job job) {
+        if (!jobService.getById(job.getId()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + job.getId() + " Not Found");
+        } else {
+            return jobService.save(job);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable(value="id") String id) {
+        if (jobService.delete(id)) {
             return ("Job with ID: " + id + " Deleted Successfully");
-        } catch (Exception e) {
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }
     }

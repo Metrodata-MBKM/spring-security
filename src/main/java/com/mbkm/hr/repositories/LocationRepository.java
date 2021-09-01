@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.repository;
+package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.model.Location;
+import com.mbkm.hr.models.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author loisceka
  */
 @Repository
-public interface LocationRepository extends JpaRepository<Location, Integer>{
-    
+public interface LocationRepository extends JpaRepository<Location, Integer> {
+
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.service;
+package com.mbkm.hr.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public abstract class CRUDService<T extends JpaRepository, Object, Key> {
 
     public boolean delete(Key id) {
         try {
-            repository.delete(id);
+            repository.deleteById(id);
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());

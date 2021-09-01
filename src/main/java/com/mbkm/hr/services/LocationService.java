@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.service;
+package com.mbkm.hr.services;
 
-
-import com.mbkm.hr.model.Location;
-import com.mbkm.hr.repository.LocationRepository;
+import com.mbkm.hr.models.Location;
+import com.mbkm.hr.repositories.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LocationService extends CRUDService<LocationRepository, Location, Integer> {
-    
+
     @Autowired
-    public LocationService(LocationRepository locationRepository){
+    public LocationService(LocationRepository locationRepository) {
         super.repository = locationRepository;
     }
 

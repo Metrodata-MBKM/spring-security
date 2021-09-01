@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.controller;
+package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.model.Location;
-import com.mbkm.hr.service.LocationService;
+import com.mbkm.hr.models.Location;
+import com.mbkm.hr.services.LocationService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,9 +76,8 @@ public class LocationController implements BaseController<Location, Integer> {
     public String delete(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             locationService.delete(id);
-            return "True";
+            return "ID: " + id + " Successfully deleted !";
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
     }
-
 }

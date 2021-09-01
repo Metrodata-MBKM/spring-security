@@ -49,9 +49,8 @@ public class Location {
     @Column(name = "state_province", length = 25)
     private String province;
 
-    @ManyToOne
-    @JoinColumn(name = "country_id", nullable = false)
-    private Country country;
+    @Column(name = "country_id", nullable = false)
+    private String country;
 
     @OneToMany(mappedBy = "department")
     private Set<Department> departments;

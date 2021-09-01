@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author hp
  */
 @RestController
+@RequestMapping("/department")
 public class DepartmentController implements BaseController<Department, Integer>{
     
     @Autowired
@@ -35,14 +37,14 @@ public class DepartmentController implements BaseController<Department, Integer>
     }
 
     @Override
-    @GetMapping("/department")
+    @GetMapping
     @ResponseBody
     public List<Department> getAll() {
         return departmentService.getAll();
     }
 
     @Override
-    @GetMapping("/department/{id}")
+    @GetMapping("/{id}")
     public Department getById(Integer id) {
         try {
             return departmentService.getById(id).get();
@@ -52,7 +54,7 @@ public class DepartmentController implements BaseController<Department, Integer>
     }
 
     @Override
-    @PostMapping("/department")
+    @PostMapping
     public Department save(@RequestBody Department department) {
 //        return departmentService.save(department);
         if (departmentService.getById(department.getId()).isPresent()) {
@@ -63,7 +65,7 @@ public class DepartmentController implements BaseController<Department, Integer>
     }
 
 //    @Override
-    @PutMapping("/department/{id}")
+    @PutMapping("/{id}")
     public Department update(@RequestBody Department department) {
         if (departmentService.getById(department.getId()).isPresent()) {
             return departmentService.save(department);
@@ -73,7 +75,7 @@ public class DepartmentController implements BaseController<Department, Integer>
     }
 
 //    @Override
-    @DeleteMapping("/department/{id}")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable Integer id) {
         if (departmentService.delete(id)){
             return ("Job with ID: " + id + "Deleted Successfully");

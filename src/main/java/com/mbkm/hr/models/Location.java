@@ -52,6 +52,6 @@ public class Location {
     @Column(name = "country_id", nullable = false)
     private String country;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "location")
     private Set<Department> departments;
 }

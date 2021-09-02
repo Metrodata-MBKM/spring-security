@@ -35,8 +35,9 @@ public class Department {
     private String name;
     
     @Nullable
-    @Column(name = "manager_id", length = 30)
-    private Integer manager;
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
     
 //    @JsonManagedReference
     @ManyToOne

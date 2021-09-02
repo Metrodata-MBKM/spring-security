@@ -1,22 +1,36 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.mbkm.hr.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.sql.Date;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
-import java.sql.Date;
-import java.util.Set;
-
+/**
+ *
+ * @author hp
+ */
 @Entity
 @Table(name = "employees")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Employee {
+public class Manager {
     @Id
     @Column(name = "employee_id")
     private Integer id;
@@ -48,11 +62,11 @@ public class Employee {
     private Double commissionPct;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "department_id")
     private Department department;
     
     @OneToMany(mappedBy = "manager")
     @JsonBackReference
     private Set<Department> departments;
-
 }

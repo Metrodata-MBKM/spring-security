@@ -48,7 +48,7 @@ public class CountryController implements BaseController<Country, String> {
 
     @Override
     @PutMapping
-    public Country update(@RequestBody Country country) {
+    public Country update(String id, Country country) {
         if (countryService.getById(country.getId()).isPresent()) {
             return countryService.save(country);
         } else {

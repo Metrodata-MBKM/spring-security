@@ -46,15 +46,8 @@ public class Employee {
     @Column(name = "commission_pct")
     private Double commissionPct;
 
-    public Employee(Integer id, String firstName, String lastName, String email, String phoneNumber, Date hireDate, Job job, double salary, double commissionPct) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.hireDate = hireDate;
-        this.job = job;
-        this.salary = salary;
-        this.commissionPct = commissionPct;
-    }
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
 }

@@ -58,9 +58,9 @@ public class JobController implements BaseController<Job, String> {
         }
     }
 
-    @PatchMapping
-    public Job update(@RequestBody Job job) {
-        if (!jobService.getById(job.getId()).isPresent()) {
+    @PatchMapping("/{id}")
+    public Job update(@PathVariable("id") String id, @RequestBody Job job) {
+        if (!jobService.getById(id).isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + job.getId() + " Not Found");
         } else {
             return jobService.save(job);

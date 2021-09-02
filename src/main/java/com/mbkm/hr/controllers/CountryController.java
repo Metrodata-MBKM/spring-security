@@ -47,9 +47,9 @@ public class CountryController implements BaseController<Country, String> {
     }
 
     @Override
-    @PutMapping
-    public Country update(String id, Country country) {
-        if (countryService.getById(country.getId()).isPresent()) {
+    @PatchMapping("/{id}")
+    public Country update(@PathVariable("id") String id, @RequestBody  Country country) {
+        if (countryService.getById(id).isPresent()) {
             return countryService.save(country);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Duplicate data!");

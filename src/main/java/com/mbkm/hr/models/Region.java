@@ -10,18 +10,17 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "region")
+@Table(name = "regions")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Region {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(length = 5)
-    private Long id;
+    @Column(name="region_id" ,length = 5)
+    private Integer id;
 
-    @Column(length = 25)
+    @Column(name = "region_name",length = 25)
     private String name;
 
     @JsonBackReference

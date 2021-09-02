@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_country")
+@Table(name = "countries")
 @Getter
 @Setter
 @NoArgsConstructor

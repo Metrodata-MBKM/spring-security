@@ -66,9 +66,9 @@ public class DepartmentController implements BaseController<Department, Integer>
     }
 
 //    @Override
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public Department update(@PathVariable("id") Integer id, @RequestBody Department department) {
-        if (departmentService.getById(department.getId()).isPresent()) {
+        if (departmentService.getById(id).isPresent()) {
             return departmentService.save(department);
         } else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + department.getId() + " Not Found");

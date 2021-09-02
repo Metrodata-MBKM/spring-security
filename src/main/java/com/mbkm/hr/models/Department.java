@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import org.springframework.lang.Nullable;
 
 /**
  *
@@ -27,22 +28,22 @@ import java.util.Set;
 @Setter
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
     @Column(name = "department_id")
-    private int id;
+    private Integer id;
     
     @Column(name = "department_name", length = 30)
     private String name;
     
+    @Nullable
     @Column(name = "manager_id", length = 30)
     private Integer manager;
     
-    @JsonManagedReference
+//    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @OneToMany
+    @OneToMany(mappedBy = "department")
     @JsonBackReference
     private Set<Employee> employees;
 }

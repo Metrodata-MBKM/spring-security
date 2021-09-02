@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
@@ -21,6 +23,8 @@ import java.util.Set;
 @Entity
 @Table(name = "departments")
 @Data
+@Getter
+@Setter
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )

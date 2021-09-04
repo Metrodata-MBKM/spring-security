@@ -1,5 +1,6 @@
-package com.metrodatambkm.security.entities;
+package com.metrodatambkm.security.entities.credentials;
 
+import com.metrodatambkm.security.entities.permission.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

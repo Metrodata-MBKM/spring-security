@@ -1,15 +1,17 @@
-package com.metrodatambkm.security.entities;
+package com.metrodatambkm.security.entities.permission;
 
+import com.metrodatambkm.security.entities.permission.Privilege;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name = "privileges")
+@Table(name = "roles")
 @Data @AllArgsConstructor @NoArgsConstructor
-public class Privilege {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,5 +19,8 @@ public class Privilege {
 
     @Column(name = "name", length = 50)
     private String name;
+
+    @ManyToMany
+    private Set<Privilege> privileges;
 
 }

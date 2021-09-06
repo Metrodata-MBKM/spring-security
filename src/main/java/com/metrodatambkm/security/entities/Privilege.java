@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.metrodatambkm.security.entity.permission;
+package com.metrodatambkm.security.entities;
 
 import java.util.Set;
 import javax.persistence.Column;
@@ -32,6 +32,6 @@ public class Privilege {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
     
-    @ManyToMany(mappedBy = "privileges")
+    @ManyToMany(mappedBy = "rolePrivileges")
     private Set<Role> roles;
 }

@@ -9,7 +9,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.management.relation.Role;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,7 +17,7 @@ public class UserModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "username", length = 50, unique = true)
     private String username;
@@ -33,13 +32,13 @@ public class UserModel implements Serializable {
     @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private List<RoleModel> role;
+    private Set<RoleModel> role;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -67,11 +66,11 @@ public class UserModel implements Serializable {
         this.email = email;
     }
 
-    public List<RoleModel> getRole() {
+    public Set<RoleModel> getRole() {
         return role;
     }
 
-    public void setRole(List<RoleModel> role) {
+    public void setRole(Set<RoleModel> role) {
         this.role = role;
     }
 }

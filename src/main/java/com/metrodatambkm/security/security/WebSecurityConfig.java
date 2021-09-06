@@ -31,29 +31,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login").permitAll()
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
-                .and()
-                .cors()
-                .and()
-                .csrf()
-                .disable();
+                ;
+//                .and()
+//                .cors()
+//                .and()
+//                .csrf()
+//                .disable();
     }
     @Bean
     public BCryptPasswordEncoder encoder() { return new BCryptPasswordEncoder(); }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-        auth.inMemoryAuthentication()
-                .passwordEncoder(encoder())
-                .withUser("admin").password(encoder().encode("admin123"))
-                .roles("ADMIN");
-    }
-//
-//    @Qualifier("userDetailsServiceImpl")
 //    @Autowired
-//    private UserDetailsService userDetailsService;
-//
-//    @Autowired
-//    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+//        auth.inMemoryAuthentication()
+//                .passwordEncoder(encoder())
+//                .withUser("admin").password(encoder().encode("admin123"))
+//                .roles("ADMIN");
 //    }
+//
+    @Qualifier("userDetailsServiceImpl")
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+    }
 }

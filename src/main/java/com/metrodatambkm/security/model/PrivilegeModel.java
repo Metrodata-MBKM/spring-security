@@ -7,16 +7,20 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "privilege")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PrivilegeModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", length = 50)
     private String name;
@@ -24,14 +28,13 @@ public class PrivilegeModel implements Serializable {
     @ManyToMany(mappedBy = "privilege", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private List<RoleModel> privilegeRole;
+    private Set<RoleModel> privilegeRole;
 
-
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -43,11 +46,11 @@ public class PrivilegeModel implements Serializable {
         this.name = name;
     }
 
-    public List<RoleModel> getPrivilegeRole() {
+    public Set<RoleModel> getPrivilegeRole() {
         return privilegeRole;
     }
 
-    public void setPrivilegeRole(List<RoleModel> privilegeRole) {
+    public void setPrivilegeRole(Set<RoleModel> privilegeRole) {
         this.privilegeRole = privilegeRole;
     }
 }

@@ -17,7 +17,7 @@ public class RoleModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", length = 50)
     private String name;
@@ -31,13 +31,13 @@ public class RoleModel implements Serializable {
     @JoinColumn(name = "id_privilege", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private List<PrivilegeModel> privilege;
+    private Set<PrivilegeModel> privilege;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -57,11 +57,11 @@ public class RoleModel implements Serializable {
         this.userRole = userRole;
     }
 
-    public List<PrivilegeModel> getPrivilege() {
+    public Set<PrivilegeModel> getPrivilege() {
         return privilege;
     }
 
-    public void setPrivilege(List<PrivilegeModel> privilege) {
+    public void setPrivilege(Set<PrivilegeModel> privilege) {
         this.privilege = privilege;
     }
 }

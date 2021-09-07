@@ -26,6 +26,6 @@ public class User {
     @Column(name = "email", length = 50, unique = true)
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 }

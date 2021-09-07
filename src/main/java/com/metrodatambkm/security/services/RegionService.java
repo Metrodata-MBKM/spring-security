@@ -24,4 +24,8 @@ public class RegionService {
     public Region getById(Integer id){
         return regionRepository.findById(id).get();
     }
+
+    public Region create(Region region){
+        return regionRepository.save(region);
+    }
 }

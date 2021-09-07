@@ -10,6 +10,7 @@ import com.mbkm.hr.services.DepartmentService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/department")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class DepartmentController implements BaseController<Department, Integer>{
     
     @Autowired
@@ -40,12 +42,14 @@ public class DepartmentController implements BaseController<Department, Integer>
     @Override
     @GetMapping
     @ResponseBody
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Department> getAll() {
         return departmentService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Department getById(Integer id) {
         try {
             return departmentService.getById(id).get();
@@ -56,6 +60,7 @@ public class DepartmentController implements BaseController<Department, Integer>
 
     @Override
     @PostMapping
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Department save(@RequestBody Department department) {
 //        return departmentService.save(department);
         if (departmentService.getById(department.getId()).isPresent()) {
@@ -67,6 +72,7 @@ public class DepartmentController implements BaseController<Department, Integer>
 
 //    @Override
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public Department update(@PathVariable("id") Integer id, @RequestBody Department department) {
         if (departmentService.getById(id).isPresent()) {
             return departmentService.save(department);
@@ -77,6 +83,7 @@ public class DepartmentController implements BaseController<Department, Integer>
 
 //    @Override
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable Integer id) {
         if (departmentService.delete(id)){
             return ("Job with ID: " + id + "Deleted Successfully");

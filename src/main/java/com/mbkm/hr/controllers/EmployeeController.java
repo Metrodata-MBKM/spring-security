@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/employee")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Autowired
@@ -23,12 +25,14 @@ public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Override
     @GetMapping("")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Employee> getAll() {
         return employeeService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Employee getById(@PathVariable Integer id) {
         try{
             return employeeService.getById(id).get();
@@ -39,6 +43,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Override
     @PostMapping
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Employee save(@RequestBody Employee employee) {
         if(employeeService.getById(employee.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee with ID: " + employee.getId() + " Is Already Exist");
@@ -49,6 +54,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Override
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public Employee update(@PathVariable("id") Integer id, @RequestBody Employee employee) {
         if (!employeeService.getById(id).isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with ID: " + employee.getId() + " Not Found");
@@ -59,6 +65,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Override
     @DeleteMapping
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(Integer id) {
         if (employeeService.delete(id)) {
             return ("Employee with ID: " + id + " Deleted Successfully");

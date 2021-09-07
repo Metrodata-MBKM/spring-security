@@ -8,7 +8,6 @@ package com.mbkm.hr.services;
 import com.mbkm.hr.models.AppUserDetails;
 import com.mbkm.hr.models.User;
 import com.mbkm.hr.repositories.AppUserRepository;
-import com.metrodatambkm.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

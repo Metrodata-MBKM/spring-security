@@ -11,11 +11,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "privilege")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class PrivilegeModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

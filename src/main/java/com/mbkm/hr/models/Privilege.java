@@ -5,38 +5,27 @@
  */
 package com.mbkm.hr.models;
 
-import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  *
- * @author WahyuKu
+ * @author hp
  */
 @Entity
-@Table(name = "users")
+@Table(name = "privileges")
 @Data 
 @AllArgsConstructor 
 @NoArgsConstructor
-public class User {
+public class Privilege {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "username", length = 50, unique = true)
-    private String username;
+    @Column(name = "name", length = 50)
+    private String name;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "email", length = 50, unique = true)
-    private String email;
-
-    @ManyToMany(fetch=FetchType.EAGER)
-    private Set<Role> roles;
 }

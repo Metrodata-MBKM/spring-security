@@ -1,10 +1,10 @@
-package com.metrodatambkm.security;
+package com.mbkm.hr;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SecurityApplicationTests {
+class HrApplicationTests {
 
 	@Test
 	void contextLoads() {

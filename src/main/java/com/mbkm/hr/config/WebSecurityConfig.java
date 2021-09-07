@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
+//@EnableWebSecurity(prePostEnable)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     private AppUserDetailsService appUserDetailsService;
@@ -48,9 +49,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/region").hasAuthority("CREATE_REGION")
-                .antMatchers("/region/**").hasAnyRole("ADMIN","OPERATOR")
-                .antMatchers("/employee/**").hasRole("ADMIN")
+//                .antMatchers(HttpMethod.POST, "/region").hasAuthority("CREATE_REGION")
+//                .antMatchers("/region/**").hasAnyRole("ADMIN","OPERATOR")
+//                .antMatchers("/employee/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

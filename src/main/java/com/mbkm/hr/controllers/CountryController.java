@@ -69,7 +69,7 @@ public class CountryController implements BaseController<Country, String> {
     @Override
     @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('UPDATE_DATA')")
-    public Country update(@PathVariable("id") String id, @RequestBody  Country country) {
+    public Country update(@PathVariable("id") String id, @RequestBody Country country) {
         if (countryService.getById(id).isPresent()) {
             return countryService.save(country);
         } else {

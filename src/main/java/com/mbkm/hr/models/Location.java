@@ -55,7 +55,7 @@ public class Location {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
-    
+
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "location")
     private Set<Department> departments;

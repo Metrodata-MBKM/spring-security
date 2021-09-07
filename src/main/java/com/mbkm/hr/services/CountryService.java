@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CountryService extends CRUDService<CountryRepository, Country, String> {
+
     @Autowired
     public CountryService(CountryRepository countryRepository) {
         super.repository = countryRepository;

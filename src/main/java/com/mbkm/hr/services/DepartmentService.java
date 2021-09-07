@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
  * @author loisceka
  */
 @Service
-public class DepartmentService extends CRUDService<DepartmentRepository, Department, Integer>{
+public class DepartmentService extends CRUDService<DepartmentRepository, Department, Integer> {
+
     @Autowired
-    public DepartmentService(DepartmentRepository departmentRepository){
+    public DepartmentService(DepartmentRepository departmentRepository) {
         super.repository = departmentRepository;
     }
 }

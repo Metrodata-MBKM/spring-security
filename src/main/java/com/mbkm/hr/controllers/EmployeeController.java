@@ -32,14 +32,15 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("employee")
 @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class EmployeeController implements BaseController<Employee, Integer> {
+
     @Autowired
     EmployeeService employeeService;
-    
+
     @Override
     public List<Employee> getAll() {
         return employeeService.getAll();
     }
-    
+
     @GetMapping()
     public List<EmployeeRequestDTO> listAll() {
         if (employeeService.getAll().isEmpty()) {
@@ -47,7 +48,7 @@ public class EmployeeController implements BaseController<Employee, Integer> {
         }
         return employeeService.getAllReq();
     }
-    
+
     @GetMapping("/{id}")
     public Employee getById(@PathVariable Integer id) {
         if (employeeService.getById(id).isPresent()) {
@@ -55,18 +56,17 @@ public class EmployeeController implements BaseController<Employee, Integer> {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
     }
-    
+
 //    @PostMapping()
 //    public EmployeeResponseDTO saveEmployeeRequestDTO(@RequestBody RegisterDTO registerDTO){
 //        return employeeService.registerEmployee(registerDTO);
 //    }
-    
-     @Override
+    @Override
     @PostMapping
     public Employee save(@RequestBody Employee employee) {
-        if(employeeService.getById(employee.getId()).isPresent()) {
+        if (employeeService.getById(employee.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee with ID: " + employee.getId() + " Is Already Exist");
-        }else{
+        } else {
             return employeeService.save(employee);
         }
     }
@@ -91,6 +91,4 @@ public class EmployeeController implements BaseController<Employee, Integer> {
         }
     }
 
-
-    
 }

@@ -8,7 +8,6 @@ package com.mbkm.hr.services;
 import com.mbkm.hr.dto.EmployeeRequestDTO;
 import com.mbkm.hr.dto.EmployeeResponseDTO;
 import com.mbkm.hr.dto.RegisterDTO;
-import com.mbkm.hr.models.Department;
 import com.mbkm.hr.models.Employee;
 import com.mbkm.hr.repositories.DepartmentRepository;
 import com.mbkm.hr.repositories.EmployeeRepository;
@@ -26,7 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author loisceka
  */
 @Service
-public class EmployeeService extends CRUDService<EmployeeRepository, Employee, Integer>{
+public class EmployeeService extends CRUDService<EmployeeRepository, Employee, Integer> {
 
     private EmployeeRepository employeeRepository;
     private JobRepository jobRepository;
@@ -96,8 +95,8 @@ public class EmployeeService extends CRUDService<EmployeeRepository, Employee, I
     public Employee saveEmployee(RegisterDTO registerDTO) {
         // CHECKING EMPLOYEE DATA BASED ON EMAIL
         Employee oldEmployee = employeeRepository.findByEmail(registerDTO.getEmail());
-         if (oldEmployee != null) {
-             throw new ResponseStatusException(HttpStatus.CONFLICT, "Data already exist !");
+        if (oldEmployee != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Data already exist !");
         }
         // ADDING EMPLOYEE
         return new Employee(

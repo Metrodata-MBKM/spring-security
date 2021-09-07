@@ -36,18 +36,18 @@ public class JobController implements BaseController<Job, String> {
     public JobController(JobService jobService) {
         this.jobService = jobService;
     }
-    
+
     @Override
     @GetMapping
     @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Job> getAll() {
         return jobService.getAll();
     }
-    
+
     @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('READ_DATA')")
-    public Job getById(@PathVariable(value="id") String id) {
+    public Job getById(@PathVariable(value = "id") String id) {
         try {
             return jobService.getById(id).get();
         } catch (Exception e) {
@@ -80,7 +80,7 @@ public class JobController implements BaseController<Job, String> {
     @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('DELETE_DATA')")
-    public Job delete(@PathVariable(value="id") String id) {
+    public Job delete(@PathVariable(value = "id") String id) {
         if (jobService.delete(id)) {
             return jobService.getById(id).get();
         } else {

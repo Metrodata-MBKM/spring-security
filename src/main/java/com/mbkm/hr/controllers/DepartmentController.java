@@ -29,8 +29,8 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/department")
 @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
-public class DepartmentController implements BaseController<Department, Integer>{
-    
+public class DepartmentController implements BaseController<Department, Integer> {
+
     @Autowired
     DepartmentService departmentService;
 
@@ -82,11 +82,11 @@ public class DepartmentController implements BaseController<Department, Integer>
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('DELETE_DATA')")
     public Department delete(@PathVariable Integer id) {
-        if (departmentService.delete(id)){
+        if (departmentService.delete(id)) {
             return departmentService.getById(id).get();
-        } else{
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }
     }
-    
+
 }

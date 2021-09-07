@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
  * @author Asus
  */
 @Service
-public class JobService extends CRUDService<JobRepository, Job, String>{
+public class JobService extends CRUDService<JobRepository, Job, String> {
+
     @Autowired
-    public JobService(JobRepository jobRepository){
+    public JobService(JobRepository jobRepository) {
         super.repository = jobRepository;
     }
 }

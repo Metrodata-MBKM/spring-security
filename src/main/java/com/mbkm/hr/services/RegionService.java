@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
  * @author loisceka
  */
 @Service
-public class RegionService extends CRUDService<RegionRepository, Region, Integer>{
-    
+public class RegionService extends CRUDService<RegionRepository, Region, Integer> {
+
     @Autowired
-    public RegionService(RegionRepository regionRepository){
+    public RegionService(RegionRepository regionRepository) {
         super.repository = regionRepository;
     }
 }

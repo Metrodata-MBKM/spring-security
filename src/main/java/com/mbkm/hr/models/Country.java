@@ -5,14 +5,11 @@
  */
 package com.mbkm.hr.models;
 
-import java.util.Set;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -45,5 +42,5 @@ public class Country {
     public Country(String name, Region region) {
         this.name = name;
         this.region = region;
-    }  
+    }
 }

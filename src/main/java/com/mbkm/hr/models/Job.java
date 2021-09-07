@@ -14,11 +14,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,7 +28,10 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "jobs")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Job {
 
     @Id
@@ -48,7 +47,7 @@ public class Job {
     @Column(name = "max_salary")
     private double max_salary;
 
-    @OneToMany(mappedBy = "job", fetch= FetchType.EAGER)
+    @OneToMany(mappedBy = "job", fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<Employee> employee;
 

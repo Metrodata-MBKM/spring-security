@@ -10,6 +10,7 @@ import com.mbkm.hr.services.RegionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/region")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class RegionController implements BaseController<Region, Integer>{
     
     @Autowired
@@ -38,6 +40,7 @@ public class RegionController implements BaseController<Region, Integer>{
     
     @Override
     @GetMapping
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Region> getAll() {
         
         return regionService.getAll();
@@ -45,6 +48,7 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @Override
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Region getById(@PathVariable("id") Integer id) {
         if(regionService.getById(id).isPresent()){
             return regionService.getById(id).get();
@@ -53,6 +57,7 @@ public class RegionController implements BaseController<Region, Integer>{
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Region save(@RequestBody Region region, Authentication authentication) {
         System.out.println(authentication.getAuthorities().toString());
         if (regionService.getById(region.getId()).isPresent()) {
@@ -64,6 +69,7 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @Override
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     public Region update(@PathVariable("id") Integer id, @RequestBody Region region) {
         if(regionService.getById(id).isPresent()){
             return regionService.save(region);
@@ -73,6 +79,7 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @Override
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable("id") Integer id) {
         if(regionService.getById(id).isPresent()){
             regionService.delete(id);

@@ -40,5 +40,5 @@ public class User {
     private String email;
 
     @ManyToMany
-    Set<Role> roles;
+    private Set<Role> roles;
 }

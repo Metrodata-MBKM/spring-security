@@ -7,9 +7,8 @@ package com.mbkm.hr.services;
 
 import com.mbkm.hr.models.AppUserDetails;
 import com.mbkm.hr.models.User;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.mbkm.hr.repositories.AppUserRepository;
+import com.metrodatambkm.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,51 +23,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
     
+    private AppUserRepository appUserRepository;
+
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AppUserDetailsService(AppUserRepository appUserRepository) {
+        this.appUserRepository = appUserRepository;
+    }
+    
 
     @Override
-    public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException{
-        User user = findByUsernameOrByEmail(username);
+    public UserDetails loadUserByUsername(String parameter)throws UsernameNotFoundException{
+        System.out.println(parameter);
+        User user = appUserRepository.findByUsernameOrEmail(parameter,parameter);
         
         return new AppUserDetails(user);
     }
     
-    private User findByUsernameOrByEmail(String parameter) {
-        System.out.println(parameter);
-        return allUser()
-                .stream()
-                .filter(user -> user.getUsername().equalsIgnoreCase(parameter))
-                .collect(Collectors.toList())
-                .get(0);
-    }
-    
-    private List<User> allUser() {
-        List<User> users = new ArrayList<>();
-        List<String> authUser1 = new ArrayList<>();
-        List<String> authUser2 = new ArrayList<>();
-        
-        authUser1.add("role_admin");
-        authUser2.add("role_operator");
-        authUser2.add("create_data");
-        
-        User user1 = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin"))
-                .active(true)
-                .authorities(authUser1)
-                .build();
-        
-        User user2 = User.builder()
-                .username("operator")
-                .password(passwordEncoder.encode("operator"))
-                .active(true)
-                .authorities(authUser2)
-                .build();
-                
-       users.add(user2);
-       users.add(user1);
-       
-       return users;
-    }
+
 }

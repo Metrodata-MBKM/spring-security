@@ -8,7 +8,6 @@ package com.mbkm.hr.models;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,28 +21,22 @@ import lombok.Setter;
 
 /**
  *
- * @author WahyuKu
+ * @author rebel
  */
 @Entity
-@Table(name = "users")
+@Table(name = "previleges")
 @Data
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
-public class User {
+public class Previlege {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "id")
     private Integer id;
     
-    @Column (name = "username", length = 50, nullable = false, unique = true)
-    private String username;
+    @Column (name = "name", length = 50, nullable = false)
+    private String name;
     
-    @Column (name = "password", length = 255, nullable = false)
-    private String password;
-    
-    @Column (name = "email", length = 50, nullable = false, unique = true)
-    private String email;
-    
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private Set<Role> roles;
 }

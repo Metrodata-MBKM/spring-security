@@ -3,21 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.dto;
+package com.mbkm.hr.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  *
  * @author rebel
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-        
-public class MailResponse {
-    private String message;
-    private boolean status;
+public class MailRequest {
+    
+    private String name;
+    private String to;
+    private String from;
+    private String subject;
 }

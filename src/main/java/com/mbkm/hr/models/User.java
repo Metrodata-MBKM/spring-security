@@ -38,11 +38,14 @@ public class User {
     @Column (name = "username", length = 50, nullable = false, unique = true)
     private String username;
     
-    @Column (name = "password", length = 255, nullable = false)
+    @Column (name = "password", length = 255)
     private String password;
     
     @Column (name = "email", length = 50, nullable = false, unique = true)
     private String email;
+    
+    @Column(name = "enabled")
+    private boolean enabled = false;
     
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;

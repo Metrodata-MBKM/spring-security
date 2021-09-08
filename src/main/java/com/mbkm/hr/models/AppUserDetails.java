@@ -19,9 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AppUserDetails implements UserDetails {
     
     private User user;
-    private Role role;
     
-
     public AppUserDetails(User user) {
         this.user = user;
     }

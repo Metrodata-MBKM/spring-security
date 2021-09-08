@@ -48,7 +48,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String confirmationUrl  = event.getAppUrl() + "/auth/confirm/" + token;
         String message = "Registration successfully \n" +
                 "Please follow the url " +
-                "http://localhost:8084/" + confirmationUrl;
+                "http://localhost:8084" + confirmationUrl;
 
         emailService.sendMessage(recipientAddress,subject,message);
 

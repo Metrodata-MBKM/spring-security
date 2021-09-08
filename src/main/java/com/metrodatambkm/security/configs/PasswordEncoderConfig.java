@@ -1,4 +1,4 @@
-package com.metrodatambkm.security.config;
+package com.metrodatambkm.security.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

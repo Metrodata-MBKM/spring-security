@@ -26,6 +26,9 @@ public class User {
     @Column(name = "email", length = 50, unique = true)
     private String email;
 
+    @Column(name = "enabled", columnDefinition ="default false")
+    private boolean enabled = false;
+
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 }

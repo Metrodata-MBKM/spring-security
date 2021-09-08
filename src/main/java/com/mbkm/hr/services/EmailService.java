@@ -9,53 +9,31 @@ package com.mbkm.hr.services;
  *
  * @author Kevitha
  */
-import com.mbkm.hr.dtos.MailRequest;
-import com.mbkm.hr.dtos.MailResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.nio.charset.StandardCharsets;
+import org.springframework.stereotype.Component;
 
 
-@Service
+@Component
 public class EmailService {
 
     @Autowired
-    private JavaMailSender sender;
+    private JavaMailSender emailSender;
 
+    public void sendMessage(String to, String subject, String text){
+        try{
 
-    @Autowired
-    public EmailService(JavaMailSender mailSender) {
-        this.sender = mailSender;
-    }
-
-    public MailResponse sendEmail(MailRequest request) {
-        MailResponse response = new MailResponse();
-        MimeMessage message = sender.createMimeMessage();
-        try {
-
-            MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                    StandardCharsets.UTF_8.name());
-
-            helper.setTo(request.getTo());
-            helper.setText("<h1>Halo<h1>", true);
-            helper.setSubject(request.getSubject());
-            helper.setFrom(request.getFrom());
-            sender.send(message);
-
-            response.setMessage("Mail Successfully Sent to : " + request.getTo());
-            response.setStatus(Boolean.TRUE);
-
-        } catch (MessagingException e) {
-            response.setMessage("Mail Failed Sent to: "+e.getMessage());
-            response.setStatus(Boolean.FALSE);
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message,"utf-8");
+            message.setFrom("kvtpraisyf@gmail.com");
+            helper.setTo(to); 
+            helper.setSubject(subject); 
+            helper.setText(text, true); 
+            emailSender.send(message);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        return response;
     }
-
 }

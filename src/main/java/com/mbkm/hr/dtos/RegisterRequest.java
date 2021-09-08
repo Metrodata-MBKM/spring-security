@@ -9,13 +9,11 @@ package com.mbkm.hr.dtos;
  *
  * @author Kevitha
  */
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
-public class MailRequest {
-
-    private String name;
-    private String to;
-    private String from;
-    private String subject;
+@Data @AllArgsConstructor @NoArgsConstructor
+public class RegisterRequest {
+    private String email, username, password;
 }

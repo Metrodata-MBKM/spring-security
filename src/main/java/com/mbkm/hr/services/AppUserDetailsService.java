@@ -7,16 +7,12 @@ package com.mbkm.hr.services;
 
 import com.mbkm.hr.models.AppUserDetails;
 import com.mbkm.hr.models.User;
-import com.mbkm.hr.repositories.AppUserDetailsRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.mbkm.hr.repositories.UserRepository;
 
 /**
  *
@@ -25,55 +21,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
     
-    private AppUserDetailsRepository appUserDetailsRepository;  
+    private UserRepository appUserDetailsRepository;  
+    private EmailService emailService;
     
     @Autowired
-    public AppUserDetailsService(AppUserDetailsRepository appUserDetailsRepository) {
+    public AppUserDetailsService(UserRepository appUserDetailsRepository, EmailService emailService) {
         this.appUserDetailsRepository = appUserDetailsRepository;
+        this.emailService = emailService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String parameter)throws UsernameNotFoundException{
         User user = appUserDetailsRepository.findByUsernameOrEmail(parameter, parameter);
-        
+        System.out.println(user);
         return new AppUserDetails(user);
     }
-    
-//    private User findByUsernameOrByEmail(String parameter) {
-//        System.out.println(parameter);
-//        return allUser()
-//                .stream()
-//                .filter(user -> user.getUsername().equalsIgnoreCase(parameter))
-//                .collect(Collectors.toList())
-//                .get(0);
-//    }
-    
-//    private List<User> allUser() {
-//        List<User> users = new ArrayList<>();
-//        List<String> authUser1 = new ArrayList<>();
-//        List<String> authUser2 = new ArrayList<>();
-//        
-//        authUser1.add("role_admin");
-//        authUser2.add("role_operator");
-//        authUser2.add("create_data");
-//        
-//        User user1 = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder.encode("admin"))
-//                .active(true)
-//                .authorities(authUser1)
-//                .build();
-//        
-//        User user2 = User.builder()
-//                .username("operator")
-//                .password(passwordEncoder.encode("operator"))
-//                .active(true)
-//                .authorities(authUser2)
-//                .build();
-//                
-//       users.add(user2);
-//       users.add(user1);
-//       
-//       return users;
-//    }
+
 }

@@ -5,6 +5,7 @@
  */
 package com.mbkm.hr.models;
 
+import com.mbkm.hr.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,9 @@ public class User {
 
     @Column(name = "email", length = 50, unique = true)
     private String email;
+    
+    @Column(name = "enabled")
+    private boolean enabled = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;

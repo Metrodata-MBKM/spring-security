@@ -5,6 +5,8 @@
  */
 package com.mbkm.hr.dtos;
 
+import com.mbkm.hr.models.Role;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,7 @@ import lombok.NoArgsConstructor;
  * @author rebel
  */
 @Data @AllArgsConstructor @NoArgsConstructor
-public class RegisterRequest {
-       private String email, username, password;
-       
-       
+public class LoginResponse {
+    private String AccessToken;
+    private Set<Role> authorities;
 }

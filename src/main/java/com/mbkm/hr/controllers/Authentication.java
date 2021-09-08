@@ -6,6 +6,8 @@
 package com.mbkm.hr.controllers;
 
 import com.mbkm.hr.dtos.ConfirmationResponse;
+import com.mbkm.hr.dtos.LoginRequest;
+import com.mbkm.hr.dtos.LoginResponse;
 import com.mbkm.hr.dtos.RegisterRequest;
 import com.mbkm.hr.dtos.RegisterResponse;
 import com.mbkm.hr.events.OnRegistrationCompleteEvent;
@@ -60,5 +62,10 @@ public class Authentication {
     @GetMapping("/confirm/{token}")
     public ConfirmationResponse confirmRegistration(@PathVariable String token){
         return authenticationService.confirmRegistration(token);
+    }
+    
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request){
+        return authenticationService.login(request);
     }
 }

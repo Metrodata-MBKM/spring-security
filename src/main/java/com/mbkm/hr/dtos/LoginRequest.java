@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
  * @author rebel
  */
 @Data @AllArgsConstructor @NoArgsConstructor
-public class RegisterRequest {
-       private String email, username, password;
-       
-       
+public class LoginRequest {
+    private String username, password;
 }

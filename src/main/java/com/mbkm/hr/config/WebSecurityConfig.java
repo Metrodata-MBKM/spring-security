@@ -28,11 +28,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     private AppUserDetailsService appUserDetailsService;
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoderConfig passwordEncoder;
 
     @Autowired
     public WebSecurityConfig(AppUserDetailsService appUserDetailsService, 
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoderConfig passwordEncoder) {
         this.appUserDetailsService = appUserDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(appUserDetailsService)
-                .passwordEncoder(passwordEncoder);
+                .passwordEncoder(passwordEncoder.passwordEncoder());
     }
 
     @Override
@@ -50,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
+                .antMatchers("/auth/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -28,12 +28,19 @@ public class AppUserDetailsService implements UserDetailsService {
 //    @Autowired
 //    private PasswordEncoder passwordEncoder;
     
-    @Autowired
+    
     private AppUserRepository appUserRepository;
+    private EmailService emailService;
+    
+    @Autowired
+    public AppUserDetailsService(AppUserRepository userRepository, EmailService emailService) {
+        this.appUserRepository = appUserRepository;
+        this.emailService = emailService;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException{
-        User user = appUserRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String params)throws UsernameNotFoundException{
+        User user = appUserRepository.findByUsernameOrEmail(params, params);
         
         return new AppUserDetails(user);
     }

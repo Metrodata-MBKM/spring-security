@@ -36,7 +36,17 @@ public class User {
 
     @Column(name = "email", length = 50, unique = true)
     private String email;
+    
+    @Column(name = "enabled")
+    private boolean enabled = false;
 
     @ManyToMany(fetch=FetchType.EAGER)
     private Set<Role> roles;
+    
+    public User(String username, String password, String email){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.enabled = false;
+    }
 }

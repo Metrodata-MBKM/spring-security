@@ -6,6 +6,8 @@
 package com.mbkm.hr.services;
 
 import com.mbkm.hr.DTO.ConfirmationResponse;
+import com.mbkm.hr.DTO.LoginRequestDTO;
+import com.mbkm.hr.DTO.LoginResponseDTO;
 import com.mbkm.hr.DTO.RegisterRequest;
 import com.mbkm.hr.DTO.RegisterResponse;
 import com.mbkm.hr.models.Role;
@@ -18,8 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.mbkm.hr.repositories.UserRepository;
 import com.mbkm.hr.repositories.VerificationTokenRepository;
+import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.Calendar;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
@@ -81,5 +87,29 @@ public class AuthenticationService {
         user.setEnabled(true);
         userRepository.save(user);
         return new ConfirmationResponse(true, "Account Activated");
+    }
+    
+    public String CreateLoginToken(String identity, String password){
+        String auth = identity + ":" + password;
+        byte[] encodedAuth = Base64.getEncoder().encode(
+                auth.getBytes(Charset.forName("US-ASCII"))
+        );
+
+        String authHeader = "Basic " + new String(encodedAuth);
+        return authHeader;
+    }
+    
+    public LoginResponseDTO login(LoginRequestDTO request){
+        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
+
+        System.out.println("result = "+user);
+        if(!encoder.matches(request.getPassword(), user.getPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
+        }
+
+        if(user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
+        }
+        return new LoginResponseDTO(CreateLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
     }
 }

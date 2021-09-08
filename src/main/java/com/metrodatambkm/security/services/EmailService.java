@@ -1,4 +1,4 @@
-package com.metrodatambkm.security.components;
+package com.metrodatambkm.security.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,11 +18,11 @@ public class EmailService {
         try{
 
             MimeMessage message = emailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message    , "utf-8");
-            helper.setFrom("devklvn@gmail.com");
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(text);
+            MimeMessageHelper helper = new MimeMessageHelper(message,"utf-8");
+            message.setFrom("devklvn@gmail.com");
+            helper.setTo(to); // tujuan
+            helper.setSubject(subject); // subject
+            helper.setText(text, true); // body message
             emailSender.send(message);
         }catch (Exception e){
             e.printStackTrace();

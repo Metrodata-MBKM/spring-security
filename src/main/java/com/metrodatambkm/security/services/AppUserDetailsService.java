@@ -1,6 +1,5 @@
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.components.EmailService;
 import com.metrodatambkm.security.entities.AppUserDetails;
 import com.metrodatambkm.security.entities.credentials.User;
 import com.metrodatambkm.security.repositories.UserRepository;

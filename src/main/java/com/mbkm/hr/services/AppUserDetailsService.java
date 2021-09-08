@@ -7,7 +7,6 @@ package com.mbkm.hr.services;
 
 import com.mbkm.hr.models.AppUserDetails;
 import com.mbkm.hr.models.User;
-import com.mbkm.hr.repositories.AppUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.mbkm.hr.repositories.UserRepository;
 
 /**
  *
@@ -25,9 +25,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
     @Autowired
-    private AppUserRepository appUserRepository;
+    private UserRepository appUserRepository;
 
-    public AppUserDetailsService(AppUserRepository appUserRepository) {
+    public AppUserDetailsService(UserRepository appUserRepository) {
         this.appUserRepository = appUserRepository;
     }
     

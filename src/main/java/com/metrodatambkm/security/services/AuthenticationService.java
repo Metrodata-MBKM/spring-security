@@ -1,9 +1,6 @@
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.configs.PasswordEncoderConfig;
-import com.metrodatambkm.security.dtos.ConfirmationResponse;
-import com.metrodatambkm.security.dtos.RegisterRequest;
-import com.metrodatambkm.security.dtos.RegisterResponse;
+import com.metrodatambkm.security.dtos.*;
 import com.metrodatambkm.security.entities.credentials.User;
 import com.metrodatambkm.security.entities.credentials.VerificationToken;
 import com.metrodatambkm.security.entities.permission.Role;
@@ -11,9 +8,12 @@ import com.metrodatambkm.security.repositories.RoleRepository;
 import com.metrodatambkm.security.repositories.UserRepository;
 import com.metrodatambkm.security.repositories.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.Charset;
 import java.util.*;
 
 @Service
@@ -47,13 +47,33 @@ public class AuthenticationService {
         return new RegisterResponse().generate(userRepository.save(user));
     }
 
+    public LoginResponse login(LoginRequest request){
+        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
+
+        System.out.println("result = "+user);
+        if(!encoder.matches(request.getPassword(), user.getPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
+        }
+
+        if(user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
+        }
+        return new LoginResponse(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
+    }
+
+    public String createLoginToken(String identity, String password){
+        String auth = identity + ":" + password;
+        byte[] encodedAuth = Base64.getEncoder().encode(
+                auth.getBytes(Charset.forName("US-ASCII"))
+        );
+
+        String authHeader = "Basic " + new String(encodedAuth);
+        return authHeader;
+    }
+
     public void createVerificationToken(User user, String token) {
         VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
-    }
-
-    public VerificationToken getVerificationToken(String VerificationToken) {
-        return tokenRepository.findByToken(VerificationToken);
     }
 
     public ConfirmationResponse confirmRegistration(String token){

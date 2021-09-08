@@ -1,8 +1,6 @@
 package com.metrodatambkm.security.controllers;
 
-import com.metrodatambkm.security.dtos.ConfirmationResponse;
-import com.metrodatambkm.security.dtos.RegisterRequest;
-import com.metrodatambkm.security.dtos.RegisterResponse;
+import com.metrodatambkm.security.dtos.*;
 import com.metrodatambkm.security.events.OnRegistrationCompleteEvent;
 import com.metrodatambkm.security.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +41,11 @@ public class Authentication {
         }
 
         return null;
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request){
+        return authenticationService.login(request);
     }
 
     @GetMapping("/confirm/{token}")

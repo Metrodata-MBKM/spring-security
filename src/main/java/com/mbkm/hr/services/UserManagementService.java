@@ -6,6 +6,8 @@
 package com.mbkm.hr.services;
 
 import com.mbkm.hr.dtos.ConfirmationResponseDTO;
+import com.mbkm.hr.dtos.LoginRequestDTO;
+import com.mbkm.hr.dtos.LoginResponseDTO;
 import com.mbkm.hr.dtos.RegisterRequestDTO;
 import com.mbkm.hr.dtos.RegisterResponseDTO;
 import com.mbkm.hr.models.Role;
@@ -14,12 +16,16 @@ import com.mbkm.hr.models.VerificationToken;
 import com.mbkm.hr.repositories.AppUserRepository;
 import com.mbkm.hr.repositories.RoleRepository;
 import com.mbkm.hr.repositories.VerificationTokenRepository;
+import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
@@ -54,6 +60,30 @@ public class UserManagementService {
                 roles);
 
         return new RegisterResponseDTO().generate(appUserRepository.save(user));
+    }
+    
+    public LoginResponseDTO login(LoginRequestDTO request){
+        User user = appUserRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
+
+        System.out.println("result = "+user);
+        if(!encoder.matches(request.getPassword(), user.getPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
+        }
+
+        if(user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
+        }
+        return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
+    }
+
+    public String createLoginToken(String identity, String password){
+        String auth = identity + ":" + password;
+        byte[] encodedAuth = Base64.getEncoder().encode(
+                auth.getBytes(Charset.forName("US-ASCII"))
+        );
+
+        String authHeader = "Basic " + new String(encodedAuth);
+        return authHeader;
     }
     
     public void createVerificationToken(User user, String token) {

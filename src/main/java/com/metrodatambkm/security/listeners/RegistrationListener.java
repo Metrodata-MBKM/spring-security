@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -19,7 +20,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private UserRepository repository;
     private AuthenticationService service;
     private EmailService emailService;
-    private SpringTemplateEngine templateEngine;
+    private TemplateEngine templateEngine;
 
     @Autowired
     public RegistrationListener(UserRepository repository, AuthenticationService service, EmailService emailService, SpringTemplateEngine templateEngine) {
@@ -47,7 +48,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String recipientAddress = user.getEmail();
         String subject = "Registration Confirmation";
 
-        String confirmationUrl  = event.getAppUrl() + "/auth/confirm/" + token;
+        String confirmationUrl  = "http://localhost:8084/auth/confirm/" + token;
 
         Context ctx = new Context(LocaleContextHolder.getLocale());
         ctx.setVariable("email", user.getEmail());

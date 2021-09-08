@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- CSS only -->
@@ -25,11 +25,11 @@
             <div class="card-title mb-5 bg-info text-center">
                 <h1 class="text-white p-3">SimpleAuth App</h1>
             </div>
-            <h5 class="text-muted mb-2 text-center" th:text="${'Hello ' + username}"></h5>
+            <h5 class="text-muted mb-2 text-center" th:text="${'Hello '+ name +'!'}"></h5>
             <h3 class="text-center thank-text text-info mb-5">Thank you.</h3>
             <h4 class="text-muted mb-3 text-bold">Let's confirm your email address</h4>
             <p class="text-muted mb-3">By clicking on the link, you are confirming your email address and agreeing to Another terms of service.</p>
-            <a class="btn btn-info btn-block" th:href="${'http://localhost:8084'+ url}">Confirm Email</a>
+            <a class="btn btn-info btn-block" th:href="${url}">Confirm Email</a>
         </div>
     </div>
 </div>

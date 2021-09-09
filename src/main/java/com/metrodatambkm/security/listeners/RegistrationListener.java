@@ -36,14 +36,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     private void confirmRegistration(OnRegistrationCompleteEvent event){
-        System.out.println("===================== RUN THE LISTENER ==================");
         String username = event.getRegisterResponse().getUsername();
         String email = event.getRegisterResponse().getEmail();
+
         User user = repository.findByUsernameOrEmail(username, email);
 
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
-
 
         String recipientAddress = user.getEmail();
         String subject = "Registration Confirmation";
@@ -51,6 +50,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String confirmationUrl  = "http://localhost:8084/auth/confirm/" + token;
 
         Context ctx = new Context(LocaleContextHolder.getLocale());
+
         ctx.setVariable("email", user.getEmail());
         ctx.setVariable("name", user.getUsername());
         ctx.setVariable("url", confirmationUrl);

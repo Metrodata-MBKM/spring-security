@@ -1,14 +1,10 @@
 package com.metrodatambkm.security.controllers;
 
 import com.metrodatambkm.security.dtos.*;
-import com.metrodatambkm.security.events.OnRegistrationCompleteEvent;
 import com.metrodatambkm.security.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,23 +20,8 @@ public class Authentication {
     }
 
     @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest request, HttpServletRequest servletRequest){
-        try{
-            RegisterResponse response = authenticationService.register(request);
-            String appUrl = servletRequest.getContextPath();
-
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-                    response,
-                    servletRequest.getLocale(),
-                    appUrl
-            ));
-
-            return response;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return null;
+    public RegisterResponse register(@RequestBody RegisterRequest request){
+        return authenticationService.register(request);
     }
 
     @PostMapping("/login")

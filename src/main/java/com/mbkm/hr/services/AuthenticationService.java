@@ -9,7 +9,6 @@ package com.mbkm.hr.services;
  *
  * @author Kevitha
  */
-import com.mbkm.hr.config.PasswordEncoderConfig;
 import com.mbkm.hr.dtos.ConfirmationResponse;
 import com.mbkm.hr.dtos.LoginRequestDTO;
 import com.mbkm.hr.dtos.LoginResponseDTO;
@@ -32,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthenticationService {
+
     UserRepository userRepository;
     RoleRepository roleRepository;
     VerificationTokenRepository tokenRepository;
@@ -45,10 +45,14 @@ public class AuthenticationService {
         this.encoder = encoder;
     }
 
-    public RegisterResponse register(RegisterRequest request){
-
+    public RegisterResponse register(RegisterRequest request) {
         Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName("OPERATOR"));
+        roles.add(roleRepository.findByName("OPERATOR")); //defaultrole
+
+        if (userRepository.findByUsername(request.getUsername()) != null
+                || userRepository.findByEmail(request.getEmail()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
+        }
 
         User user = new User(
                 null,
@@ -60,21 +64,21 @@ public class AuthenticationService {
 
         return new RegisterResponse().generate(userRepository.save(user));
     }
-    
-    public LoginResponseDTO login(LoginRequestDTO request){
-        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
-        
-        if (!encoder.matches(request.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password!");
-        }
+
+    public LoginResponseDTO login(LoginRequestDTO request) {
+        User user = userRepository.findByUsername(request.getUsername());
+
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found!");
         }
-        
+
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password!");
+        }
         return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
     }
-    
-    public String createLoginToken(String identity, String password){
+
+    public String createLoginToken(String identity, String password) {
         String auth = identity + ":" + password;
         byte[] encodedAuth = Base64.getEncoder().encode(
                 auth.getBytes(Charset.forName("US-ASCII"))
@@ -89,16 +93,14 @@ public class AuthenticationService {
         tokenRepository.save(myToken);
     }
 
-    public ConfirmationResponse confirmRegistration(String token){
+    public ConfirmationResponse confirmRegistration(String token) {
         VerificationToken verificationToken = tokenRepository.findByToken(token);
         User user = verificationToken.getUser();
         Calendar cal = Calendar.getInstance();
 
-        if(token == null){
+        if (token == null) {
             return new ConfirmationResponse(false, "Token invalid");
-        }
-
-        if(verificationToken.getExpireDate().getTime() - cal.getTime().getTime() <= 0){
+        } else if (verificationToken.getExpireDate().getTime() - cal.getTime().getTime() <= 0) {
             return new ConfirmationResponse(false, "Token Expired");
         }
 

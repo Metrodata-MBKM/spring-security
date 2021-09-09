@@ -12,7 +12,6 @@ package com.mbkm.hr.events;
 import com.mbkm.hr.dtos.RegisterResponse;
 import org.springframework.context.ApplicationEvent;
 
-import java.time.Clock;
 import java.util.Locale;
 
 public class OnRegistrationCompleteEvent extends ApplicationEvent {

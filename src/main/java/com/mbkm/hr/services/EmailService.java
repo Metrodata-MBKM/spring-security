@@ -18,10 +18,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailService {
-
+    
+    //menerapkan kelas JavaMailSender
     @Autowired
     private JavaMailSender emailSender;
-
+    
+    //membuat method untuk kirim email dengan MimeMessageHelper
     public void sendMessage(String to, String subject, String text){
         try{
 

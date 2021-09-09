@@ -5,10 +5,8 @@
  */
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.dto.EmployeeRequestDTO;
-import com.mbkm.hr.dto.EmployeeResponseDTO;
-import com.mbkm.hr.dto.RegisterDTO;
 import com.mbkm.hr.models.Employee;
+import com.mbkm.hr.models.Job;
 import com.mbkm.hr.services.EmployeeService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,26 +39,17 @@ public class EmployeeController implements BaseController<Employee, Integer> {
         return employeeService.getAll();
     }
 
-    @GetMapping()
-    public List<EmployeeRequestDTO> listAll() {
-        if (employeeService.getAll().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
-        }
-        return employeeService.getAllReq();
-    }
-
+    @Override
     @GetMapping("/{id}")
-    public Employee getById(@PathVariable Integer id) {
-        if (employeeService.getById(id).isPresent()) {
-            return employeeService.getByIds(id);
+    @PreAuthorize("hasAuthority('READ_DATA')")
+    public Employee getById(@PathVariable(value = "id") Integer id) {
+        try {
+            return employeeService.getById(id).get();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with ID: " + id + " Not Found");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
     }
 
-//    @PostMapping()
-//    public EmployeeResponseDTO saveEmployeeRequestDTO(@RequestBody RegisterDTO registerDTO){
-//        return employeeService.registerEmployee(registerDTO);
-//    }
     @Override
     @PostMapping
     public Employee save(@RequestBody Employee employee) {

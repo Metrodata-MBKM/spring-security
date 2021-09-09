@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.models.User;
+import com.mbkm.hr.models.Privilege;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author loisceka
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
-    public User findByUsernameOrEmail(String username, String email);
+public interface PrivilegeRepository extends JpaRepository<Privilege, Integer>{
+    
 }

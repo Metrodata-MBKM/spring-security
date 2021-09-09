@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.models;
+package com.mbkm.hr.dto;
 
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,16 +13,8 @@ import lombok.NoArgsConstructor;
  *
  * @author loisceka
  */
-@Entity
-@Table(name = "privileges")
 @Data @AllArgsConstructor @NoArgsConstructor
-public class Privilege {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "name", length = 50)
-    private String name;
-
+public class ConfirmationResponse {
+    private boolean status;
+    private String message;
 }

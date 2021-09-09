@@ -29,8 +29,8 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String params) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameOrEmail(params, params);
+    public UserDetails loadUserByUsername(String parameter) throws UsernameNotFoundException {
+        User user = userRepository.findByUsernameOrEmail(parameter, parameter);
         return new AppUserDetails(user);
     }
 

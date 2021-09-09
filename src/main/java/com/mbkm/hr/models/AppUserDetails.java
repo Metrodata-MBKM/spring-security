@@ -24,18 +24,18 @@ public class AppUserDetails implements UserDetails {
         this.user = user;
     }
 
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Role> userRole = user.getRoles();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        Set<Role> userRoles = user.getRoles();
-        Collection<GrantedAuthority> auth = new ArrayList<>();
-
-        for (Role role : userRoles) {
-            auth.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
-            for (Privilege rolePrivilege : role.getPrivileges()) {
-                auth.add(new SimpleGrantedAuthority(rolePrivilege.getName().toUpperCase()));
+        for (Role role : userRole) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+            for (Privilege privilege : role.getPrivileges()) {
+                authorities.add(new SimpleGrantedAuthority(privilege.getName().toUpperCase()));
             }
         }
-        return auth;
+        return authorities;
     }
 
     @Override

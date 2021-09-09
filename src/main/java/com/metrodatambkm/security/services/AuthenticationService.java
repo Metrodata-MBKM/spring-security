@@ -84,7 +84,7 @@ public class AuthenticationService {
     }
 
     public String createLoginToken(String identity, String password){
-        
+
         String auth = identity + ":" + password;
         byte[] encodedAuth = Base64.getEncoder().encode(
                 auth.getBytes(Charset.forName("US-ASCII"))

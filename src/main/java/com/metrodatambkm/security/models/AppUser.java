@@ -1,22 +1,24 @@
 package com.metrodatambkm.security.models;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class AppUser implements UserDetails {
 
     @SequenceGenerator(
@@ -33,26 +35,63 @@ public class AppUser implements UserDetails {
     private String username;
     private String password;
     private String email;
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    //    @Enumerated(EnumType.STRING)
+////    private AppUserRole appUserRole;
     private Boolean locked = false;
     private Boolean enabled = false;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"
+            )
+    )
+    private List<Role> roles;
+
     public AppUser(String username,
                    String email,
-                   String password,
-                   AppUserRole appUserRole) {
+                   String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.appUserRole = appUserRole;
+    }
+
+    public AppUser(String username, String email, String password, Role user) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = Collections.singletonList(user);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority(appUserRole.name());
-        return Collections.singletonList(authority);
+        return getGrantedAuthorities(getPrivileges(roles));
+    }
+
+    private List<String> getPrivileges(Collection<Role> roles) {
+
+        List<String> privileges = new ArrayList<>();
+        List<Privilege> collection = new ArrayList<>();
+        for (Role role : roles) {
+            privileges.add(role.getName());
+            collection.addAll(role.getPrivileges());
+        }
+        for (Privilege item : collection) {
+            privileges.add(item.getName().toUpperCase());
+        }
+        return privileges;
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String privilege : privileges) {
+            authorities.add(new SimpleGrantedAuthority(privilege));
+        }
+        return authorities;
     }
 
     @Override

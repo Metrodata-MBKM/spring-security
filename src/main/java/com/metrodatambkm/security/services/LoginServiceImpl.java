@@ -51,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
     public LoginResponse loginToken(LoginRequest loginRequest) {
         AppUser appUser = userRepository.findByUsername(loginRequest.getUsername());
 
-        return new LoginResponse(getToken(loginRequest.getUsername(), loginRequest.getPassword()), appUser.getAppUserRole());
+        return new LoginResponse(getToken(loginRequest.getUsername(), loginRequest.getPassword()), appUser.getRoles());
     }
 
     private String getToken(String username, String password) {

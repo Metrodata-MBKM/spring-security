@@ -4,6 +4,7 @@ import com.metrodatambkm.security.dto.RegistrationRequest;
 import com.metrodatambkm.security.models.AppUser;
 import com.metrodatambkm.security.models.AppUserRole;
 import com.metrodatambkm.security.models.ConfirmationToken;
+import com.metrodatambkm.security.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class RegistrationService {
                         request.getUsername(),
                         request.getEmail(),
                         request.getPassword(),
-                        AppUserRole.USER
+                        new Role(2L)
 
                 )
         );

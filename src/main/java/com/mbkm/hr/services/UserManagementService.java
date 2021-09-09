@@ -50,7 +50,12 @@ public class UserManagementService {
 
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR"));
-
+        
+        if (appUserRepository.findByUsername(request.getUsername()) != null
+                || appUserRepository.findByEmail(request.getEmail()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
+        }
+        
         User user = new User(
                 null,
                 request.getUsername(),
@@ -63,7 +68,7 @@ public class UserManagementService {
     }
     
     public LoginResponseDTO login(LoginRequestDTO request){
-        User user = appUserRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
+        User user = appUserRepository.findByUsername(request.getUsername());
 
         System.out.println("result = "+user);
         if(!encoder.matches(request.getPassword(), user.getPassword())){

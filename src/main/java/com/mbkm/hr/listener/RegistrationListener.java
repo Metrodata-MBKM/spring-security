@@ -50,8 +50,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String recipientAddress = user.getEmail();
         String subject = "Registration Confirmation";
         String confirmationUrl  = event.getAppUrl() + "/auth/confirm/" + token;
-        String message = "<h1>Haiii " + user.getUsername() + " ..</h1> <br> Registration successfully \n" +
-                "Please follow the url " +
+        String message = "<h1>Halo " + user.getUsername() + " ..</h1> <br> Registrasi Anda berhasil \n" +
+                "Tolong klik link untuk memverifikasi akun anda  " +
                 "http://localhost:8088" + confirmationUrl;
 
         emailService.sendMessage(recipientAddress,subject,message);

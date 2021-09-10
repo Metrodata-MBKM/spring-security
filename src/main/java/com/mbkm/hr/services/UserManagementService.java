@@ -60,37 +60,30 @@ public class UserManagementService {
                 false,
                 roles);
         
-        if (appUserRepository.findByUsername(request.getUsername()) != null
-                || appUserRepository.findByEmail(request.getEmail()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
-        }else{
-            return new RegisterResponseDTO().generate(appUserRepository.save(user));
-        }
-        
-//        return new RegisterResponseDTO().generate(appUserRepository.save(user));
+        return new RegisterResponseDTO().generate(appUserRepository.save(user));
         
     }
     
     public LoginResponseDTO login(LoginRequestDTO request){
         User user = appUserRepository.findByUsername(request.getUsername());
         
-        Set<Role> userRole = user.getRoles();
-        Set<String> autho = new HashSet<>();
-        for (Role role : userRole) {
-            autho.add(role.getName());
-            for (Privilege privilege : role.getPrivileges()) {
-                autho.add(privilege.getName());
-            }
-        }
-        
         System.out.println("result = "+user);
-        if(!encoder.matches(request.getPassword(), user.getPassword())){
+        if(user == null){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found!");
+        }else if(!encoder.matches(request.getPassword(), user.getPassword())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
-        }else if(user == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
         }else if(user.isEnabled() == false){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User has not verified");
         }else{
+            Set<Role> userRole = user.getRoles();
+            Set<String> autho = new HashSet<>();
+            for (Role role : userRole) {
+                autho.add(role.getName());
+                for (Privilege privilege : role.getPrivileges()) {
+                    autho.add(privilege.getName());
+                }
+            }
+            
             return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), autho);
         }
         

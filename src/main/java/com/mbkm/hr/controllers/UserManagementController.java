@@ -31,14 +31,14 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/auth")
-public class UserRegisterController {
+public class UserManagementController {
     
     UserManagementService authenticationService;
     ApplicationEventPublisher eventPublisher;
     AppUserRepository appUserRepository;
     
     @Autowired
-    public UserRegisterController(UserManagementService authenticationService, ApplicationEventPublisher eventPublisher, AppUserRepository appUserRepository) {
+    public UserManagementController(UserManagementService authenticationService, ApplicationEventPublisher eventPublisher, AppUserRepository appUserRepository) {
         this.authenticationService = authenticationService;
         this.eventPublisher = eventPublisher;
         this.appUserRepository = appUserRepository;
@@ -47,24 +47,6 @@ public class UserRegisterController {
     
     @PostMapping("/register")
     public RegisterResponseDTO register(@RequestBody RegisterRequestDTO request, HttpServletRequest servletRequest){
-//        try{
-//            RegisterResponseDTO response = authenticationService.register(request);
-//            String appUrl = servletRequest.getContextPath();
-//
-//            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-//                    response,
-//                    servletRequest.getLocale(),
-//                    appUrl
-//            ));
-//            
-//                return response;
-//            
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
-//        }
-
-//        return null;
 
         if(appUserRepository.findByUsername(request.getUsername()) != null
                 || appUserRepository.findByEmail(request.getEmail()) != null){
@@ -83,7 +65,6 @@ public class UserRegisterController {
                 return response;
         }
 
-//        return null;
     }
     
     @GetMapping("/confirm/{token}")

@@ -14,6 +14,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 /**
  *
@@ -24,12 +28,14 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private AppUserRepository repository;
     private UserManagementService service;
     private EmailService emailService;
+    private TemplateEngine templateEngine;
 
     @Autowired
-    public RegistrationListener(AppUserRepository repository, UserManagementService service, EmailService emailService) {
+    public RegistrationListener(AppUserRepository repository, UserManagementService service, EmailService emailService, TemplateEngine templateEngine) {
         this.repository = repository;
         this.service = service;
         this.emailService = emailService;
+        this.templateEngine = templateEngine;
     }
 
     @Override
@@ -50,14 +56,16 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         
         //menginisialisasi email penerima, subjek, dan isi email
         String recipientAddress = user.getEmail();
-        String subject = "Verification Email";
-        String confirmationUrl  = event.getAppUrl() + "/auth/confirm/" + token;
-        String message = "<h1>Haiii " + user.getUsername() + 
-                " ..</h1> <br>Your Registration is successfully \n" +
-                "Click this link to verif your email " +
-                "http://localhost:8080" + confirmationUrl;
+        String subject = "Verification Account";
+        String Url  = "http://localhost:8080"+event.getAppUrl() + "/auth/confirm/" + token;
 
-        emailService.sendMessage(recipientAddress,subject,message);
+        Context ctx = new Context(LocaleContextHolder.getLocale());
+        ctx.setVariable("email", user.getEmail());
+        ctx.setVariable("username", user.getUsername());
+        ctx.setVariable("url", Url);
+        String htmlContent = this.templateEngine.process("email-verification", ctx);
+
+        emailService.sendMessage(recipientAddress,subject,htmlContent);
 
     }
 }

@@ -10,6 +10,7 @@ import com.mbkm.hr.dtos.LoginRequestDTO;
 import com.mbkm.hr.dtos.LoginResponseDTO;
 import com.mbkm.hr.dtos.RegisterRequestDTO;
 import com.mbkm.hr.dtos.RegisterResponseDTO;
+import com.mbkm.hr.models.Privilege;
 import com.mbkm.hr.models.Role;
 import com.mbkm.hr.models.User;
 import com.mbkm.hr.models.VerificationToken;
@@ -51,11 +52,6 @@ public class UserManagementService {
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR"));
         
-        if (appUserRepository.findByUsername(request.getUsername()) != null
-                || appUserRepository.findByEmail(request.getEmail()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
-        }
-        
         User user = new User(
                 null,
                 request.getUsername(),
@@ -63,27 +59,39 @@ public class UserManagementService {
                 request.getEmail(),
                 false,
                 roles);
-
-        return new RegisterResponseDTO().generate(appUserRepository.save(user));
+        
+        if (appUserRepository.findByUsername(request.getUsername()) != null
+                || appUserRepository.findByEmail(request.getEmail()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
+        }else{
+            return new RegisterResponseDTO().generate(appUserRepository.save(user));
+        }
+        
     }
     
     public LoginResponseDTO login(LoginRequestDTO request){
         User user = appUserRepository.findByUsername(request.getUsername());
-
+        
+        Set<Role> userRole = user.getRoles();
+        Set<String> autho = new HashSet<>();
+        for (Role role : userRole) {
+            autho.add(role.getName());
+            for (Privilege privilege : role.getPrivileges()) {
+                autho.add(privilege.getName());
+            }
+        }
+        
         System.out.println("result = "+user);
         if(!encoder.matches(request.getPassword(), user.getPassword())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
-        }
-
-        if(user == null) {
+        }else if(user == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
-        }
-        
-        if(user.isEnabled() == false) {
+        }else if(user.isEnabled() == false){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User has not verified");
+        }else{
+            return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), autho);
         }
         
-        return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
     }
 
     public String createLoginToken(String identity, String password){
@@ -92,7 +100,7 @@ public class UserManagementService {
                 auth.getBytes(Charset.forName("US-ASCII"))
         );
 
-        String authHeader = "Basic " + new String(encodedAuth);
+        String authHeader = new String(encodedAuth);
         return authHeader;
     }
     

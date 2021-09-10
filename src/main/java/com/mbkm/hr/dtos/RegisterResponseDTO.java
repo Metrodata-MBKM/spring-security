@@ -15,7 +15,9 @@ import lombok.NoArgsConstructor;
  *
  * @author hp
  */
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data 
+@AllArgsConstructor 
+@NoArgsConstructor
 public class RegisterResponseDTO {
     private String email, username;
     private boolean enabled;

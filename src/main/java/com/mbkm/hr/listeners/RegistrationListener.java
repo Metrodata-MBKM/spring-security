@@ -57,7 +57,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         //menginisialisasi email penerima, subjek, dan isi email
         String recipientAddress = user.getEmail();
         String subject = "Verification Account";
-        String Url  = "http://localhost:8080"+event.getAppUrl() + "/auth/confirm/" + token;
+        String Url  = "http://localhost:8080/auth/confirm/" + token;
 
         Context ctx = new Context(LocaleContextHolder.getLocale());
         ctx.setVariable("email", user.getEmail());

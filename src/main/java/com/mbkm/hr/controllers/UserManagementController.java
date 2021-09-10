@@ -46,25 +46,8 @@ public class UserManagementController {
     }
     
     @PostMapping("/register")
-    public RegisterResponseDTO register(@RequestBody RegisterRequestDTO request, HttpServletRequest servletRequest){
-
-        if(appUserRepository.findByUsername(request.getUsername()) != null
-                || appUserRepository.findByEmail(request.getEmail()) != null){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
-            
-        }else{
-            RegisterResponseDTO response = authenticationService.register(request);
-            String appUrl = servletRequest.getContextPath();
-
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-                    response,
-                    servletRequest.getLocale(),
-                    appUrl
-            ));
-            
-                return response;
-        }
-
+    public RegisterResponseDTO register(@RequestBody RegisterRequestDTO request){
+        return authenticationService.register(request);
     }
     
     @GetMapping("/confirm/{token}")

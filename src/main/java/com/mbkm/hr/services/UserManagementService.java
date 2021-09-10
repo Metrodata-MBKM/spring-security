@@ -10,6 +10,9 @@ import com.mbkm.hr.dtos.LoginRequestDTO;
 import com.mbkm.hr.dtos.LoginResponseDTO;
 import com.mbkm.hr.dtos.RegisterRequestDTO;
 import com.mbkm.hr.dtos.RegisterResponseDTO;
+import com.mbkm.hr.events.OnRegistrationCompleteEvent;
+import com.mbkm.hr.exceptions.AlreadyExistExceptions;
+import com.mbkm.hr.exceptions.UnauthorizedExceptions;
 import com.mbkm.hr.models.credentials.Privilege;
 import com.mbkm.hr.models.credentials.Role;
 import com.mbkm.hr.models.credentials.User;
@@ -23,6 +26,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,17 +42,30 @@ public class UserManagementService {
     RoleRepository roleRepository;
     VerificationTokenRepository tokenRepository;
     PasswordEncoder encoder;
+    ApplicationEventPublisher eventPublisher;
     
     @Autowired
-    public UserManagementService(AppUserRepository appUserRepository, RoleRepository roleRepository, VerificationTokenRepository tokenRepository, PasswordEncoder encoder) {
+    public UserManagementService(AppUserRepository appUserRepository, 
+            RoleRepository roleRepository, 
+            VerificationTokenRepository tokenRepository, 
+            PasswordEncoder encoder, 
+            ApplicationEventPublisher eventPublisher) {
         this.appUserRepository = appUserRepository;
         this.roleRepository = roleRepository;
         this.tokenRepository = tokenRepository;
         this.encoder = encoder;
+        this.eventPublisher = eventPublisher;
     }
     
     public RegisterResponseDTO register(RegisterRequestDTO request){
-
+        if(appUserRepository.findByUsername(request.getUsername()) != null){
+            throw new AlreadyExistExceptions("Username already exists");
+        }
+        
+        if(appUserRepository.findByEmail(request.getEmail()) != null){
+            throw new AlreadyExistExceptions("Email already exists");
+        }
+        
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR"));
         
@@ -60,7 +77,12 @@ public class UserManagementService {
                 false,
                 roles);
         
-        return new RegisterResponseDTO().generate(appUserRepository.save(user));
+        RegisterResponseDTO response = new RegisterResponseDTO()
+                .generate(appUserRepository.save(user));
+
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(response));
+
+        return response;
         
     }
     
@@ -69,11 +91,11 @@ public class UserManagementService {
         
         System.out.println("result = "+user);
         if(user == null){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found!");
+            throw new UnauthorizedExceptions("User not found!");
         }else if(!encoder.matches(request.getPassword(), user.getPassword())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
+            throw new UnauthorizedExceptions("Your account has not been activated");
         }else if(user.isEnabled() == false){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User has not verified");
+            throw new UnauthorizedExceptions("Wrong credentials!");
         }else{
             Set<Role> userRole = user.getRoles();
             Set<String> autho = new HashSet<>();
@@ -84,7 +106,8 @@ public class UserManagementService {
                 }
             }
             
-            return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), autho);
+            return new LoginResponseDTO(createLoginToken(request.getUsername(), 
+                    request.getPassword()), autho);
         }
         
     }

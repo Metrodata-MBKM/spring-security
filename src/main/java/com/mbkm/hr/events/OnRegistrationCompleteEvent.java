@@ -14,26 +14,8 @@ import org.springframework.context.ApplicationEvent;
  * @author hp
  */
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
-
-    private String appUrl;
-    private Locale locale;
+    
     private RegisterResponseDTO registerResponseDTO;
-
-    public String getAppUrl() {
-        return appUrl;
-    }
-
-    public void setAppUrl(String appUrl) {
-        this.appUrl = appUrl;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
 
     public RegisterResponseDTO getRegisterResponseDTO() {
         return registerResponseDTO;
@@ -43,11 +25,9 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
         this.registerResponseDTO = registerResponseDTO;
     }
 
-    public OnRegistrationCompleteEvent(RegisterResponseDTO response, Locale locale, String appUrl){
+    public OnRegistrationCompleteEvent(RegisterResponseDTO response){
         super(response);
 
         this.registerResponseDTO = response;
-        this.locale = locale;
-        this.appUrl = appUrl;
     }
 }

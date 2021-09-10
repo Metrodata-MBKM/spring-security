@@ -33,7 +33,6 @@ public class AppUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String parameter)throws UsernameNotFoundException{
         User user = appUserDetailsRepository.findByUsernameOrEmail(parameter, parameter);
-        System.out.println(user);
         return new AppUserDetails(user);
     }
 

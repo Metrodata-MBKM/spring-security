@@ -14,6 +14,8 @@ import com.mbkm.hr.dtos.LoginRequestDTO;
 import com.mbkm.hr.dtos.LoginResponseDTO;
 import com.mbkm.hr.dtos.RegisterRequest;
 import com.mbkm.hr.dtos.RegisterResponse;
+import com.mbkm.hr.events.OnRegistrationCompleteEvent;
+import com.mbkm.hr.models.Privilege;
 import com.mbkm.hr.models.User;
 import com.mbkm.hr.models.VerificationToken;
 import com.mbkm.hr.models.Role;
@@ -26,7 +28,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -36,23 +41,24 @@ public class AuthenticationService {
     RoleRepository roleRepository;
     VerificationTokenRepository tokenRepository;
     PasswordEncoder encoder;
+    ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, VerificationTokenRepository tokenRepository, PasswordEncoder encoder) {
+    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, VerificationTokenRepository tokenRepository, PasswordEncoder encoder, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.tokenRepository = tokenRepository;
         this.encoder = encoder;
+        this.eventPublisher = eventPublisher;
     }
 
     public RegisterResponse register(RegisterRequest request) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName("OPERATOR")); //defaultrole
-
-        if (userRepository.findByUsername(request.getUsername()) != null
-                || userRepository.findByEmail(request.getEmail()) != null) {
+        if (userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
         }
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByName("OPERATOR")); //defaultrole
 
         User user = new User(
                 null,
@@ -61,21 +67,36 @@ public class AuthenticationService {
                 request.getEmail(),
                 false,
                 roles);
+        
+        RegisterResponse response = new RegisterResponse().generate(userRepository.save(user));
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(response));
 
-        return new RegisterResponse().generate(userRepository.save(user));
+        return response;
     }
 
     public LoginResponseDTO login(LoginRequestDTO request) {
         User user = userRepository.findByUsername(request.getUsername());
-
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found!");
+        }
+
+        if (!user.isEnabled()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Your account has not been activated");
         }
 
         if (!encoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password!");
         }
-        return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
+
+        Set<Role> userRole = user.getRoles();
+        Set<String> authorities = new HashSet<>();
+        for (Role role : userRole) {
+            authorities.add(role.getName());
+            for (Privilege privilege : role.getPrivileges()) {
+                authorities.add(privilege.getName());
+            }
+        }
+        return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), authorities);
     }
 
     public String createLoginToken(String identity, String password) {
@@ -84,7 +105,7 @@ public class AuthenticationService {
                 auth.getBytes(Charset.forName("US-ASCII"))
         );
 
-        String authHeader = "Basic " + new String(encodedAuth);
+        String authHeader = new String(encodedAuth);
         return authHeader;
     }
 

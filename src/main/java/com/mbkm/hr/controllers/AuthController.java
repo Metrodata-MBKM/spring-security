@@ -31,32 +31,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     AuthenticationService authenticationService;
-    ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public AuthController(AuthenticationService authenticationService, ApplicationEventPublisher eventPublisher) {
+    public AuthController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.eventPublisher = eventPublisher;
     }
 
     @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest request, HttpServletRequest servletRequest){
-        try{
-            RegisterResponse response = authenticationService.register(request);
-            String appUrl = servletRequest.getContextPath();
-
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-                    response,
-                    servletRequest.getLocale(),
-                    appUrl
-            ));
-
-            return response;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return null;
+    public RegisterResponse register(@RequestBody RegisterRequest request){
+        return authenticationService.register(request);
     }
     
     @PostMapping("/login")

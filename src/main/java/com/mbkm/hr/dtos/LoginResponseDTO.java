@@ -22,5 +22,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginResponseDTO {
     private String accessToken;
-    private Set<Role> authorities;
+    private Set<Role> authorities; //Set<String>
 }

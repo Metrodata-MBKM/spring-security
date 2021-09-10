@@ -78,6 +78,11 @@ public class UserManagementService {
         if(user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
         }
+        
+        if(user.isEnabled() == false) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User has not verified");
+        }
+        
         return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
     }
 

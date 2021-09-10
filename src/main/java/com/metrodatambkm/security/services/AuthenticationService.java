@@ -69,7 +69,7 @@ public class AuthenticationService {
         User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
 
         if(user == null) {
-            throw new ResourceNotFoundException("User not found!");
+            throw new UnauthorizedException("User not found!");
         }
 
         if(!user.isEnabled()){
@@ -111,6 +111,8 @@ public class AuthenticationService {
         if(verificationToken.getExpireDate().getTime() - cal.getTime().getTime() <= 0){
             return new ConfirmationResponse(false, "Token Expired");
         }
+
+        tokenRepository.delete(verificationToken);
 
         user.setEnabled(true);
         userRepository.save(user);

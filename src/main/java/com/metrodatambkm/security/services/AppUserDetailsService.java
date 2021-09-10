@@ -24,7 +24,8 @@ public class AppUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userIdentity) throws UsernameNotFoundException {
         User user = userRepository.findByUsernameOrEmail(userIdentity, userIdentity);
-        emailService.sendMessage("tepinnko@gmail.com", "New login", "new login from kelvin");
+
+        System.out.println("User loaded ! --------------");
 
         return new AppUserDetails(user);
     }

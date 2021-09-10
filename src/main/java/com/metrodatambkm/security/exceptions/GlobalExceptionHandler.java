@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> resourceNotFound(ResourceNotFoundException ex, WebRequest request) {
+    public ResponseEntity<ExceptionResponse> resourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
         ExceptionResponse response = new ExceptionResponse();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.NOT_FOUND.value());
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceAlreadyExists.class)
-    public ResponseEntity<ExceptionResponse> resourceAlreadyExists(ResourceAlreadyExists ex, WebRequest request) {
+    public ResponseEntity<ExceptionResponse> resourceAlreadyExists(ResourceAlreadyExists ex, HttpServletRequest request) {
         ExceptionResponse response=new ExceptionResponse();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.CONFLICT.value());
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ExceptionResponse> customException(CustomException ex, WebRequest request) {
+    public ResponseEntity<ExceptionResponse> customException(CustomException ex, HttpServletRequest request) {
         ExceptionResponse response=new ExceptionResponse();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -50,7 +51,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ExceptionResponse> unauthorizedException(UnauthorizedException ex, WebRequest request) {
+    public ResponseEntity<ExceptionResponse> unauthorizedException(UnauthorizedException ex, HttpServletRequest request) {
         ExceptionResponse response=new ExceptionResponse();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

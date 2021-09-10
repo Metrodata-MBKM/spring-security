@@ -1,5 +1,6 @@
 package com.metrodatambkm.security.entities.credentials;
 
+import com.metrodatambkm.security.entities.Profile;
 import com.metrodatambkm.security.entities.permission.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +27,21 @@ public class User {
     @Column(name = "email", length = 50, unique = true)
     private String email;
 
-    @Column(name = "enabled", columnDefinition ="default false")
+    @Column(name = "enabled", columnDefinition ="tinyint(1) default 0")
     private boolean enabled = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
+
+    @OneToOne(mappedBy = "user")
+    private Profile profile;
+
+    public User(Integer id, String username, String password, String email, boolean enabled, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.enabled = enabled;
+        this.roles = roles;
+    }
 }

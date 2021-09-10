@@ -45,4 +45,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .httpBasic();
     }
+
 }

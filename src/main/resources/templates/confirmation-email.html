@@ -2,8 +2,23 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+    </style>
+    <style>
+        body{
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+        .container{
+            width: 80%;
+            display: inline-block;
+        }
+        .card{
+            border: 1px #d4d4d4 solid;
+            border-radius: 10px;
+            padding: 20px;
+        }
         .thank-text{
             font-size:48px;
             margin-top: 20px;
@@ -15,6 +30,37 @@
         }
         .text-bold{
             font-weight:700;
+        }
+        .card-title{
+            background: #79B4B7;
+            padding: 5px 0;
+            font-size: 22px;
+            color: #fff;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .thank-text{
+            color: #79B4B7;
+        }
+
+        .text-muted{
+            color: #2d2d2d;
+        }
+        .card-body{
+            text-align: left;
+        }
+        .confirm-btn{
+            width: 100%;
+            background: #79B4B7;
+            border-radius: 20px;
+            display: block;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -29,7 +75,7 @@
             <h3 class="text-center thank-text text-info mb-5">Thank you.</h3>
             <h4 class="text-muted mb-3 text-bold">Let's confirm your email address</h4>
             <p class="text-muted mb-3">By clicking on the link, you are confirming your email address and agreeing to Another terms of service.</p>
-            <a class="btn btn-info btn-block" th:href="${url}">Confirm Email</a>
+            <a class="btn btn-info btn-block confirm-btn" href="#" th:href="${url}">Confirm Email</a>
         </div>
     </div>
 </div>

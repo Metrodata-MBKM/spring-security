@@ -90,7 +90,7 @@ public class AuthenticationService {
                 auth.getBytes(Charset.forName("US-ASCII"))
         );
 
-        String authHeader = "Basic " + new String(encodedAuth);
+        String authHeader = new String(encodedAuth);
         return authHeader;
     }
 

@@ -13,5 +13,5 @@ import java.util.Set;
 @Builder
 public class LoginResponse {
     private String accessToken;
-    private Set<Role> authorities;
+    private Set<String> authorities;
 }

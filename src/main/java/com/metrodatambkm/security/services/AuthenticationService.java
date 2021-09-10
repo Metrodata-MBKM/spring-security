@@ -3,6 +3,7 @@ package com.metrodatambkm.security.services;
 import com.metrodatambkm.security.dtos.*;
 import com.metrodatambkm.security.entities.credentials.User;
 import com.metrodatambkm.security.entities.credentials.VerificationToken;
+import com.metrodatambkm.security.entities.permission.Privilege;
 import com.metrodatambkm.security.entities.permission.Role;
 import com.metrodatambkm.security.events.OnRegistrationCompleteEvent;
 import com.metrodatambkm.security.exceptions.ResourceAlreadyExists;
@@ -80,7 +81,16 @@ public class AuthenticationService {
             throw new UnauthorizedException("Wrong credentials!");
         }
 
-        return new LoginResponse(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
+        Set<String> authorities = new HashSet<>();
+
+        for (Role role: user.getRoles()) {
+            authorities.add("ROLE_" + role.getName().toUpperCase());
+            for (Privilege privilege : role.getPrivileges()) {
+                authorities.add(privilege.getName().toUpperCase());
+            }
+        }
+
+        return new LoginResponse(createLoginToken(request.getUsername(), request.getPassword()), authorities);
     }
 
     public String createLoginToken(String identity, String password){

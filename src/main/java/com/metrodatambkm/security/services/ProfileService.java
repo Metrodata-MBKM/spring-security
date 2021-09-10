@@ -8,14 +8,7 @@ import com.metrodatambkm.security.exceptions.ResourceNotFoundException;
 import com.metrodatambkm.security.repositories.ProfileRepository;
 import com.metrodatambkm.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 
 @Service
 public class ProfileService {
@@ -26,9 +19,9 @@ public class ProfileService {
     @Autowired
     UserRepository userRepository;
 
-    public ProfileResponse getCurrentProfile(Principal principal){
-        String identity = principal.getName();
-        User user = userRepository.findByUsernameOrEmail(identity, identity);
+
+    public ProfileResponse getCurrentProfile(String name){
+        User user = userRepository.findByUsernameOrEmail(name, name);
 
         if(repository.findByUser(user) == null){
             throw new ResourceNotFoundException("Setup your profile first");
@@ -37,9 +30,8 @@ public class ProfileService {
         return new ProfileResponse(repository.findByUser(user));
     }
 
-    public ProfileResponse save(ProfileRequest request, Principal principal){
-        String identity = principal.getName();
-        User user = userRepository.findByUsernameOrEmail(identity, identity);
+    public ProfileResponse save(ProfileRequest request, String name){
+        User user = userRepository.findByUsernameOrEmail(name, name);
         Profile profile = new Profile();
 
         if(repository.findByUser(user) == null){

@@ -1,5 +1,6 @@
 package com.metrodatambkm.security.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class Privilege {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "privileges")
     private List<Role> rolse;
 

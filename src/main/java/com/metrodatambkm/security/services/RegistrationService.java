@@ -2,7 +2,6 @@ package com.metrodatambkm.security.services;
 
 import com.metrodatambkm.security.dto.RegistrationRequest;
 import com.metrodatambkm.security.models.AppUser;
-import com.metrodatambkm.security.models.AppUserRole;
 import com.metrodatambkm.security.models.ConfirmationToken;
 import com.metrodatambkm.security.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,7 @@ public class RegistrationService {
 
 
     public String register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.
-                test(request.getEmail());
+        boolean isValidEmail = emailValidator.test(request.getEmail());
 
         if (!isValidEmail) {
             throw new IllegalStateException("email not valid");
@@ -41,7 +39,6 @@ public class RegistrationService {
                         request.getEmail(),
                         request.getPassword(),
                         new Role(2L)
-
                 )
         );
 
@@ -69,8 +66,7 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(
-                confirmationToken.getAppUser().getEmail());
+        appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
         return "confirmed";
     }
 

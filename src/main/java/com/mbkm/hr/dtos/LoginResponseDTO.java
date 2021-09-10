@@ -6,6 +6,7 @@
 package com.mbkm.hr.dtos;
 
 import com.mbkm.hr.models.Role;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +22,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginResponseDTO {
     private String accessToken;
-    private Set<String> authorities;
+    private List<String> authorities;
 }

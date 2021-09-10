@@ -11,11 +11,8 @@ import com.mbkm.hr.dtos.LoginResponseDTO;
 
 import com.mbkm.hr.dtos.RegisterRequest;
 import com.mbkm.hr.dtos.RegisterResponse;
-import com.mbkm.hr.events.OnRegistrationCompleteEvent;
 import com.mbkm.hr.services.AuthenticationService;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

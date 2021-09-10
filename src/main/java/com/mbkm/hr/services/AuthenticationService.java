@@ -28,10 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -55,7 +53,7 @@ public class AuthenticationService {
     public RegisterResponse register(RegisterRequest request) {
         if (userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
-        }
+        } 
 
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR")); //defaultrole
@@ -77,26 +75,32 @@ public class AuthenticationService {
     public LoginResponseDTO login(LoginRequestDTO request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found!");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not registered!");
         }
 
         if (!user.isEnabled()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Your account has not been activated");
         }
-
+        
         if (!encoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password!");
         }
-
-        Set<Role> userRole = user.getRoles();
-        Set<String> authorities = new HashSet<>();
-        for (Role role : userRole) {
-            authorities.add(role.getName());
+        
+        return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()),
+                generateAuthorities(user.getRoles()));
+    }
+    
+    private List<String> generateAuthorities(Set<Role> roles){
+        List<String> authorities = new ArrayList<>();
+        
+        for (Role role : roles) {
+            authorities.add("ROLE_" + role.getName().toUpperCase());
             for (Privilege privilege : role.getPrivileges()) {
                 authorities.add(privilege.getName());
             }
         }
-        return new LoginResponseDTO(createLoginToken(request.getUsername(), request.getPassword()), authorities);
+        
+        return authorities;
     }
 
     public String createLoginToken(String identity, String password) {
@@ -126,6 +130,7 @@ public class AuthenticationService {
         }
 
         user.setEnabled(true);
+        tokenRepository.delete(verificationToken);
         userRepository.save(user);
         return new ConfirmationResponse(true, "Account Activated");
     }

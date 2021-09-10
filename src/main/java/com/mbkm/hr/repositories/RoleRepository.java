@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.models.Role;
+import com.mbkm.hr.models.credentials.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,6 @@
-package com.mbkm.hr.models;
+package com.mbkm.hr.models.hrschemas;
 
+import com.mbkm.hr.models.hrschemas.Country;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

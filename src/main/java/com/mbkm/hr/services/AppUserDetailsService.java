@@ -5,8 +5,8 @@
  */
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.models.AppUserDetails;
-import com.mbkm.hr.models.User;
+import com.mbkm.hr.models.credentials.AppUserDetails;
+import com.mbkm.hr.models.credentials.User;
 import com.mbkm.hr.repositories.AppUserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,63 +25,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
     
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-    
-    
     private AppUserRepository appUserRepository;
     private EmailService emailService;
     
     @Autowired
     public AppUserDetailsService(AppUserRepository userRepository, EmailService emailService) {
-        this.appUserRepository = appUserRepository;
+        this.appUserRepository = userRepository;
         this.emailService = emailService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String params)throws UsernameNotFoundException{
-        User user = appUserRepository.findByUsernameOrEmail(params, params);
-        
+        System.out.println(params);
+        User user = appUserRepository.findByUsername(params);
+        System.out.println(user);
         return new AppUserDetails(user);
     }
-    
-//    private User findByUsernameOrByEmail(String parameter) {
-//        System.out.println(parameter);
-//        return allUser()
-//                .stream()
-//                .filter(user -> user.getUsername().equalsIgnoreCase(parameter))
-//                .collect(Collectors.toList())
-//                .get(0);
-//    }
-    
-//    private List<User> allUser() {
-//        List<User> users = new ArrayList<>();
-//        List<String> authUser1 = new ArrayList<>();
-//        List<String> authUser2 = new ArrayList<>();
-//        
-//        authUser1.add("role_admin");
-//        authUser2.add("role_operator");
-//        authUser2.add("create_data");
-//        
-//        User user1 = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder.encode("admin"))
-//                .active(true)
-//                .authorities(authUser1)
-//                .build();
-//        
-//        User user2 = User.builder()
-//                .username("operator")
-//                .password(passwordEncoder.encode("operator"))
-//                .active(true)
-//                .authorities(authUser2)
-//                .build();
-//                
-//       users.add(user2);
-//       users.add(user1);
-//       
-//       return users;
-//    }
 
     public AppUserDetailsService() {
     }

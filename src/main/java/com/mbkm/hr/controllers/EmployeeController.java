@@ -1,6 +1,6 @@
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.models.Employee;
+import com.mbkm.hr.models.hrschemas.Employee;
 import com.mbkm.hr.services.EmployeeService;
 import com.mbkm.hr.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;

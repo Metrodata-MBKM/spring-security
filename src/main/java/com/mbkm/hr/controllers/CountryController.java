@@ -1,6 +1,6 @@
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.models.Country;
+import com.mbkm.hr.models.hrschemas.Country;
 import com.mbkm.hr.services.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

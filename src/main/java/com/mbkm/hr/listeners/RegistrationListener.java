@@ -6,7 +6,7 @@
 package com.mbkm.hr.listeners;
 
 import com.mbkm.hr.events.OnRegistrationCompleteEvent;
-import com.mbkm.hr.models.User;
+import com.mbkm.hr.models.credentials.User;
 import com.mbkm.hr.repositories.AppUserRepository;
 import com.mbkm.hr.services.UserManagementService;
 import com.mbkm.hr.services.EmailService;

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.models;
+package com.mbkm.hr.models.credentials;
 
-import java.util.Set;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,11 +15,11 @@ import lombok.NoArgsConstructor;
  * @author hp
  */
 @Entity
-@Table(name = "roles")
+@Table(name = "privileges")
 @Data 
 @AllArgsConstructor 
 @NoArgsConstructor
-public class Role {
+public class Privilege {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,8 +27,5 @@ public class Role {
 
     @Column(name = "name", length = 50)
     private String name;
-
-    @ManyToMany
-    private Set<Privilege> privileges;
 
 }

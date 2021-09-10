@@ -5,8 +5,8 @@
  */
 package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.models.User;
-import com.mbkm.hr.models.VerificationToken;
+import com.mbkm.hr.models.credentials.User;
+import com.mbkm.hr.models.credentials.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

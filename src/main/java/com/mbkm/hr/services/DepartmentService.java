@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.models.Department;
+import com.mbkm.hr.models.hrschemas.Department;
 import com.mbkm.hr.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

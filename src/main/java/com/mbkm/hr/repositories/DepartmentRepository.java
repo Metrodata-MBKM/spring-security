@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.models.Department;
+import com.mbkm.hr.models.hrschemas.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

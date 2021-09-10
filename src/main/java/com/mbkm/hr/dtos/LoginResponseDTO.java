@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.dtos;
 
-import com.mbkm.hr.models.Role;
+import com.mbkm.hr.models.credentials.Role;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

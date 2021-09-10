@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.models.Role;
+import com.mbkm.hr.models.credentials.Role;
 import com.mbkm.hr.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

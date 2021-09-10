@@ -1,5 +1,6 @@
-package com.mbkm.hr.models;
+package com.mbkm.hr.models.hrschemas;
 
+import com.mbkm.hr.models.hrschemas.Department;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;

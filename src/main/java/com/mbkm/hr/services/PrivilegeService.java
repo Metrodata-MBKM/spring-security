@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.models.Privilege;
+import com.mbkm.hr.models.credentials.Privilege;
 import com.mbkm.hr.repositories.PrivilegeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

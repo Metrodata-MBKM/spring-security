@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.dtos;
 
-import com.mbkm.hr.models.User;
+import com.mbkm.hr.models.credentials.User;
 import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;

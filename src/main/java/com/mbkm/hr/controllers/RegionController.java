@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.models.Region;
+import com.mbkm.hr.models.hrschemas.Region;
 import com.mbkm.hr.services.RegionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

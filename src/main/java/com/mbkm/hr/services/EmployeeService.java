@@ -1,6 +1,6 @@
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.models.Employee;
+import com.mbkm.hr.models.hrschemas.Employee;
 import com.mbkm.hr.repositories.EmployeeRepository;
 import com.mbkm.hr.repositories.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;

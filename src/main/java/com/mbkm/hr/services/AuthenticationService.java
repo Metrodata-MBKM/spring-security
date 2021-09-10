@@ -105,13 +105,20 @@ public class AuthenticationService {
         User user = appUserRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
 
         System.out.println("result = "+user);
+        
+        if(user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found!");
+        }
+        
         if(!encoder.matches(request.getPassword(), user.getPassword())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
         }
-
-        if(user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
+        
+        if(!user.isEnabled()){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Check Email! Verify Your Account First!");
         }
+
+        
         return new LoginResponse(createLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
     }
     

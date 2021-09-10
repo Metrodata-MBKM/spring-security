@@ -67,6 +67,8 @@ public class UserManagementService {
             return new RegisterResponseDTO().generate(appUserRepository.save(user));
         }
         
+//        return new RegisterResponseDTO().generate(appUserRepository.save(user));
+        
     }
     
     public LoginResponseDTO login(LoginRequestDTO request){

@@ -18,5 +18,5 @@ import lombok.*;
 @Builder
 public class LoginResponseDTO {
     private String accessToken;
-    private Set<Role> authorities;
+    private Set<String> authorities; // set<String>
 }

@@ -13,7 +13,11 @@ import com.mbkm.hr.services.EmailService;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 /**
  *
@@ -25,12 +29,14 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private UserRepository repository;
     private AuthenticationService service;
     private EmailService emailService;
+    private TemplateEngine templateEngine;
 
     @Autowired
-    public RegistrationListener(UserRepository repository, AuthenticationService service, EmailService emailService) {
+    public RegistrationListener(UserRepository repository, AuthenticationService service, EmailService emailService, TemplateEngine templateEngine) {
         this.repository = repository;
         this.service = service;
         this.emailService = emailService;
+        this.templateEngine = templateEngine;
     }
 
     @Override
@@ -39,7 +45,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     private void confirmRegistration(OnRegistrationCompleteEvent event){
-        System.out.println("===================== RUN THE LISTENER ==================");
         String username = event.getRegisterResponse().getUsername();
         String email = event.getRegisterResponse().getEmail();
         User user = repository.findByUsernameOrEmail(username, email);
@@ -48,12 +53,15 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         service.createVerificationToken(user, token);
 
         String recipientAddress = user.getEmail();
-        String subject = "Registration Confirmation";
-        String confirmationUrl  = event.getAppUrl() + "/auth/confirm/" + token;
-        String message = "<h1>Halo " + user.getUsername() + " ..</h1> <br> Registrasi Anda berhasil \n" +
-                "Tolong klik link untuk memverifikasi akun anda  " +
-                "http://localhost:8088" + confirmationUrl;
-
-        emailService.sendMessage(recipientAddress,subject,message);
+        String subject = "Verification Account";
+        String Url  = "http://localhost:8088"+event.getAppUrl() + "/auth/confirm/" + token;
+        
+        Context ctx = new Context(LocaleContextHolder.getLocale());
+        ctx.setVariable("email", user.getEmail());
+        ctx.setVariable("username", user.getUsername());
+        ctx.setVariable("url", Url);
+        String htmlContent = this.templateEngine.process("email-verification", ctx);
+         
+        emailService.sendMessage(recipientAddress,subject,htmlContent);
     }
 }

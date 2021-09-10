@@ -10,6 +10,7 @@ import com.mbkm.hr.DTO.LoginRequestDTO;
 import com.mbkm.hr.DTO.LoginResponseDTO;
 import com.mbkm.hr.DTO.RegisterRequest;
 import com.mbkm.hr.DTO.RegisterResponse;
+import com.mbkm.hr.models.Privilege;
 import com.mbkm.hr.models.Role;
 import com.mbkm.hr.models.User;
 import com.mbkm.hr.models.VerificationToken;
@@ -47,10 +48,14 @@ public class AuthenticationService {
     }
 
     public RegisterResponse register(RegisterRequest request){
-
+        User users = userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail());
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR"));
 
+        if(users!=null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Already Exist!");
+        }else{
+        
         User user = new User(
                 null,
                 request.getUsername(),
@@ -58,8 +63,8 @@ public class AuthenticationService {
                 request.getEmail(),
                 false,
                 roles);
-
         return new RegisterResponse().generate(userRepository.save(user));
+        }
     }
 
     public void createVerificationToken(User user, String token) {
@@ -95,21 +100,31 @@ public class AuthenticationService {
                 auth.getBytes(Charset.forName("US-ASCII"))
         );
 
-        String authHeader = "Basic " + new String(encodedAuth);
+        String authHeader = new String(encodedAuth);
         return authHeader;
     }
     
     public LoginResponseDTO login(LoginRequestDTO request){
-        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
-
+        User user = userRepository.findByUsername(request.getUsername());
         System.out.println("result = "+user);
+        if(user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found!");
+        }
         if(!encoder.matches(request.getPassword(), user.getPassword())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
         }
-
-        if(user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
+        if(user.isEnabled()== false){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User has not verified!");
         }
-        return new LoginResponseDTO(CreateLoginToken(request.getUsername(), request.getPassword()), user.getRoles());
+        
+        Set<Role> userRole = user.getRoles();
+        Set<String> autho = new HashSet<>();
+        for (Role role : userRole) {
+            autho.add(role.getName());
+            for (Privilege privilege : role.getPrivileges()) {
+                autho.add(privilege.getName());
+            }
+        }
+        return new LoginResponseDTO(CreateLoginToken(request.getUsername(), request.getPassword()), autho);
     }
 }

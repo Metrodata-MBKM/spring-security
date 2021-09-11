@@ -1,22 +1,27 @@
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.models.AppUser;
-import com.metrodatambkm.security.models.ConfirmationToken;
+import com.metrodatambkm.security.dto.ProfileResponse;
+import com.metrodatambkm.security.models.credentials.AppUser;
+import com.metrodatambkm.security.models.credentials.ConfirmationToken;
 import com.metrodatambkm.security.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class AppUserService implements UserDetailsService {
     private final static String USER_NOT_FOUND_MSG =
-            "user with email %s not found";
+            "user with username %s not found";
 
     private AppUserRepository appUserRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -30,19 +35,19 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        return appUserRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(username);
+        return appUserRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
-                                String.format(USER_NOT_FOUND_MSG, email)));
+                                String.format(USER_NOT_FOUND_MSG, username)));
     }
 
     public String signUpUser(AppUser appUser) {
-        boolean userExists = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
+        boolean userExists = appUserRepository.findByUsername(appUser.getUsername()).isPresent();
 
         if (userExists) {
-            throw new IllegalStateException("email already taken");
+            throw new IllegalStateException("user is already exists");
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
@@ -66,5 +71,11 @@ public class AppUserService implements UserDetailsService {
 
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
+    }
+
+    public ProfileResponse getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return new ProfileResponse();
     }
 }

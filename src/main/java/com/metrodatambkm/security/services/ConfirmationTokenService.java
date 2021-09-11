@@ -1,6 +1,6 @@
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.models.ConfirmationToken;
+import com.metrodatambkm.security.models.credentials.ConfirmationToken;
 import com.metrodatambkm.security.repository.ConfirmationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

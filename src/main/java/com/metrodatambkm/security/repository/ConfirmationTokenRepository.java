@@ -1,7 +1,7 @@
 package com.metrodatambkm.security.repository;
 
-import com.metrodatambkm.security.models.AppUser;
-import com.metrodatambkm.security.models.ConfirmationToken;
+import com.metrodatambkm.security.models.credentials.AppUser;
+import com.metrodatambkm.security.models.credentials.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,7 +1,8 @@
-package com.metrodatambkm.security.models;
+package com.metrodatambkm.security.models.credentials;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.metrodatambkm.security.models.Privilege;
+import com.metrodatambkm.security.models.Role;
+import com.metrodatambkm.security.models.hr_schema.Employee;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,9 +33,9 @@ public class AppUser implements UserDetails {
             generator = "student_sequence"
     )
     private Long id;
+    @Column(unique = true)
     private String username;
     private String password;
-    private String email;
     private Boolean locked = false;
     private Boolean enabled = false;
 
@@ -50,24 +51,41 @@ public class AppUser implements UserDetails {
     )
     private List<Role> roles;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "employee_id")
+    private Employee employee;
+
     public AppUser(String username,
-                   String email,
                    String password) {
         this.username = username;
-        this.email = email;
         this.password = password;
     }
 
-    public AppUser(String username, String email, String password, Role user) {
+    public AppUser(String username, String password, Role user) {
         this.username = username;
-        this.email = email;
         this.password = password;
         this.roles = Collections.singletonList(user);
     }
 
+    public AppUser(String username, String password, Employee employee, Role role) {
+        this.username = username;
+        this.password = password;
+        this.employee = employee;
+        this.roles = Collections.singletonList(role);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getGrantedAuthorities(getPrivileges(roles));
+        List<Role> userRole = getRoles();
+        Collection<GrantedAuthority> authenticated = new ArrayList<>();
+
+        for (Role role : userRole) {
+            authenticated.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+            for (Privilege privilege : role.getPrivileges()) {
+                authenticated.add(new SimpleGrantedAuthority(privilege.getName().toUpperCase()));
+            }
+        }
+        return authenticated;
     }
 
     private List<String> getPrivileges(Collection<Role> roles) {
@@ -81,6 +99,7 @@ public class AppUser implements UserDetails {
         for (Privilege item : collection) {
             privileges.add(item.getName().toUpperCase());
         }
+        System.out.println("Test" + privileges);
         return privileges;
     }
 
@@ -89,6 +108,7 @@ public class AppUser implements UserDetails {
         for (String privilege : privileges) {
             authorities.add(new SimpleGrantedAuthority(privilege));
         }
+        System.out.println("Test" + authorities);
         return authorities;
     }
 
@@ -99,7 +119,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

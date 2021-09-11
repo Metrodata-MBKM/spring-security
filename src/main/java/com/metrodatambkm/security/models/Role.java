@@ -1,7 +1,7 @@
 package com.metrodatambkm.security.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.metrodatambkm.security.models.credentials.AppUser;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,6 +1,6 @@
 package com.metrodatambkm.security.repository;
 
-import com.metrodatambkm.security.models.AppUser;
+import com.metrodatambkm.security.models.credentials.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,13 +11,12 @@ import java.util.Optional;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-    Optional<AppUser> findByEmail(String email);
 
-    AppUser findByUsername(String username);
+    Optional<AppUser> findByUsername(String username);
 
     @Transactional
     @Modifying
-    @Query("UPDATE AppUser a " + "SET a.enabled = TRUE WHERE a.email = ?1")
+    @Query("UPDATE AppUser a " + "SET a.enabled = TRUE WHERE a.id in (SELECT e.id FROM Employee e WHERE e.email = ?1)")
     int enableAppUser(String email);
 
     @Query(value = "SELECT u FROM AppUser u where u.username= ?1 and u.password = ?2 ")

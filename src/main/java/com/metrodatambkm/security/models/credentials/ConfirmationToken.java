@@ -1,4 +1,4 @@
-package com.metrodatambkm.security.models;
+package com.metrodatambkm.security.models.credentials;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

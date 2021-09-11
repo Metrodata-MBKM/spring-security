@@ -1,9 +1,10 @@
 package com.metrodatambkm.security.services;
 
 import com.metrodatambkm.security.dto.RegistrationRequest;
-import com.metrodatambkm.security.models.AppUser;
-import com.metrodatambkm.security.models.ConfirmationToken;
+import com.metrodatambkm.security.models.credentials.AppUser;
+import com.metrodatambkm.security.models.credentials.ConfirmationToken;
 import com.metrodatambkm.security.models.Role;
+import com.metrodatambkm.security.models.hr_schema.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +34,16 @@ public class RegistrationService {
             throw new IllegalStateException("email not valid");
         }
 
+        AppUser appUser = new AppUser();
+        Employee employee = new Employee();
+        employee.setEmail(request.getEmail());
+        appUser.setEmployee(employee);
+
         String token = appUserService.signUpUser(
                 new AppUser(
                         request.getUsername(),
-                        request.getEmail(),
                         request.getPassword(),
+                        new Employee(request.getEmail()),
                         new Role(2L)
                 )
         );
@@ -66,7 +72,7 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+        appUserService.enableAppUser(confirmationToken.getAppUser().getEmployee().getEmail());
         return "confirmed";
     }
 

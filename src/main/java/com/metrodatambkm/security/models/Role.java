@@ -24,15 +24,6 @@ public class Role {
     private List<AppUser> users;
 
     @ManyToMany
-    @JoinTable(
-            name = "roles_privileges",
-            joinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "privilege_id", referencedColumnName = "id"
-            )
-    )
     private List<Privilege> privileges;
 
     public Role(String name) {

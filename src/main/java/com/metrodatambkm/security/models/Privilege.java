@@ -19,10 +19,6 @@ public class Privilege {
 
     private String name;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "privileges")
-    private List<Role> rolse;
-
     public Privilege(String name) {
         this.name = name;
     }

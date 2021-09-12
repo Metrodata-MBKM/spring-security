@@ -76,30 +76,21 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Role> userRole = getRoles();
-        Collection<GrantedAuthority> authenticated = new ArrayList<>();
-
-        for (Role role : userRole) {
-            authenticated.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
-            for (Privilege privilege : role.getPrivileges()) {
-                authenticated.add(new SimpleGrantedAuthority(privilege.getName().toUpperCase()));
-            }
-        }
-        return authenticated;
+        return getGrantedAuthorities(getPrivileges(roles));
     }
 
     private List<String> getPrivileges(Collection<Role> roles) {
 
+        System.out.println("Testing : ");
         List<String> privileges = new ArrayList<>();
         List<Privilege> collection = new ArrayList<>();
         for (Role role : roles) {
-            privileges.add(role.getName());
+            privileges.add("ROLE_" + role.getName());
             collection.addAll(role.getPrivileges());
         }
         for (Privilege item : collection) {
             privileges.add(item.getName().toUpperCase());
         }
-        System.out.println("Test" + privileges);
         return privileges;
     }
 
@@ -108,7 +99,6 @@ public class AppUser implements UserDetails {
         for (String privilege : privileges) {
             authorities.add(new SimpleGrantedAuthority(privilege));
         }
-        System.out.println("Test" + authorities);
         return authorities;
     }
 

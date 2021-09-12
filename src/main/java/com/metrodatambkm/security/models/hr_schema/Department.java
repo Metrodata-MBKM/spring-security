@@ -39,8 +39,7 @@ public class Department {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    
-//    @JsonManagedReference
+
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
@@ -52,5 +51,9 @@ public class Department {
 
     public Department(String name) {
         this.name = name;
+    }
+
+    public Department(Long id) {
+        this.id = id;
     }
 }

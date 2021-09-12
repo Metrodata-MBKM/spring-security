@@ -57,4 +57,7 @@ public class Job {
         this.min_salary = min_salary;
     }
 
+    public Job(Long job) {
+        this.id = job;
+    }
 }

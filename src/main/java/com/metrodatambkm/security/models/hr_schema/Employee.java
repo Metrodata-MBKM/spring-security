@@ -83,4 +83,17 @@ public class Employee {
     public Employee(String email) {
         this.email = email;
     }
+
+    public Employee(String firstName, String lastName, String phoneNumber, Long department, Long job, Long manager) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.department = new Department(department);
+        this.job = new Job(job);
+        this.managerId = new Employee(manager);
+    }
+
+    public Employee(Long manager) {
+        this.id = manager;
+    }
 }

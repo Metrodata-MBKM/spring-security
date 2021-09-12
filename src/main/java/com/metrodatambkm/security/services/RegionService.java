@@ -10,8 +10,9 @@ import com.metrodatambkm.security.models.hr_schema.Region;
 import com.metrodatambkm.security.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  * @author Dony Tri P
  */
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 public class RegionService {
 
     @Autowired

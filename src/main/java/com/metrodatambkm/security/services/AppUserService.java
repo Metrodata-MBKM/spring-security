@@ -1,8 +1,10 @@
 package com.metrodatambkm.security.services;
 
+import com.metrodatambkm.security.dto.EmployeeRequest;
 import com.metrodatambkm.security.dto.ProfileResponse;
 import com.metrodatambkm.security.models.credentials.AppUser;
 import com.metrodatambkm.security.models.credentials.ConfirmationToken;
+import com.metrodatambkm.security.models.hr_schema.Employee;
 import com.metrodatambkm.security.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,8 +22,7 @@ import java.util.UUID;
 @Service
 @Transactional
 public class AppUserService implements UserDetailsService {
-    private final static String USER_NOT_FOUND_MSG =
-            "user with username %s not found";
+    private final static String USER_NOT_FOUND_MSG = "user with username %s not found";
 
     private AppUserRepository appUserRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -73,9 +74,33 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.enableAppUser(email);
     }
 
-    public ProfileResponse getProfile() {
+    public ProfileResponse getProfile(String username) {
+        AppUser appUser = appUserRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found"));
+
+        ProfileResponse profileResponse = new ProfileResponse(
+                appUser.getEmployee().getFirstName() + " " + appUser.getEmployee().getLastName(),
+                appUser.getEmployee().getEmail(),
+                appUser.getEmployee().getPhoneNumber()
+        );
+
+        return new ProfileResponse();
+    }
+
+    public AppUser updateProfile(EmployeeRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return new ProfileResponse();
+        AppUser appUser = appUserRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found"));
+        Employee employee = new Employee(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getPhoneNumber(),
+                request.getDepartment(),
+                request.getJob(),
+                request.getManager()
+        );
+        appUser.setEmployee(employee);
+        return appUserRepository.save(appUser);
     }
 }

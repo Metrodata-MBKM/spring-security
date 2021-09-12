@@ -57,6 +57,8 @@ public class User {
     
     @ManyToMany(fetch=FetchType.EAGER)
     Set<Role> roles;
+    
+    
 //    private Long id;
 //    
 //    private String username;
@@ -68,4 +70,13 @@ public class User {
 //    private List<String> authorities;
 //    
 //    private boolean active;
+
+    public User(Integer id, String username, String password, String email, Employee emploeyee, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.emploeyee = emploeyee;
+        this.roles = roles;
+    }
 }

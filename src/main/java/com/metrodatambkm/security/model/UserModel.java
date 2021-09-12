@@ -13,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
+//@Data @AllArgsConstructor @NoArgsConstructor
 public class UserModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,7 @@ public class UserModel implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Set<RoleModel> role;
+
 
     public Integer getId() {
         return id;

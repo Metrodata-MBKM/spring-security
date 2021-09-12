@@ -1,6 +1,7 @@
 package com.metrodatambkm.security.security;
 
 
+import com.metrodatambkm.security.model.AppUserDetails;
 import com.metrodatambkm.security.model.UserModel;
 import com.metrodatambkm.security.model.RoleModel;
 import com.metrodatambkm.security.repository.UserRepository;
@@ -28,10 +29,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserModel user = userRepository.findByUsername(username);
-        Set<GrantedAuthority> grantedAuthorities = user.getRole().stream()
-                .map(roleModel -> new SimpleGrantedAuthority(roleModel.getName()))
-                .collect(Collectors.toSet());
-
-        return  new User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        return new AppUserDetails(user);
     }
 }

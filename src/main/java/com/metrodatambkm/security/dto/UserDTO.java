@@ -15,7 +15,8 @@ public class UserDTO {
     private String password;
 
     @JsonProperty("role")
-    private Long roleId;
+    private String role;
+
 
     public String getUsername() {
         return username;
@@ -41,11 +42,12 @@ public class UserDTO {
         this.password = password;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setRole(String role) {
+        this.role = role;
     }
+
 }

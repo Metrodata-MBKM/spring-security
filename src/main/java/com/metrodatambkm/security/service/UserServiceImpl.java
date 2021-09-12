@@ -1,22 +1,36 @@
 package com.metrodatambkm.security.service;
 
+import com.metrodatambkm.security.dto.UserDTO;
+import com.metrodatambkm.security.model.RoleModel;
 import com.metrodatambkm.security.model.UserModel;
+import com.metrodatambkm.security.repository.RoleRepository;
 import com.metrodatambkm.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Override
-    public UserModel addUser(UserModel user) {
-        String pass = encrypt(user.getPassword());
-        user.setPassword(pass);
-        return userRepository.save(user);
+    public UserModel addUser(UserDTO user) {
+        UserModel newUser = new UserModel();
+        Set<RoleModel> roles = new HashSet<>();
+        roles.add(roleRepository.findByName("ROLE_"+user.getRole()));
+        newUser.setUsername(user.getUsername());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(encrypt(user.getPassword()));
+        newUser.setRole(roles);
+        return userRepository.save(newUser);
     }
 
     @Override

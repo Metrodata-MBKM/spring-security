@@ -13,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "role")
+//@Data @AllArgsConstructor @NoArgsConstructor
 public class RoleModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -43,14 +43,14 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         //mengambil nilai username dan email ketika berhasil register
         String username = event.getRegisterResponse().getUsername();
         String email = event.getRegisterResponse().getEmail();
-        User user = repository.findByUsernameOrEmail(username, email);
+        User user = repository.findByUsernameOrEmployee_Email(username, email);
         
         //membuat token dengan randomUUID
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
 
         //menginisialisasi email penerima, subjek, dan isi email
-        String recipientAddress = user.getEmail();
+        String recipientAddress = user.getEmployee().getEmail();
         String subject = "[MBKM_HR] Verification Email ";
         String confirmationUrl  = "http://localhost:8080/auth/confirm/" + token;
         String message = "<h1>Thankyou for registering, " + user.getUsername() +

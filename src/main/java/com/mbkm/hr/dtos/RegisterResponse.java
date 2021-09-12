@@ -25,6 +25,6 @@ public class RegisterResponse {
     }
 
     public RegisterResponse generate(User user){
-        return new RegisterResponse(user.getEmail(), user.getUsername());
+        return new RegisterResponse(user.getEmployee().getEmail(), user.getUsername());
     }
 }

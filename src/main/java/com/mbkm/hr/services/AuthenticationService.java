@@ -15,13 +15,18 @@ import com.mbkm.hr.dtos.LoginResponseDTO;
 import com.mbkm.hr.dtos.RegisterRequest;
 import com.mbkm.hr.dtos.RegisterResponse;
 import com.mbkm.hr.events.OnRegistrationCompleteEvent;
+import com.mbkm.hr.models.Employee;
 import com.mbkm.hr.models.Privilege;
 import com.mbkm.hr.models.User;
 import com.mbkm.hr.models.VerificationToken;
 import com.mbkm.hr.models.Role;
+import com.mbkm.hr.repositories.DepartmentRepository;
+import com.mbkm.hr.repositories.EmployeeRepository;
+import com.mbkm.hr.repositories.JobRepository;
 import com.mbkm.hr.repositories.RoleRepository;
 import com.mbkm.hr.repositories.UserRepository;
 import com.mbkm.hr.repositories.VerificationTokenRepository;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,41 +42,66 @@ public class AuthenticationService {
 
     UserRepository userRepository;
     RoleRepository roleRepository;
+    EmployeeRepository employeeRepository;
     VerificationTokenRepository tokenRepository;
     PasswordEncoder encoder;
     ApplicationEventPublisher eventPublisher;
+    JobRepository jobRepository;
+    DepartmentRepository departmentRepository;
 
     @Autowired
-    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, VerificationTokenRepository tokenRepository, PasswordEncoder encoder, ApplicationEventPublisher eventPublisher) {
+    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, EmployeeRepository employeeRepository, VerificationTokenRepository tokenRepository, PasswordEncoder encoder, ApplicationEventPublisher eventPublisher, JobRepository jobRepository, DepartmentRepository departmentRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.employeeRepository = employeeRepository;
         this.tokenRepository = tokenRepository;
         this.encoder = encoder;
         this.eventPublisher = eventPublisher;
+        this.jobRepository = jobRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     public RegisterResponse register(RegisterRequest request) {
-        if (userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail()) != null) {
+        if (userRepository.findByUsernameOrEmployee_Email(request.getUsername(), request.getEmail()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
         } 
 
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR")); //defaultrole
-
+        
+        Employee newemployee = new Employee(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPhoneNumber(),
+                request.getHireDate(),
+                request.getSalary(),
+                request.getCommissionPct(),
+                jobRepository.getById(request.getJob()),
+                departmentRepository.getById(request.getDepartment()),
+                employeeRepository.getById(request.getManager())
+        );
+        
+        employeeRepository.save(newemployee);
+        
         User user = new User(
                 null,
                 request.getUsername(),
                 encoder.encode(request.getPassword()),
-                request.getEmail(),
                 false,
-                roles);
+                roles,
+                newemployee);
+        
+        System.out.println("id: "+employeeRepository.findByFirstName(request.getFirstName()).getId());
         
         RegisterResponse response = new RegisterResponse().generate(userRepository.save(user));
+        
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(response));
 
         return response;
     }
 
+    
     public LoginResponseDTO login(LoginRequestDTO request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {

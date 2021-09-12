@@ -12,7 +12,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,6 +45,12 @@ public class User {
     
     @Column(name="email", length=50)
     private String email;
+    
+    @MapsId
+    @OneToOne
+    @JoinColumn(name="id")
+    private Employee emploeyee;
+    
     
     @Column(name = "enabled", columnDefinition ="default false")
     private boolean enabled = false;

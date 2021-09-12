@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -82,7 +83,8 @@ public class AuthenticationService {
     }
 
     public LoginResponseDTO login(LoginRequestDTO request){
-        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
+//        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
+      User user = userRepository.findByUsernameOrEmployee_Email(request.getUsername(), request.getUsername());
 
         if(user == null) {
             throw new ResourceNotFoundException("User not found!");

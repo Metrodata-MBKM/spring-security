@@ -11,6 +11,7 @@ import com.metrodatambkm.security.models.User;
 import com.metrodatambkm.security.repositories.UserRepository;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,7 +38,7 @@ public class AppUserDetailsService implements UserDetailsService{
     
     @Override
     public UserDetails loadUserByUsername(String parameter) throws UsernameNotFoundException {
-        User user=userRepository.findByUsernameOrEmail(parameter,parameter);
+        User user=userRepository.findByUsernameOrEmployee_Email(parameter, parameter);
         return new AppUserDetails(user);
     }
     

@@ -6,6 +6,7 @@
 package com.metrodatambkm.security.repositories;
 
 import com.metrodatambkm.security.models.User;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +16,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
-    User findByUsernameOrEmail(String username, String email);
+    User findByUsernameOrEmployee_Email(String username, String email);
     User findByUsername(String username);
     User findByEmail(String email);
     User findByUsernameAndPassword(String username, String password);
+
 }

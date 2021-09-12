@@ -39,7 +39,7 @@ public class RegionController implements BaseController<Region, Integer>{
     
     @Override
     @GetMapping
-    @PreAuthorize("hasAuthority('READ_DATA)")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Region> getAll() {
         
         return regionService.getAll();
@@ -47,7 +47,7 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @Override
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('READ_DATA)")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Region getById(@PathVariable("id") Integer id) {
         if(regionService.getById(id).isPresent()){
             return regionService.getById(id).get();

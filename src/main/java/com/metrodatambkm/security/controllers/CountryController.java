@@ -10,6 +10,7 @@ import com.metrodatambkm.security.services.CountryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/country")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class CountryController implements BaseController<Country, String>{
   
     @Autowired
@@ -37,12 +39,14 @@ public class CountryController implements BaseController<Country, String>{
 
     @Override
     @GetMapping
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Country> getAll() {
         return countryService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Country getById(@PathVariable("id") String id) {
         try {
             return countryService.getById(id).get();
@@ -53,6 +57,7 @@ public class CountryController implements BaseController<Country, String>{
 
     @Override
     @PostMapping
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Country save(@RequestBody Country country) {
         if (countryService.getById(country.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
@@ -63,6 +68,7 @@ public class CountryController implements BaseController<Country, String>{
 
     @Override
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public Country update(@PathVariable("id") String id, @RequestBody  Country country) {
         if (countryService.getById(id).isPresent()) {
             return countryService.save(country);
@@ -73,6 +79,7 @@ public class CountryController implements BaseController<Country, String>{
 
     @Override
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable("id") String id) {
         if (countryService.getById(id).isPresent()) {
             countryService.delete(id);

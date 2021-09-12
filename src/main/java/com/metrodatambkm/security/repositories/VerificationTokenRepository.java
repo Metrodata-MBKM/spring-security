@@ -5,18 +5,15 @@
  */
 package com.metrodatambkm.security.repositories;
 
+import com.metrodatambkm.security.models.TokenVerification;
 import com.metrodatambkm.security.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author gabri
  */
-@Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
-    User findByUsernameOrEmail(String username, String email);
-    User findByUsername(String username);
-    User findByEmail(String email);
-    User findByUsernameAndPassword(String username, String password);
+public interface VerificationTokenRepository extends JpaRepository<TokenVerification, Integer>{
+    TokenVerification findByToken(String token);
+    TokenVerification findByUser(User user);
 }

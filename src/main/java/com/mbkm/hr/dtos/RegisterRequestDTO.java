@@ -27,6 +27,6 @@ public class RegisterRequestDTO {
     private Double commissionPct;
     private String job;
     private Integer department;
-    private Integer manager;
+    private Integer managerId;
     private String username, password;
 }

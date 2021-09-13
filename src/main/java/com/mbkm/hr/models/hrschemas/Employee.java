@@ -75,7 +75,7 @@ public class Employee {
     @PrimaryKeyJoinColumn
     private User user;
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee managerId) {
+    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manageId) {
 //        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -86,6 +86,6 @@ public class Employee {
         this.commissionPct = commissionPct;
         this.job = job;
         this.department = department;
-        this.managerId = managerId;
+        this.managerId = manageId;
     }
 }

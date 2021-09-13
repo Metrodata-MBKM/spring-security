@@ -53,16 +53,15 @@ public class UserManagementService {
 
     
     @Autowired
-    public UserManagementService(AppUserRepository appUserRepository, 
-            RoleRepository roleRepository, 
-            VerificationTokenRepository tokenRepository, 
-            PasswordEncoder encoder, 
-            ApplicationEventPublisher eventPublisher) {
+    public UserManagementService(AppUserRepository appUserRepository, RoleRepository roleRepository, VerificationTokenRepository tokenRepository, PasswordEncoder encoder, ApplicationEventPublisher eventPublisher, EmployeeRepository employeeRepository, JobRepository jobRepository, DepartmentRepository departmentRepository) {
         this.appUserRepository = appUserRepository;
         this.roleRepository = roleRepository;
         this.tokenRepository = tokenRepository;
         this.encoder = encoder;
         this.eventPublisher = eventPublisher;
+        this.employeeRepository = employeeRepository;
+        this.jobRepository = jobRepository;
+        this.departmentRepository = departmentRepository;
     }
     
     public RegisterResponseDTO register(RegisterRequestDTO request){
@@ -83,7 +82,7 @@ public class UserManagementService {
                 request.getCommissionPct(),
                 jobRepository.getById(request.getJob()),
                 departmentRepository.getById(request.getDepartment()),
-                employeeRepository.getById(request.getManager())
+                employeeRepository.getById(request.getManagerId())
         );
         
         employeeRepository.save(newemployee);
@@ -104,6 +103,8 @@ public class UserManagementService {
         return response;
         
     }
+
+    
     
     public LoginResponseDTO login(LoginRequestDTO request){
         User user = appUserRepository.findByUsername(request.getUsername());

@@ -52,6 +52,7 @@ public class EmployeeController implements BaseController<Employee, Integer> {
 
     @Override
     @PostMapping
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Employee save(@RequestBody Employee employee) {
         if (employeeService.getById(employee.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee with ID: " + employee.getId() + " Is Already Exist");
@@ -62,6 +63,7 @@ public class EmployeeController implements BaseController<Employee, Integer> {
 
     @Override
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     public Employee update(@PathVariable("id") Integer id, @RequestBody Employee employee) {
         if (!employeeService.getById(id).isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with ID: " + employee.getId() + " Not Found");
@@ -72,6 +74,7 @@ public class EmployeeController implements BaseController<Employee, Integer> {
 
     @Override
     @DeleteMapping
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public Employee delete(Integer id) {
         if (employeeService.delete(id)) {
             return employeeService.getById(id).get();

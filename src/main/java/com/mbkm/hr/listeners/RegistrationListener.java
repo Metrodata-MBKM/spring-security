@@ -39,20 +39,23 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     private void confirmRegistration(OnRegistrationCompleteEvent event){
-        System.out.println("===================== RUN THE LISTENER ==================");
+        // TAKING USERNAME AND PASSWORD AFTER REGISTER
         String username = event.getRegisterResponse().getUsername();
         String email = event.getRegisterResponse().getEmail();
-        User user = repository.findByUsernameOrEmail(username, email);
-
+        User user = repository.findByUsernameOrEmployee_Email(username, email);
+        
+        // CREATING TOKEN FOR VERIFICATION USING RANDOMUUID
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
 
-        String recipientAddress = user.getEmail();
-        String subject = "Registration Confirmation";
-        String confirmationUrl  = event.getAppUrl() + "/auth/confirm/" + token;
-        String message = "<h1>Hello " + user.getUsername() + " ..</h1> <br> Registration successfully \n" +
-                "Please click the following url " +
-                "http://localhost:8080" + confirmationUrl;
+        // MAIL SERVICE 
+        String recipientAddress = user.getEmployee().getEmail();
+        String subject = "Verification Email ";
+        String confirmationUrl  = "http://localhost:8080/auth/confirm/" + token;
+        String message = "<h1>Thankyou for registering, " + user.getUsername() +
+                "!</h1> <br> Please verify your email to secure your account, <br>" +
+                "Click the following link to verify your email -> " +
+                confirmationUrl;
 
         emailService.sendMessage(recipientAddress,subject,message);
 

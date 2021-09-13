@@ -5,7 +5,6 @@
  */
 package com.mbkm.hr.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +14,15 @@ import lombok.NoArgsConstructor;
  *
  * @author loisceka
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor
 @Builder
-public class AuthResponseDTO {
-    
-    private String accessToken;
-    private List<String> authorities;
+public class ProfileDTO {
+    private String username;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+//    private String department;
+//    private String job;
+//    private String manager;
 }

@@ -15,24 +15,11 @@ import org.springframework.context.ApplicationEvent;
  */
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
 
-    private String appUrl;
-    private Locale locale;
     private RegisterResponse registerResponse;
-
-    public String getAppUrl() {
-        return appUrl;
-    }
-
-    public void setAppUrl(String appUrl) {
-        this.appUrl = appUrl;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
+    
+    public OnRegistrationCompleteEvent(RegisterResponse response){
+        super(response);
+        this.registerResponse = response;
     }
 
     public RegisterResponse getRegisterResponse() {
@@ -41,13 +28,5 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
 
     public void setRegisterResponse(RegisterResponse registerResponse) {
         this.registerResponse = registerResponse;
-    }
-
-    public OnRegistrationCompleteEvent(RegisterResponse response, Locale locale, String appUrl){
-        super(response);
-
-        this.registerResponse = response;
-        this.locale = locale;
-        this.appUrl = appUrl;
     }
 }

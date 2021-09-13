@@ -8,14 +8,21 @@ package com.mbkm.hr.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Date;
 import java.util.Set;
-import javax.persistence.CascadeType;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,58 +42,70 @@ import org.springframework.lang.Nullable;
 public class Employee {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
     private Integer id;
 
     @Column(name = "first_name")
     private String firstName;
 
+    @Basic(optional = false)
     @Column(name = "last_name")
     private String lastName;
 
+    @Basic(optional = false)
     @Column(name = "email")
     private String email;
 
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Basic(optional = false)
     @Column(name = "hire_date")
-    private Date hireDate;
+    @Temporal(TemporalType.DATE)
+    private java.util.Date hireDate;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "job_id")
-    private Job job;
-
+    @Basic(optional = false)
     @Column(name = "salary")
     private Double salary;
-
-    @Nullable
     @Column(name = "commission_pct")
     private Double commissionPct;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
-
-    @ManyToOne
-    @JoinColumn(name = "manager_id")
-    private Employee manager;
-
-    @OneToMany(mappedBy = "manager")
     @JsonBackReference
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
     private Set<Department> departments;
 
-    public Employee(Integer id, String firstName, String lastName, String email, String phoneNumber, Date hireDate, Job job, Double salary, @Nullable Double commissionPct, Department department, Employee manager) {
-        this.id = id;
+    @JoinColumn(name = "job_id", referencedColumnName = "job_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Job job;
+
+    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Department department;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY)
+    private Set<Employee> employees;
+
+    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Employee managerId;
+
+    @OneToOne(mappedBy = "employee")
+    @PrimaryKeyJoinColumn
+    private User user;
+
+    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee managerId) {
+//        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.hireDate = hireDate;
-        this.job = job;
         this.salary = salary;
         this.commissionPct = commissionPct;
+        this.job = job;
         this.department = department;
-        this.manager = manager;
+        this.managerId = managerId;
     }
 }

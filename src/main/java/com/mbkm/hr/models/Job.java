@@ -11,6 +11,7 @@ package com.mbkm.hr.models;
  */
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,15 +48,7 @@ public class Job {
     @Column(name = "max_salary")
     private double max_salary;
 
-    @OneToMany(mappedBy = "job", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "job", fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<Employee> employee;
-
-    public Job(String id, String title, double min_salary, double max_salary) {
-        this.id = id;
-        this.title = title;
-        this.min_salary = min_salary;
-        this.max_salary = max_salary;
-    }
-
 }

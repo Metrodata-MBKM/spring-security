@@ -17,11 +17,13 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "users")
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "employee_id")
     private Integer id;
 
     @Column(name = "username", length = 50, unique = true)
@@ -30,12 +32,14 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email", length = 50, unique = true)
-    private String email;
-
     @Column(name = "enabled")
     private boolean enabled = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 }

@@ -11,6 +11,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -32,6 +34,7 @@ import lombok.Setter;
 public class Region {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "region_id", length = 5)
     private Integer id;
 
@@ -41,14 +44,4 @@ public class Region {
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "region")
     private Set<Country> countries;
-
-    public Region(String name) {
-        this.name = name;
-    }
-
-    public Region(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.mbkm.hr.models;
+package com.mbkm.hr.models.hr_schema;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;

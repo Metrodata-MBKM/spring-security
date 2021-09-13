@@ -30,41 +30,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
     AuthenticationService authenticationService;
-    ApplicationEventPublisher eventPublisher;
 
-     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService, ApplicationEventPublisher eventPublisher) {
+    @Autowired
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.eventPublisher = eventPublisher;
     }
-    
+
     @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest request, HttpServletRequest servletRequest){
-        try{
-            RegisterResponse response = authenticationService.register(request);
-            String appUrl = servletRequest.getContextPath();
-
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-                    response,
-                    servletRequest.getLocale(),
-                    appUrl
-            ));
-
-            return response;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return null;
+    public RegisterResponse register(@RequestBody RegisterRequest request){
+        return authenticationService.register(request);
     }
-    
-    @GetMapping("/confirm/{token}")
-    public ConfirmationResponse confirmRegistration(@PathVariable String token){
-        return authenticationService.confirmRegistration(token);
-    }
-    
+
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO request){
         return authenticationService.login(request);
+    }
+
+    @GetMapping("/confirm/{token}")
+    public ConfirmationResponse confirmRegistration(@PathVariable String token){
+        return authenticationService.confirmRegistration(token);
     }
 }

@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.models.Location;
+import com.mbkm.hr.models.hr_schema.Location;
 import com.mbkm.hr.services.LocationService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

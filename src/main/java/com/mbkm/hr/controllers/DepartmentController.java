@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.models.Department;
+import com.mbkm.hr.models.hr_schema.Department;
 import com.mbkm.hr.services.DepartmentService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

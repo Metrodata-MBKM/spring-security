@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.models.Job;
+import com.mbkm.hr.models.hr_schema.Job;
 import com.mbkm.hr.repositories.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

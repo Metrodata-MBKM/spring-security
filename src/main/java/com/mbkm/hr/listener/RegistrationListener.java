@@ -52,12 +52,12 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
 
-        String recipientAddress = user.getEmail();
+        String recipientAddress = user.getEmployee().getEmail();
         String subject = "Verification Account";
-        String Url  = "http://localhost:8088"+event.getAppUrl() + "/auth/confirm/" + token;
+        String Url  = "http://localhost:8080/auth/confirm/" + token;
         
         Context ctx = new Context(LocaleContextHolder.getLocale());
-        ctx.setVariable("email", user.getEmail());
+        ctx.setVariable("email", user.getEmployee().getEmail());
         ctx.setVariable("username", user.getUsername());
         ctx.setVariable("url", Url);
         String htmlContent = this.templateEngine.process("email-verification", ctx);

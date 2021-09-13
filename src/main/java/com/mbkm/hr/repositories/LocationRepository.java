@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.models.Location;
+import com.mbkm.hr.models.hr_schema.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

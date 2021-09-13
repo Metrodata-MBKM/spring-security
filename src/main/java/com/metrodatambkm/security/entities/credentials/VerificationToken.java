@@ -5,25 +5,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor @Data
-public class VerificationToken {
+public class VerificationToken implements Serializable {
     private static final int EXPIRATION = 60 * 24;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user")
+    @MapsId
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
     private User user;
 
+    @Column(name = "expire_date")
     private Date expireDate;
 
     public VerificationToken(String token, User user) {

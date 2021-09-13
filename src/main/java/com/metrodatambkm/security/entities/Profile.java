@@ -10,11 +10,13 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Profile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "first_name", length = 100)
@@ -30,8 +32,9 @@ public class Profile {
     @Nullable
     private Date birthDate;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "user")
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "id")
     private User user;
 
     public Profile(String firstName, String lastName, String phone, @Nullable Date birthDate, User user) {

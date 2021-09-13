@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -33,8 +34,13 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne
+    @PrimaryKeyJoinColumn
     private Profile profile;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private VerificationToken verificationToken;
 
     public User(Integer id, String username, String password, String email, boolean enabled, Set<Role> roles) {
         this.id = id;

@@ -7,7 +7,9 @@ package com.mbkm.hr.config;
 
 import com.mbkm.hr.services.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,11 +27,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     private AppUserDetailsService appUserDetailsService;
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoderConfig passwordEncoder;
 
     @Autowired
     public WebSecurityConfig(AppUserDetailsService appUserDetailsService, 
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoderConfig passwordEncoder) {
         this.appUserDetailsService = appUserDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -38,7 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(appUserDetailsService)
-                .passwordEncoder(passwordEncoder);
+                .passwordEncoder(passwordEncoder.passwordEncoder());
+                
     }
 
     @Override
@@ -47,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
+                .antMatchers("/auth/**/*").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -54,4 +58,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .httpBasic();
     }
+    
 }

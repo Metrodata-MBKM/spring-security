@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/employee")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Autowired

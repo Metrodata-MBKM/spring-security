@@ -17,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Region {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="region_id" ,length = 5)
     private Integer id;
 

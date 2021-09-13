@@ -5,15 +5,17 @@
  */
 package com.mbkm.hr.repositories;
 
-import com.mbkm.hr.models.Job;
+import com.mbkm.hr.models.Department;
+import com.mbkm.hr.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Asus
+ * @author Kevitha
  */
 @Repository
-public interface JobRepository extends JpaRepository<Job, String>{
-
+public interface UserRepository extends JpaRepository<User, Integer>{
+    User findByUsername(String username);
+    User findByUsernameOrEmployee_Email(String username, String email);
 }

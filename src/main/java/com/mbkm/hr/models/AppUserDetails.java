@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author WahyuKu
  */
 public class AppUserDetails implements UserDetails {
-    
+
     private User user;
 
     public AppUserDetails(User user) {
@@ -29,19 +29,16 @@ public class AppUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Role> userRole = user.getRoles();
-        Collection<GrantedAuthority> collectionGrantedAuthorithy = new ArrayList<>();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
         
         for (Role role : userRole) {
-            collectionGrantedAuthorithy.add(new SimpleGrantedAuthority("ROLE_"+role.getName().toUpperCase()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
             for (Privilege privilege : role.getPrivileges()) {
-                 collectionGrantedAuthorithy.add(new SimpleGrantedAuthority(privilege.getName()));
+                authorities.add(new SimpleGrantedAuthority(privilege.getName().toUpperCase()));
             }
         }
-        return collectionGrantedAuthorithy;
+        return authorities;
     }
-
-    
-    
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -71,5 +68,5 @@ public class AppUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    
+
 }

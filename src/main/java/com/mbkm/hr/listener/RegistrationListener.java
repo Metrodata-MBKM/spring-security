@@ -47,7 +47,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private void confirmRegistration(OnRegistrationCompleteEvent event){
         String username = event.getRegisterResponse().getUsername();
         String email = event.getRegisterResponse().getEmail();
-        User user = repository.findByUsernameOrEmail(username, email);
+        User user = repository.findByUsernameOrEmployee_Email(username, email);
 
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);

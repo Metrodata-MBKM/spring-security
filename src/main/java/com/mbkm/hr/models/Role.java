@@ -29,5 +29,4 @@ public class Role {
 
     @ManyToMany
     private Set<Privilege> privileges;
-
 }

@@ -24,18 +24,19 @@ import com.mbkm.hr.repositories.UserRepository;
  */
 @Service
 public class AppUserDetailsService implements UserDetailsService {
-    @Autowired
-    private UserRepository appUserRepository;
-
-    public AppUserDetailsService(UserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
-    }
     
+    private UserRepository appUserRepository;
+    private EmailService emailService;
+
+    @Autowired
+    public AppUserDetailsService(UserRepository appUserRepository, EmailService emailService) {
+        this.appUserRepository = appUserRepository;
+        this.emailService = emailService;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String parameter)throws UsernameNotFoundException{
-        System.out.println(appUserRepository.findByUsernameOrEmail(parameter, parameter));
-        User user = appUserRepository.findByUsernameOrEmail(parameter, parameter);
-        
+        User user = appUserRepository.findByUsernameOrEmployee_Email(parameter, parameter);
         return new AppUserDetails(user);
     }
     

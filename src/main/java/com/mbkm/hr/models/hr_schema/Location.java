@@ -53,8 +53,9 @@ public class Location {
     @Column(name = "state_province", length = 25)
     private String province;
 
-    @Column(name = "country_id", nullable = false)
-    private String country;
+    @JoinColumn(name = "country_id", referencedColumnName = "country_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Country country;
     
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "location")

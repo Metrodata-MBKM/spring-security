@@ -54,7 +54,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
         String recipientAddress = user.getEmployee().getEmail();
         String subject = "Verification Account";
-        String Url  = "http://localhost:8080/auth/confirm/" + token;
+        String Url  = "http://localhost:8088/auth/confirm/" + token;
         
         Context ctx = new Context(LocaleContextHolder.getLocale());
         ctx.setVariable("email", user.getEmployee().getEmail());

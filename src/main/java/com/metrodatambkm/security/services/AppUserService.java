@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,13 +25,14 @@ public class AppUserService implements UserDetailsService {
     private final static String USER_NOT_FOUND_MSG = "user with username %s not found";
 
     private AppUserRepository appUserRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
     private ConfirmationTokenService confirmationTokenService;
 
     @Autowired
-    public AppUserService(AppUserRepository appUserRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService) {
+    private PasswordEncoder encoder;
+
+    @Autowired
+    public AppUserService(AppUserRepository appUserRepository, ConfirmationTokenService confirmationTokenService) {
         this.appUserRepository = appUserRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.confirmationTokenService = confirmationTokenService;
     }
 
@@ -51,7 +52,7 @@ public class AppUserService implements UserDetailsService {
             throw new IllegalStateException("user is already exists");
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
+        String encodedPassword = encoder.encode(appUser.getPassword());
 
         appUser.setPassword(encodedPassword);
 
@@ -74,17 +75,17 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.enableAppUser(email);
     }
 
-    public ProfileResponse getProfile(String username) {
+    public ProfileResponse getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         AppUser appUser = appUserRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("User not found"));
 
-        ProfileResponse profileResponse = new ProfileResponse(
+        return new ProfileResponse(
                 appUser.getEmployee().getFirstName() + " " + appUser.getEmployee().getLastName(),
                 appUser.getEmployee().getEmail(),
                 appUser.getEmployee().getPhoneNumber()
         );
-
-        return new ProfileResponse();
     }
 
     public AppUser updateProfile(EmployeeRequest request) {

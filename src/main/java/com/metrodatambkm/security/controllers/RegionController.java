@@ -23,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/region")
+@PreAuthorize("hasAnyRole('ADMIN','USER')")
 public class RegionController {
 
     Logger logger = LoggerFactory.getLogger(RegionController.class);
@@ -31,6 +32,7 @@ public class RegionController {
     private RegionService regionService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('READ')")
     public List<Region> getAllRegion() {
         System.out.println("Test");
         return regionService.getAll();

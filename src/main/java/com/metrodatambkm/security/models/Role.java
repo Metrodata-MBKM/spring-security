@@ -19,11 +19,7 @@ public class Role {
 
     private String name;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
-    private List<AppUser> users;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Privilege> privileges;
 
     public Role(String name) {

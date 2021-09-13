@@ -25,23 +25,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
     
-    private AppUserRepository appUserRepository;
+    private AppUserRepository appUserDetailsRepository;  
     private EmailService emailService;
     
     @Autowired
-    public AppUserDetailsService(AppUserRepository userRepository, EmailService emailService) {
-        this.appUserRepository = userRepository;
+    public AppUserDetailsService(AppUserRepository appUserDetailsRepository, EmailService emailService) {
+        this.appUserDetailsRepository = appUserDetailsRepository;
         this.emailService = emailService;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String params)throws UsernameNotFoundException{
-        System.out.println(params);
-        User user = appUserRepository.findByUsername(params);
-        System.out.println(user);
+    public UserDetails loadUserByUsername(String parameter)throws UsernameNotFoundException{
+        User user = appUserDetailsRepository.findByUsernameOrEmployee_Email(parameter, parameter);
         return new AppUserDetails(user);
-    }
-
-    public AppUserDetailsService() {
     }
 }

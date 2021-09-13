@@ -6,6 +6,7 @@
 package com.mbkm.hr.models.credentials;
 
 import com.mbkm.hr.models.credentials.Role;
+import com.mbkm.hr.models.hrschemas.Employee;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
@@ -25,8 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "employee_id")
     private Integer id;
 
     @Column(name = "username", length = 50, unique = true)
@@ -35,19 +35,14 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email", length = 50, unique = true)
-    private String email;
-    
     @Column(name = "enabled")
     private boolean enabled = false;
-
-    @ManyToMany(fetch=FetchType.EAGER)
-    private Set<Role> roles;
     
-    public User(String username, String password, String email){
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.enabled = false;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Role> roles;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 }

@@ -5,6 +5,7 @@
  */
 package com.mbkm.hr.dtos;
 
+import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor 
 @NoArgsConstructor
 public class RegisterRequestDTO {
-    private String email, username, password;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private Date hireDate;
+    private Double salary;
+    private Double commissionPct;
+    private String job;
+    private Integer department;
+    private Integer manager;
+    private String username, password;
 }

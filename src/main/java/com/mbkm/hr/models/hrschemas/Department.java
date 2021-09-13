@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 @Setter
 public class Department {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
     private Integer id;
     
@@ -36,12 +37,12 @@ public class Department {
     
     @Nullable
     @ManyToOne
-    @JoinColumn(name = "manager_id")
-    private Manager manager;
+    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
+    private Employee manager;
     
 //    @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "location_id", nullable = false)
+    @JoinColumn(name = "location_id", referencedColumnName = "location_id", nullable = false)
     private Location location;
 
     @OneToMany(mappedBy = "department")

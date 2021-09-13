@@ -28,6 +28,6 @@ public class RegisterResponseDTO {
     }
 
     public RegisterResponseDTO generate(User user){
-        return new RegisterResponseDTO(user.getEmail(), user.getUsername());
+        return new RegisterResponseDTO(user.getEmployee().getEmail(), user.getUsername());
     }
 }

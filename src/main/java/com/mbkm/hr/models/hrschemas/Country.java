@@ -19,13 +19,15 @@ import java.util.Set;
 public class Country {
 
     @Id
-    @Column(name = "country_id", length = 4)
+    @Basic(optional = false)
+    @Column(name = "country_id")
     private String id;
-
-    @Column(name = "country_name", length = 35)
+    @Column(name = "country_name")
     private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "region_id", nullable = false)
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.LAZY)
+    private Set<Location> locations;
+    @JoinColumn(name = "region_id", referencedColumnName = "region_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Region region;
 }

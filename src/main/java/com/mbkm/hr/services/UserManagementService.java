@@ -17,7 +17,11 @@ import com.mbkm.hr.models.credentials.Privilege;
 import com.mbkm.hr.models.credentials.Role;
 import com.mbkm.hr.models.credentials.User;
 import com.mbkm.hr.models.credentials.VerificationToken;
+import com.mbkm.hr.models.hrschemas.Employee;
 import com.mbkm.hr.repositories.AppUserRepository;
+import com.mbkm.hr.repositories.DepartmentRepository;
+import com.mbkm.hr.repositories.EmployeeRepository;
+import com.mbkm.hr.repositories.JobRepository;
 import com.mbkm.hr.repositories.RoleRepository;
 import com.mbkm.hr.repositories.VerificationTokenRepository;
 import java.nio.charset.Charset;
@@ -43,6 +47,10 @@ public class UserManagementService {
     VerificationTokenRepository tokenRepository;
     PasswordEncoder encoder;
     ApplicationEventPublisher eventPublisher;
+    EmployeeRepository employeeRepository;
+    JobRepository jobRepository;
+    DepartmentRepository departmentRepository;
+
     
     @Autowired
     public UserManagementService(AppUserRepository appUserRepository, 
@@ -58,24 +66,35 @@ public class UserManagementService {
     }
     
     public RegisterResponseDTO register(RegisterRequestDTO request){
-        if(appUserRepository.findByUsername(request.getUsername()) != null){
-            throw new AlreadyExistExceptions("Username already exists");
-        }
-        
-        if(appUserRepository.findByEmail(request.getEmail()) != null){
-            throw new AlreadyExistExceptions("Email already exists");
-        }
+        if (appUserRepository.findByUsernameOrEmployee_Email(request.getUsername(), request.getEmail()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
+        } 
         
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR"));
+        
+        Employee newemployee = new Employee(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPhoneNumber(),
+                request.getHireDate(),
+                request.getSalary(),
+                request.getCommissionPct(),
+                jobRepository.getById(request.getJob()),
+                departmentRepository.getById(request.getDepartment()),
+                employeeRepository.getById(request.getManager())
+        );
+        
+        employeeRepository.save(newemployee);
         
         User user = new User(
                 null,
                 request.getUsername(),
                 encoder.encode(request.getPassword()),
-                request.getEmail(),
                 false,
-                roles);
+                roles,
+                newemployee);
         
         RegisterResponseDTO response = new RegisterResponseDTO()
                 .generate(appUserRepository.save(user));

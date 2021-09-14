@@ -5,31 +5,38 @@
  */
 package com.mbkm.hr.models;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- *
- * @author WahyuKu
- */
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class User {
-    
-    private Long id;
-    
+
+    @Id
+    @Column(name = "employee_id")
+    private Integer id;
+
+    @Column(name = "username", length = 50, unique = true)
     private String username;
-    
-    private String email;
-    
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "enabled")
+    private boolean enabled = false;
     
-    private List<String> authorities;
-    
-    private boolean active;
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Role> roles;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 }

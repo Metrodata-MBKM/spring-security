@@ -5,9 +5,9 @@
  */
 package com.mbkm.hr.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
-import lombok.NoArgsConstructor;
+import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author WahyuKu
  */
 public class AppUserDetails implements UserDetails {
-    
+
     private User user;
 
     public AppUserDetails(User user) {
@@ -26,12 +26,17 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getAuthorities()
-                .stream()
-                .map(auth -> new SimpleGrantedAuthority(auth.toUpperCase()))
-                .collect(Collectors.toList());
+        Set<Role> userRole = user.getRoles();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        
+        for (Role role : userRole) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+            for (Privilege privilege : role.getPrivileges()) {
+                authorities.add(new SimpleGrantedAuthority(privilege.getName().toUpperCase()));
+            }
+        }
+        return authorities;
     }
-
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -44,22 +49,22 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.isActive();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.isActive();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.isActive();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isActive();
+        return true;
     }
-    
+
 }

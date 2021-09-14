@@ -47,7 +47,7 @@ public class CountryController implements BaseController<Country, String> {
     }
 
     @Override
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public Country update(@PathVariable("id") String id, @RequestBody  Country country) {
         if (countryService.getById(id).isPresent()) {
             return countryService.save(country);

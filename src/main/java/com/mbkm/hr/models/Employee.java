@@ -60,7 +60,7 @@ public class Employee {
     private Department department;
     
     @JsonBackReference
-    @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "managerId", fetch = FetchType.EAGER)
     private Set<Employee> employees;
     
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
@@ -84,9 +84,6 @@ public class Employee {
         this.department = department;
         this.managerId = managerId;
     }
-    
-    
-
-    
+     
 
 }

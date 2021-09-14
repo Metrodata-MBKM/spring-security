@@ -1,8 +1,6 @@
 package com.mbkm.hr.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +23,11 @@ public class Country {
     private String id;
     @Column(name = "country_name")
     private String name;
-    @JsonBackReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.LAZY)
+    
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.EAGER)
     private Set<Location> locations;
+    
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Region region;

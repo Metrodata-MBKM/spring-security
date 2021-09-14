@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/employee")
-@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+
 public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Autowired

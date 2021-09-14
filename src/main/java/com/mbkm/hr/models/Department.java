@@ -40,7 +40,7 @@ public class Department {
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
     private Employee manager;
     
-//    @JsonManagedReference
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "location_id", nullable = false)
     private Location location;

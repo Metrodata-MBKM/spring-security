@@ -54,7 +54,6 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @PostMapping
     public Region save(@RequestBody Region region, Authentication authentication) {
-        System.out.println(authentication.getAuthorities().toString());
         if (regionService.getById(region.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
         } else {

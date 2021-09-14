@@ -54,10 +54,10 @@ public class Location {
     private String province;
 
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Country country;
     
     @JsonBackReference
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "location")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "location")
     private Set<Department> departments;
 }

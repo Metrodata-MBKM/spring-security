@@ -50,23 +50,23 @@ public class Employee {
     private Double commissionPct;
     
     @JsonBackReference
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
     private Set<Department> departments;
     
     @JoinColumn(name = "job_id", referencedColumnName = "job_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Job job;
     
     @JoinColumn(name = "department_id", referencedColumnName = "department_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Department department;
     
     @JsonBackReference
-    @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "managerId", fetch = FetchType.EAGER)
     private Set<Employee> employees;
     
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Employee managerId;
     
     @OneToOne(mappedBy = "employee")

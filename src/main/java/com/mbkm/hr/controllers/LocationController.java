@@ -25,7 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author loisceka
  */
 @RestController
-@RequestMapping("api/location")
+@RequestMapping("/location")
 public class LocationController implements BaseController<Location, Integer> {
 
     @Autowired
@@ -38,9 +38,9 @@ public class LocationController implements BaseController<Location, Integer> {
     @Override
     @GetMapping()
     public List<Location> getAll() {
-        if (locationService.getAll().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
-        }
+//        if (locationService.getAll().isEmpty()) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
+//        }
         return locationService.getAll();
     }
 

@@ -1,4 +1,4 @@
-package com.metrodatambkm.security.dtos;
+package com.metrodatambkm.security.dtos.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

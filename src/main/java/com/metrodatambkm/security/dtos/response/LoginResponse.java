@@ -1,4 +1,4 @@
-package com.metrodatambkm.security.dtos;
+package com.metrodatambkm.security.dtos.response;
 
 import com.metrodatambkm.security.entities.permission.Role;
 import lombok.AllArgsConstructor;

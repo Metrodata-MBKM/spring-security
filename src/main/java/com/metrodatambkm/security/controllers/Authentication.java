@@ -1,6 +1,10 @@
 package com.metrodatambkm.security.controllers;
 
-import com.metrodatambkm.security.dtos.*;
+import com.metrodatambkm.security.dtos.request.LoginRequest;
+import com.metrodatambkm.security.dtos.request.RegisterRequest;
+import com.metrodatambkm.security.dtos.response.ConfirmationResponse;
+import com.metrodatambkm.security.dtos.response.LoginResponse;
+import com.metrodatambkm.security.dtos.response.RegisterResponse;
 import com.metrodatambkm.security.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

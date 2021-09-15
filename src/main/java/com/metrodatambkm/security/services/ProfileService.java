@@ -1,8 +1,8 @@
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.dtos.ProfileRequest;
-import com.metrodatambkm.security.dtos.ProfileResponse;
-import com.metrodatambkm.security.entities.Profile;
+import com.metrodatambkm.security.dtos.request.ProfileRequest;
+import com.metrodatambkm.security.dtos.response.ProfileResponse;
+import com.metrodatambkm.security.entities.Employee;
 import com.metrodatambkm.security.entities.credentials.User;
 import com.metrodatambkm.security.exceptions.ResourceNotFoundException;
 import com.metrodatambkm.security.repositories.ProfileRepository;
@@ -21,36 +21,36 @@ public class ProfileService {
 
 
     public ProfileResponse getCurrentProfile(String name){
-        User user = userRepository.findByUsernameOrEmail(name, name);
+        User user = userRepository.findByUsernameOrEmployee_Email(name, name);
 
         if(repository.findByUser(user) == null){
-            throw new ResourceNotFoundException("Setup your profile first");
+            throw new ResourceNotFoundException("Setup your employee first");
         }
 
         return new ProfileResponse(repository.findByUser(user));
     }
 
     public ProfileResponse save(ProfileRequest request, String name){
-        User user = userRepository.findByUsernameOrEmail(name, name);
-        Profile profile = new Profile();
+        User user = userRepository.findByUsernameOrEmployee_Email(name, name);
+        Employee employee = new Employee();
 
         if(repository.findByUser(user) == null){
-            profile = new Profile(
+            employee = new Employee(
                     request.getFirstName(),
                     request.getLastName(),
                     request.getPhone(),
                     request.getBirthDate(),
                     user);
         }else{
-            profile = repository.findByUser(user);
-            profile.setFirstName(request.getFirstName());
-            profile.setLastName(request.getLastName());
-            profile.setBirthDate(request.getBirthDate());
-            profile.setPhone(request.getPhone());
-            profile.setUser(user);
+            employee = repository.findByUser(user);
+            employee.setFirstName(request.getFirstName());
+            employee.setLastName(request.getLastName());
+            employee.setHireDate(request.getBirthDate());
+            employee.setPhone(request.getPhone());
+            employee.setUser(user);
         }
 
-        return new ProfileResponse(repository.save(profile));
+        return new ProfileResponse(repository.save(employee));
 
     }
 }

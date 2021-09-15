@@ -1,16 +1,12 @@
 package com.metrodatambkm.security.controllers;
 
-import com.metrodatambkm.security.dtos.ProfileRequest;
-import com.metrodatambkm.security.dtos.ProfileResponse;
-import com.metrodatambkm.security.entities.Profile;
+import com.metrodatambkm.security.dtos.request.ProfileRequest;
+import com.metrodatambkm.security.dtos.response.ProfileResponse;
 import com.metrodatambkm.security.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/profile")

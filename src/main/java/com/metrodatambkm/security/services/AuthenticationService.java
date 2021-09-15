@@ -1,13 +1,16 @@
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.dtos.*;
+import com.metrodatambkm.security.dtos.request.LoginRequest;
+import com.metrodatambkm.security.dtos.request.RegisterRequest;
+import com.metrodatambkm.security.dtos.response.ConfirmationResponse;
+import com.metrodatambkm.security.dtos.response.LoginResponse;
+import com.metrodatambkm.security.dtos.response.RegisterResponse;
 import com.metrodatambkm.security.entities.credentials.User;
 import com.metrodatambkm.security.entities.credentials.VerificationToken;
 import com.metrodatambkm.security.entities.permission.Privilege;
 import com.metrodatambkm.security.entities.permission.Role;
 import com.metrodatambkm.security.events.OnRegistrationCompleteEvent;
 import com.metrodatambkm.security.exceptions.ResourceAlreadyExists;
-import com.metrodatambkm.security.exceptions.ResourceNotFoundException;
 import com.metrodatambkm.security.exceptions.UnauthorizedException;
 import com.metrodatambkm.security.repositories.RoleRepository;
 import com.metrodatambkm.security.repositories.UserRepository;
@@ -44,7 +47,7 @@ public class AuthenticationService {
             throw new ResourceAlreadyExists("Username already exists");
         }
 
-        if(userRepository.findByEmail(request.getEmail()) != null){
+        if(userRepository.findByEmployee_Email(request.getEmail()) != null){
             throw new ResourceAlreadyExists("Email already exists");
         }
 
@@ -55,7 +58,6 @@ public class AuthenticationService {
                 null,
                 request.getUsername(),
                 encoder.encode(request.getPassword()),
-                request.getEmail(),
                 false,
                 roles);
 
@@ -67,7 +69,7 @@ public class AuthenticationService {
     }
 
     public LoginResponse login(LoginRequest request){
-        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername());
+        User user = userRepository.findByUsernameOrEmployee_Email(request.getUsername(), request.getUsername());
 
         if(user == null) {
             throw new UnauthorizedException("User not found!");

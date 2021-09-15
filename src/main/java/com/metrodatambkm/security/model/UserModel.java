@@ -2,6 +2,7 @@ package com.metrodatambkm.security.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,34 +14,46 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-//@Data @AllArgsConstructor @NoArgsConstructor
+//@Data @AllArgsConstructor @NoArgsConstructor // kalau mau pakai ini, gaperlu bikin relasi ke entitas satunya
 public class UserModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
-    @Column(name = "username", length = 50, unique = true)
+    @NotNull
+    @Column(name = "username", length = 50, unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password")
+    @NotNull
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", length = 50, unique = true)
+    @NotNull
+    @Column(name = "email", length = 50, unique = true, nullable = false)
     private String email;
 
+    @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Set<RoleModel> role;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private VerificationToken verificationToken;
 
-    public Integer getId() {
+    @Column(name = "enabled")
+    private boolean enabled;
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,5 +87,21 @@ public class UserModel implements Serializable {
 
     public void setRole(Set<RoleModel> role) {
         this.role = role;
+    }
+
+    public VerificationToken getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(VerificationToken verificationToken) {
+        this.verificationToken = verificationToken;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

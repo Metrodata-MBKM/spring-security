@@ -22,8 +22,10 @@ public class AppUserDetails implements UserDetails {
         Collection<GrantedAuthority> authorities = new ArrayList<>(userRole.size());
 
         for (RoleModel role : userRole){
+            System.out.println(role.getName());
             authorities.add(new SimpleGrantedAuthority(role.getName()));
             for (PrivilegeModel privilege : role.getPrivilege()) {
+                System.out.println(privilege.getName());
                 authorities.add(new SimpleGrantedAuthority(privilege.getName()));
             }
         }

@@ -13,12 +13,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "role")
-//@Data @AllArgsConstructor @NoArgsConstructor
+//@Data @AllArgsConstructor @NoArgsConstructor // kalau mau pakai ini, gaperlu bikin relasi ke entitas satunya
 public class RoleModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", length = 50)
     private String name;
@@ -34,11 +34,11 @@ public class RoleModel implements Serializable {
     @JsonIgnore
     private Set<PrivilegeModel> privilege;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

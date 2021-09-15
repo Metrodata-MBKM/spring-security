@@ -1,5 +1,6 @@
 package com.mbkm.hr.controllers;
 
+import com.mbkm.hr.DTO.EmployeeDTO;
 import com.mbkm.hr.models.hr_schema.Employee;
 import com.mbkm.hr.services.EmployeeService;
 import com.mbkm.hr.services.JobService;
@@ -25,6 +26,11 @@ public class EmployeeController implements BaseController<Employee, Integer>{
     @GetMapping("")
     public List<Employee> getAll() {
         return employeeService.getAll();
+    }
+    
+    @GetMapping("/dto")
+    public List<EmployeeDTO> getAlle() {
+        return employeeService.getAlle();
     }
 
     @Override

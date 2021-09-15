@@ -1,6 +1,7 @@
 package com.mbkm.hr.models.hr_schema;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mbkm.hr.models.User;
 import lombok.Getter;
@@ -17,7 +18,9 @@ import lombok.AllArgsConstructor;
 @Table(name = "employees")
 @Getter
 @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,30 +53,30 @@ public class Employee {
     private Double commissionPct;
     
     @JsonBackReference
-    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
     private Set<Department> departments;
     
     @JoinColumn(name = "job_id", referencedColumnName = "job_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Job job;
     
     @JoinColumn(name = "department_id", referencedColumnName = "department_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
     
     @JsonBackReference
-    @OneToMany(mappedBy = "managerId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY)
     private Set<Employee> employees;
     
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Employee managerId;
     
     @OneToOne(mappedBy = "employee")
     @PrimaryKeyJoinColumn
     private User user;
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee managerId) {
+    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manageId) {
 //        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -84,6 +87,6 @@ public class Employee {
         this.commissionPct = commissionPct;
         this.job = job;
         this.department = department;
-        this.managerId = managerId;
+        this.managerId = manageId;
     }
 }

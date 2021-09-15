@@ -26,8 +26,8 @@ import org.springframework.web.server.ResponseStatusException;
  * @author loisceka
  */
 @RestController
-@RequestMapping("api/location")
-@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+@RequestMapping("/location")
+//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class LocationController implements BaseController<Location, Integer> {
 
     @Autowired
@@ -39,7 +39,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @GetMapping()
-    @PreAuthorize("hasAuthority('READ_DATA')")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Location> getAll() {
         if (locationService.getAll().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
@@ -49,7 +49,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('READ_DATA')")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
     public Location getById(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             return locationService.getById(id).get();
@@ -59,7 +59,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @PostMapping()
-    @PreAuthorize("hasAuthority('CREATE_DATA')")
+//    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Location save(@RequestBody Location location) {
         if (locationService.getById(location.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Data already exist !");
@@ -69,7 +69,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('EDIT_DATA')")
+//    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public Location update(@PathVariable("id") Integer id, @RequestBody Location location) {
         if (locationService.getById(id).isPresent()) {
             return locationService.save(location);
@@ -79,7 +79,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('DELETE_DATA')")
+//    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             locationService.delete(id);

@@ -6,7 +6,10 @@
 package com.mbkm.hr.models.hrschemas;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 
@@ -26,6 +29,7 @@ import org.springframework.lang.Nullable;
 @Data
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,12 +39,13 @@ public class Department {
     @Column(name = "department_name", length = 30)
     private String name;
     
+    @JsonBackReference
     @Nullable
     @ManyToOne
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
     private Employee manager;
     
-//    @JsonManagedReference
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "location_id", nullable = false)
     private Location location;

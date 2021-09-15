@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/country")
-@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class CountryController implements BaseController<Country, String> {
 
     @Autowired
@@ -24,14 +25,14 @@ public class CountryController implements BaseController<Country, String> {
 
     @Override
     @GetMapping
-    @PreAuthorize("hasAuthority('READ_DATA')")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Country> getAll() {
         return countryService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('READ_DATA')")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
     public Country getById(@PathVariable("id") String id) {
         try {
             return countryService.getById(id).get();
@@ -41,8 +42,8 @@ public class CountryController implements BaseController<Country, String> {
     }
 
     @Override
-    @PostMapping
-    @PreAuthorize("hasAuthority('CREATE_DATA')")
+    @PostMapping(path = "",consumes = { MediaType.APPLICATION_JSON_VALUE })
+//    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Country save(@RequestBody Country country) {
         if (countryService.getById(country.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
@@ -52,8 +53,8 @@ public class CountryController implements BaseController<Country, String> {
     }
 
     @Override
-    @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('EDIT_DATA')")
+    @PutMapping("/{id}")
+//    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public Country update(@PathVariable("id") String id, @RequestBody  Country country) {
         if (countryService.getById(id).isPresent()) {
             return countryService.save(country);
@@ -64,7 +65,7 @@ public class CountryController implements BaseController<Country, String> {
 
     @Override
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('DELETE_DATA')")
+//    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable("id") String id) {
         if (countryService.getById(id).isPresent()) {
             countryService.delete(id);

@@ -59,8 +59,8 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @PostMapping
 //    @PreAuthorize("hasAuthority('CREATE_DATA')")
-    public Region save(@RequestBody Region region, Authentication authentication) {
-        System.out.println(authentication.getAuthorities().toString());
+    public Region save(@RequestBody Region region) {
+//        System.out.println(authentication.getAuthorities().toString());
         if (regionService.getById(region.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
         } else {
@@ -89,10 +89,10 @@ public class RegionController implements BaseController<Region, Integer>{
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
     }
 
-    @Override
-    public Region save(Region object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//    @Override
+//    public Region save(Region object) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
 //    @Override
 //    public List<Region> getAll() {

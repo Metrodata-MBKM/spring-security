@@ -15,7 +15,10 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +34,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Job {
 
     @Id
@@ -45,9 +49,9 @@ public class Job {
 
     @Column(name = "max_salary")
     private double max_salary;
-
+    
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "job", fetch= FetchType.EAGER)
-    @JsonBackReference
     private Set<Employee> employee;
 
 }

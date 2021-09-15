@@ -6,14 +6,18 @@
 package com.mbkm.hr.dtos;
 
 import java.sql.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author hp
  */
 @Data
-public class RegisterDTO {
+@AllArgsConstructor 
+@NoArgsConstructor
+public class EmployeeRequestDTO {
     private Integer id;
     private String firstName;
     private String lastName;

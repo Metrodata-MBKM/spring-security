@@ -5,6 +5,7 @@
  */
 package com.mbkm.hr.models.credentials;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mbkm.hr.models.credentials.Role;
 import com.mbkm.hr.models.hrschemas.Employee;
 import java.util.List;
@@ -40,7 +41,8 @@ public class User {
     
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
-
+    
+//    @JsonBackReference
     @MapsId
     @OneToOne
     @JoinColumn(name = "employee_id")

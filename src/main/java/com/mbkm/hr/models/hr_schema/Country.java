@@ -25,11 +25,14 @@ public class Country {
     @Basic(optional = false)
     @Column(name = "country_id")
     private String id;
+    
     @Column(name = "country_name")
     private String name;
+    
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.LAZY)
     private Set<Location> locations;
+    
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Region region;

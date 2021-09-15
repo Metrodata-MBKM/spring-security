@@ -8,6 +8,7 @@ package com.mbkm.hr.DTO;
 import com.mbkm.hr.models.hr_schema.Employee;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,9 +16,9 @@ import lombok.NoArgsConstructor;
  *
  * @author Lenovo-PC
  */
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class EmployeeDTO {
-
+    Integer id;
     String firstName;
     String lastName;
     String email;
@@ -30,6 +31,7 @@ public class EmployeeDTO {
     String managerName;
 
     public EmployeeDTO(Employee e) {
+        id = e.getId();
         firstName = e.getFirstName();
         lastName = e.getLastName();
         email = e.getEmail();

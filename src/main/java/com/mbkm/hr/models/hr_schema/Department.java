@@ -37,12 +37,13 @@ public class Department {
     @Column(name = "department_name", length = 30)
     private String name;
     
+    @JsonBackReference
     @Nullable
     @ManyToOne
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
     private Employee manager;
     
-//    @JsonManagedReference
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "location_id", nullable = false)
     private Location location;

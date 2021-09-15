@@ -27,8 +27,7 @@ public class Region {
     @Column(name = "region_name",length = 25)
     private String name;
 
-//    @JsonBackReference
-    @JsonIgnore
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "region")
     private Set<Country> countries;
 }

@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -46,9 +47,9 @@ public class Job {
 
     @Column(name = "max_salary")
     private double max_salary;
-
+    
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "job", fetch= FetchType.EAGER)
-    @JsonBackReference
     private Set<Employee> employee;
 
 }

@@ -33,6 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.sql.Date;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -74,7 +75,7 @@ public class AuthenticationService {
                 request.getLastName(),
                 request.getEmail(),
                 request.getPhoneNumber(),
-                request.getHireDate(),
+                (Date) request.getHireDate(),
                 request.getSalary(),
                 request.getCommissionPct(),
                 jobRepository.getById(request.getJob()),
@@ -157,7 +158,7 @@ public class AuthenticationService {
             return new ConfirmationResponse(false, "Token invalid");
         } else if (verificationToken.getExpireDate().getTime() - cal.getTime().getTime() <= 0) {
             return new ConfirmationResponse(false, "Token Expired");
-        }
+        } 
 
         user.setEnabled(true);
         tokenRepository.delete(verificationToken);

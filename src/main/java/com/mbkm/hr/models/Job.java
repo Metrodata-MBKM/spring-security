@@ -9,12 +9,12 @@ package com.mbkm.hr.models;
  *
  * @author Asus
  */
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Set;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,11 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "jobs")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Job {
 
     @Id
@@ -37,12 +41,12 @@ public class Job {
     private String title;
 
     @Column(name = "min_salary")
-    private double min_salary;
+    private Double min_salary;
 
     @Column(name = "max_salary")
-    private double max_salary;
+    private Double max_salary;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "job", fetch= FetchType.EAGER)
     @JsonBackReference
+    @OneToMany(mappedBy = "job", fetch = FetchType.EAGER)
     private Set<Employee> employee;
 }

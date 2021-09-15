@@ -52,7 +52,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         //menginisialisasi email penerima, subjek, dan isi email
         String recipientAddress = user.getEmployee().getEmail();
         String subject = "[MBKM_HR] Verification Email ";
-        String confirmationUrl  = "http://localhost:8080/auth/confirm/" + token;
+        String confirmationUrl  = "http://localhost:8088/auth/confirm/" + token;
         String message = "<h1>Thankyou for registering, " + user.getUsername() +
                 "!</h1> <br> You are registered successfully, <br>" +
                 "Click the link to verify your email -> " +

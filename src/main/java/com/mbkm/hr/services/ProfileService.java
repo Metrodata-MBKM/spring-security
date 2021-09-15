@@ -35,7 +35,7 @@ public class ProfileService {
                 .department(user.getEmployee().getDepartment().getName())
                 .phoneNumber(user.getEmployee().getPhoneNumber())
                 .job(user.getEmployee().getJob().getTitle())
-                .manager(user.getEmployee().getManagerId() == null ? "" : user.getEmployee().getManagerId().getLastName()) 
+                .manager(user.getEmployee().getManager() == null ? "" : user.getEmployee().getManager().getLastName()) 
                 .build();
         
         return profile;

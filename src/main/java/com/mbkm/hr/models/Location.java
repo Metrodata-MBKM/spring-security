@@ -6,7 +6,9 @@
 package com.mbkm.hr.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -33,11 +35,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "location_id", length = 11)
     private Integer id;
 
@@ -53,11 +55,11 @@ public class Location {
     @Column(name = "state_province", length = 25)
     private String province;
 
-    @JoinColumn(name = "country_id", referencedColumnName = "country_id")
+    @JoinColumn(name = "country_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Country country;
-    
-    @JsonBackReference
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "location")
     private Set<Department> departments;
 }

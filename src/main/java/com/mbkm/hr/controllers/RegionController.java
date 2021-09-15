@@ -28,7 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/region")
-@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class RegionController implements BaseController<Region, Integer>{
     
     @Autowired
@@ -40,7 +40,7 @@ public class RegionController implements BaseController<Region, Integer>{
     
     @Override
     @GetMapping
-    @PreAuthorize("hasAuthority('READ_DATA')")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Region> getAll() {
         
         return regionService.getAll();
@@ -48,7 +48,7 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @Override
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('READ_DATA')")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
     public Region getById(@PathVariable("id") Integer id) {
         if(regionService.getById(id).isPresent()){
             return regionService.getById(id).get();
@@ -57,9 +57,9 @@ public class RegionController implements BaseController<Region, Integer>{
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CREATE_DATA')")
-    public Region save(@RequestBody Region region, Authentication authentication) {
-        System.out.println(authentication.getAuthorities().toString());
+//    @PreAuthorize("hasAuthority('CREATE_DATA')")
+    public Region save(@RequestBody Region region) {
+//        System.out.println(authentication.getAuthorities().toString());
         if (regionService.getById(region.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
         } else {
@@ -69,7 +69,7 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @Override
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('UPDATE_DATA')")
+//    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     public Region update(@PathVariable("id") Integer id, @RequestBody Region region) {
         if(regionService.getById(id).isPresent()){
             return regionService.save(region);
@@ -79,7 +79,7 @@ public class RegionController implements BaseController<Region, Integer>{
 
     @Override
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('DELETE_DATA')")
+//    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable("id") Integer id) {
         if(regionService.getById(id).isPresent()){
             regionService.delete(id);
@@ -87,10 +87,4 @@ public class RegionController implements BaseController<Region, Integer>{
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
     }
-
-    @Override
-    public Region save(Region object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

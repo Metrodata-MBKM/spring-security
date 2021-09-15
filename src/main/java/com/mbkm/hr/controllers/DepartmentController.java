@@ -28,8 +28,8 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/department")
-public class DepartmentController implements BaseController<Department, Integer>{
-    
+public class DepartmentController implements BaseController<Department, Integer> {
+
     @Autowired
     DepartmentService departmentService;
 
@@ -39,50 +39,49 @@ public class DepartmentController implements BaseController<Department, Integer>
 
     @Override
     @GetMapping
-    @ResponseBody
     public List<Department> getAll() {
         return departmentService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
-    public Department getById(Integer id) {
+    public Department getById(@PathVariable Integer id) {
         try {
             return departmentService.getById(id).get();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Department with ID: " + id + " Not Found");
         }
     }
 
     @Override
     @PostMapping
     public Department save(@RequestBody Department department) {
-//        return departmentService.save(department);
         if (departmentService.getById(department.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + department.getId() + " Is Already Exist");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Department with ID: " + department.getId() + " Is Already Exist");
         } else {
             return departmentService.save(department);
         }
     }
 
-//    @Override
-    @PatchMapping("/{id}")
+    @Override
+    @PutMapping("/{id}")
     public Department update(@PathVariable("id") Integer id, @RequestBody Department department) {
+        System.out.println(department.toString());
         if (departmentService.getById(id).isPresent()) {
             return departmentService.save(department);
         } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + department.getId() + " Not Found");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Department with ID: " + department.getId() + " Not Found");
         }
     }
 
-//    @Override
+    @Override
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Integer id) {
-        if (departmentService.delete(id)){
-            return ("Job with ID: " + id + "Deleted Successfully");
-        } else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
+        if (departmentService.delete(id)) {
+            return ("Department with ID: " + id + "Deleted Successfully");
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Department with ID: " + id + " Not Found");
         }
     }
-    
+
 }

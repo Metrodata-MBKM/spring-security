@@ -1,12 +1,12 @@
 package com.mbkm.hr.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import java.math.BigDecimal;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.sql.Date;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,9 @@ import lombok.AllArgsConstructor;
 @Table(name = "employees")
 @Getter
 @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,8 +40,7 @@ public class Employee {
     
     @Basic(optional = false)
     @Column(name = "hire_date")
-    @Temporal(TemporalType.DATE)
-    private java.util.Date hireDate;
+    private Date hireDate;
     
     @Basic(optional = false)
     @Column(name = "salary")
@@ -51,27 +52,31 @@ public class Employee {
     @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
     private Set<Department> departments;
     
+//    @JsonBackReference
     @JoinColumn(name = "job_id", referencedColumnName = "job_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Job job;
     
+//    @JsonBackReference
     @JoinColumn(name = "department_id", referencedColumnName = "department_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
     
-    @JsonBackReference
-    @OneToMany(mappedBy = "managerId", fetch = FetchType.EAGER)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY)
     private Set<Employee> employees;
     
-    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
     private Employee managerId;
     
+    @JsonBackReference
     @OneToOne(mappedBy = "employee")
     @PrimaryKeyJoinColumn
     private User user;
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee managerId) {
+    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manageId) {
 //        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -82,7 +87,21 @@ public class Employee {
         this.commissionPct = commissionPct;
         this.job = job;
         this.department = department;
-        this.managerId = managerId;
+        this.managerId = manageId;
+    }
+    
+    public Employee(Integer id,String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manageId) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.hireDate = hireDate;
+        this.salary = salary;
+        this.commissionPct = commissionPct;
+        this.job = job;
+        this.department = department;
+        this.managerId = manageId;
     }
      
 

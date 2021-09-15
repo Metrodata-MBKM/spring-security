@@ -1,6 +1,7 @@
 package com.mbkm.hr.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,17 +16,19 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Country {
-    
+
     @Id
     @Basic(optional = false)
     @Column(name = "country_id")
     private String id;
+    
     @Column(name = "country_name")
     private String name;
     
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.LAZY)
     private Set<Location> locations;
     
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")

@@ -1,15 +1,15 @@
 package com.mbkm.hr.controllers;
 
+import com.mbkm.hr.dtos.EmployeeRequestDTO;
+import com.mbkm.hr.dtos.EmployeeResponseDTO;
 import com.mbkm.hr.models.Employee;
 import com.mbkm.hr.services.EmployeeService;
-import com.mbkm.hr.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/employee")
@@ -18,6 +18,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Autowired
     EmployeeService employeeService;
+    private EmployeeRequestDTO employeeResponseDTO;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -27,6 +28,11 @@ public class EmployeeController implements BaseController<Employee, Integer>{
     @GetMapping("")
     public List<Employee> getAll() {
         return employeeService.getAll();
+    }
+    
+    @GetMapping("/dto")
+    public List<EmployeeResponseDTO> getAllEmployee() {
+        return employeeService.getAllEmployee();
     }
 
     @Override
@@ -38,6 +44,11 @@ public class EmployeeController implements BaseController<Employee, Integer>{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with ID: " + id + " Not Found");
         }
     }
+    
+    @GetMapping("/dto/{id}")
+    public EmployeeRequestDTO getByIdDTO(@PathVariable Integer id) {
+          return employeeService.getByIdEmployee(id);
+    }
 
     @Override
     @PostMapping
@@ -48,9 +59,18 @@ public class EmployeeController implements BaseController<Employee, Integer>{
             return employeeService.save(employee);
         }
     }
+    
+    
+    @PostMapping("/dto")
+    public EmployeeResponseDTO create(@RequestBody EmployeeRequestDTO employeeRequestDTO) {   
+            System.out.println(employeeRequestDTO.toString());
+            return employeeService.create(employeeRequestDTO);
+            
+    }
+   
 
     @Override
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public Employee update(@PathVariable("id") Integer id, @RequestBody Employee employee) {
         if (!employeeService.getById(id).isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with ID: " + employee.getId() + " Not Found");
@@ -58,6 +78,12 @@ public class EmployeeController implements BaseController<Employee, Integer>{
             return employeeService.save(employee);
         }
     }
+    
+    @PutMapping("/dto/{id}")
+    public EmployeeResponseDTO update(@PathVariable("id") Integer id, @RequestBody EmployeeRequestDTO employeeRequestDTO) {  
+            System.out.println(employeeRequestDTO.toString());
+            return employeeService.update(employeeRequestDTO);
+        }
 
     @Override
     @DeleteMapping

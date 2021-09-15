@@ -33,6 +33,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Location {
 
     @Id
@@ -52,7 +53,8 @@ public class Location {
 
     @Column(name = "state_province", length = 25)
     private String province;
-
+    
+    @JsonManagedReference
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Country country;

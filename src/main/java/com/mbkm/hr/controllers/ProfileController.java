@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/profile")
-@PreAuthorize("isAuthenticated()")
 public class ProfileController {
     
     private ProfileService profileService;

@@ -7,7 +7,7 @@ package com.mbkm.hr.models;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;

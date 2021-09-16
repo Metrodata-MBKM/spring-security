@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
-public class DepartmentRequest {
-    private Integer id;
+public class DepartmentRequest extends BaseRequest<Integer>{
     private String name;
     private Integer location;
     private Integer manager;

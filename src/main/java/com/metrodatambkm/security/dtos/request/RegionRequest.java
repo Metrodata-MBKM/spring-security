@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class RegionRequest {
-    private Integer id;
+public class RegionRequest extends BaseRequest<Integer> {
     private String name;
 }

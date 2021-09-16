@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class LocationRequest {
-    private Integer id;
+public class LocationRequest extends BaseRequest<Integer> {
     private String streetAddress;
     private String city;
     private String stateProvince;

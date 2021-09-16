@@ -1,6 +1,7 @@
 package com.metrodatambkm.security.services;
 
 import com.metrodatambkm.security.dtos.EntityResponse;
+import com.metrodatambkm.security.dtos.request.BaseRequest;
 import com.metrodatambkm.security.exceptions.ResourceNotFoundException;
 import com.metrodatambkm.security.services.interfaces.ConvertToEntity;
 import com.metrodatambkm.security.services.interfaces.ICRUDService;
@@ -9,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CRUDService<E, Req, Res, I> implements ICRUDService<E, Req, Res, I>, ConvertToEntity<E, Req> {
+public abstract class CRUDService<E, Req extends BaseRequest, Res, I> implements ICRUDService<E, Req, Res, I>, ConvertToEntity<E, Req> {
 
     JpaRepository<E, I> repository;
     EntityResponse<E, Res> response;
@@ -50,6 +51,7 @@ public abstract class CRUDService<E, Req, Res, I> implements ICRUDService<E, Req
         if(!repository.findById(id).isPresent()){
             throw new ResourceNotFoundException("ID Not Found!");
         }
+        req.setId(id);
         return response.create(repository.save(convert(req)));
     }
 

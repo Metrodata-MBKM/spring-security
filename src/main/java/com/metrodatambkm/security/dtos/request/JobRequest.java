@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
-public class JobRequest {
-    private Integer id;
+public class JobRequest extends BaseRequest<Integer>{
     private String name;
     private double minSalary;
     private double maxSalary;

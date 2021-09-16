@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface IBasicRestController<Req, Res, I>{
 
-    public ResponseEntity<APIResponse<List<Res>>> getAll();
-    public ResponseEntity<APIResponse<Res>> getById(@PathVariable I id);
-    public ResponseEntity<APIResponse<Res>> create(@RequestBody Req req);
-    public ResponseEntity<APIResponse<Res>> update(@PathVariable I id, @RequestBody Req req);
-    public ResponseEntity<APIResponse<String>> delete(@PathVariable I id);
+    public List<Res> getAll();
+    public Res getById(@PathVariable I id);
+    public Res create(@RequestBody Req req);
+    public Res update(@PathVariable I id, @RequestBody Req req);
+    public ResponseEntity<String> delete(@PathVariable I id);
 
 }

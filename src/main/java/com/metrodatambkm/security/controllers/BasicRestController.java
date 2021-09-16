@@ -15,62 +15,42 @@ public class BasicRestController<E, Req, Res, I> implements IBasicRestController
 
     @Override
     @GetMapping
-    public ResponseEntity<APIResponse<List<Res>>> getAll() {
+    public List<Res> getAll() {
 
         List<Res> result = service.getAll();
 
-        return ResponseEntity.ok(new APIResponse(
-                LocalDateTime.now(),
-                HttpStatus.OK.value(),
-                result
-        ));
+        return result;
     }
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<APIResponse<Res>> getById(@PathVariable  I id) {
+    public Res getById(@PathVariable  I id) {
         Res result = service.getById(id);
 
-        return ResponseEntity.ok(new APIResponse(
-                LocalDateTime.now(),
-                HttpStatus.OK.value(),
-                result
-        ));
+        return result;
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<APIResponse<Res>> create(@RequestBody Req req) {
+    public Res create(@RequestBody Req req) {
         Res result = service.create(req);
 
-        return ResponseEntity.ok(new APIResponse(
-                LocalDateTime.now(),
-                HttpStatus.OK.value(),
-                result
-        ));
+        return result;
     }
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<APIResponse<Res>> update(@PathVariable I id, @RequestBody Req req) {
+    public Res update(@PathVariable I id, @RequestBody Req req) {
         Res result = service.update(id, req);
 
-        return ResponseEntity.ok(new APIResponse(
-                LocalDateTime.now(),
-                HttpStatus.OK.value(),
-                result
-        ));
+        return result;
     }
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<APIResponse<String>> delete(@PathVariable I id) {
+    public ResponseEntity<String> delete(@PathVariable I id) {
 
         service.delete(id);
-
-        return ResponseEntity.ok(new APIResponse(
-                LocalDateTime.now(),
-                HttpStatus.OK.value()
-        ));
+        return ResponseEntity.ok("Deleted!");
     }
 }

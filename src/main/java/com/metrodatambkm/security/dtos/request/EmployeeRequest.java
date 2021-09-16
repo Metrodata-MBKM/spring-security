@@ -10,8 +10,7 @@ import java.sql.Date;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class EmployeeRequest{
-    private Integer id;
+public class EmployeeRequest extends BaseRequest<Integer>{
     private String firstName;
     private String lastName;
     private String email;

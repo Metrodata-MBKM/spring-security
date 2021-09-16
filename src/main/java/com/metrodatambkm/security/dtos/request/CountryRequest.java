@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class CountryRequest{
+public class CountryRequest extends BaseRequest<Integer>{
 
     RegionService regionService;
 
-    private Integer id;
     private String name;
     private Integer region;
 

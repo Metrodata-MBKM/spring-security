@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.services.ProfileDTO;
+import com.mbkm.hr.DTO.ProfileDTO;
 import com.mbkm.hr.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

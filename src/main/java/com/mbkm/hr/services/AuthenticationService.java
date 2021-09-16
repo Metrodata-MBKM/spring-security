@@ -68,6 +68,7 @@ public class AuthenticationService {
         if (userRepository.findByUsernameOrEmployee_Email(request.getUsername(), request.getEmail()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username or Email Has Already Exist");
         } 
+        System.out.println(request.getUsername());
 
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("OPERATOR")); //defaultrole

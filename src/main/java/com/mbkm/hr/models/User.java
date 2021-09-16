@@ -37,7 +37,7 @@ public class User {
 
     @Column(name = "enabled")
     private boolean enabled = false;
-    
+
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 

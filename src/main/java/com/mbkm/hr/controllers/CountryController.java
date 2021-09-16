@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/country")
-public class CountryController implements BaseController<Country, String> {
+public class CountryController implements BaseController<Country, Integer> {
 
     @Autowired
     CountryService countryService;
@@ -28,7 +28,7 @@ public class CountryController implements BaseController<Country, String> {
 
     @Override
     @GetMapping("/{id}")
-    public Country getById(@PathVariable("id") String id) {
+    public Country getById(@PathVariable("id") Integer id) {
         try {
             return countryService.getById(id).get();
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class CountryController implements BaseController<Country, String> {
 
     @Override
     @PatchMapping("/{id}")
-    public Country update(@PathVariable("id") String id, @RequestBody  Country country) {
+    public Country update(@PathVariable("id") Integer id, @RequestBody  Country country) {
         if (countryService.getById(id).isPresent()) {
             return countryService.save(country);
         } else {
@@ -58,7 +58,7 @@ public class CountryController implements BaseController<Country, String> {
 
     @Override
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") String id) {
+    public String delete(@PathVariable("id") Integer id) {
         if (countryService.getById(id).isPresent()) {
             countryService.delete(id);
             return "Delete Successfully!";

@@ -30,7 +30,7 @@ public class AppUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Role> userRole = user.getRoles();
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        
+
         for (Role role : userRole) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
             for (Privilege privilege : role.getPrivileges()) {
@@ -39,6 +39,7 @@ public class AppUserDetails implements UserDetails {
         }
         return authorities;
     }
+
     @Override
     public String getPassword() {
         return user.getPassword();

@@ -5,8 +5,6 @@
  */
 package com.mbkm.hr.DTO;
 
-import com.mbkm.hr.models.hr_schema.Department;
-import com.mbkm.hr.models.hr_schema.Job;
 import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,15 +16,16 @@ import lombok.NoArgsConstructor;
  * @author Lenovo-PC
  */
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
-public class EmployeeDTO {
+public class EmployeeRequestDTO {
     private Integer id;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
     private Date hireDate;
-    private Job job;
+    private String jobId;
     private Double salary;
     private Double commissionPct;
-    private Department department; 
+    private Integer managerId;
+    private Integer departmentId; 
 }

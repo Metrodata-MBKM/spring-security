@@ -5,6 +5,7 @@
  */
 package com.mbkm.hr.services;
 
+import com.mbkm.hr.DTO.ProfileDTO;
 import com.mbkm.hr.models.User;
 import com.mbkm.hr.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ProfileService {
                 .department(user.getEmployee().getDepartment().getName())
                 .phoneNumber(user.getEmployee().getPhoneNumber())
                 .job(user.getEmployee().getJob().getTitle())
-                .manager(user.getEmployee().getManagerId() == null ? "" : user.getEmployee().getManagerId().getLastName()) 
+                .manager(user.getEmployee().getManager()== null ? "" : user.getEmployee().getManager().getLastName()) 
                 .build();
         
         return profile;

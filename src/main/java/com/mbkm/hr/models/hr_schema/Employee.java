@@ -23,65 +23,62 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
     private Integer id;
-    
+
     @Column(name = "first_name")
     private String firstName;
-    
-    @Basic(optional = false)
+
     @Column(name = "last_name")
     private String lastName;
-    
-    @Basic(optional = false)
+
     @Column(name = "email")
     private String email;
-    
+
     @Column(name = "phone_number")
     private String phoneNumber;
-    
-    @Basic(optional = false)
+
     @Column(name = "hire_date")
     private Date hireDate;
-    
-    @Basic(optional = false)
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "job_id")
+    @ManyToOne
+    private Job job;
+
     @Column(name = "salary")
     private Double salary;
+
     @Column(name = "commission_pct")
     private Double commissionPct;
-    
-    @JsonBackReference
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
-    private Set<Department> departments;
-    
-//    @JsonBackReference
-    @JoinColumn(name = "job_id", referencedColumnName = "job_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Job job;
-    
-//    @JsonBackReference
-    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Department department;
-    
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY)
-    private Set<Employee> employees;
-    
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
-    private Employee managerId;
-    
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Employee manager;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "manager")
+    private Set<Department> departments;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
+    private Set<Employee> employees;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne(mappedBy = "employee")
     @PrimaryKeyJoinColumn
     private User user;
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manageId) {
-//        this.id = id;
+    public Employee(String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manager) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -91,10 +88,10 @@ public class Employee {
         this.commissionPct = commissionPct;
         this.job = job;
         this.department = department;
-        this.managerId = manageId;
+        this.manager = manager;
     }
-    
-    public Employee(Integer id,String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manageId) {
+
+    public Employee(Integer id, String firstName, String lastName, String email, String phoneNumber, Date hireDate, Double salary, Double commissionPct, Job job, Department department, Employee manager) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -105,6 +102,7 @@ public class Employee {
         this.commissionPct = commissionPct;
         this.job = job;
         this.department = department;
-        this.managerId = manageId;
+        this.manager = manager;
     }
+
 }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CountryService extends CRUDService<CountryRepository, Country, String> {
+public class CountryService extends CRUDService<CountryRepository, Country, Integer> {
     @Autowired
     public CountryService(CountryRepository countryRepository) {
         super.repository = countryRepository;

@@ -17,8 +17,11 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "roles")
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -29,4 +32,8 @@ public class Role {
 
     @ManyToMany
     private Set<Privilege> privileges;
+
+    public Role(String name) {
+        this.name = name;
+    }
 }

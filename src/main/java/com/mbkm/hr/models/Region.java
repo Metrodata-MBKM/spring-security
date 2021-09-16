@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,7 +41,12 @@ public class Region {
     @Column(name = "region_name", length = 25)
     private String name;
 
-    @JsonBackReference
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "region")
     private Set<Country> countries;
+
+    public Region(String name) {
+        this.name = name;
+    }
+
 }

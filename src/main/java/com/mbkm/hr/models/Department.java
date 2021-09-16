@@ -5,7 +5,8 @@
  */
 package com.mbkm.hr.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 /**
@@ -28,6 +31,11 @@ import org.springframework.lang.Nullable;
 @Entity
 @Table(name = "departments")
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Department {
 
     @Id
@@ -40,15 +48,20 @@ public class Department {
 
     @Nullable
     @ManyToOne
-    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
+    @JoinColumn(name = "manager_id")
     private Employee manager;
 
-//    @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "location_id", nullable = false)
+    @JoinColumn(name = "location_id", nullable = false, referencedColumnName = "location_id")
     private Location location;
 
     @OneToMany(mappedBy = "department")
-    @JsonBackReference
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Employee> employees;
+
+    public Department(String name, Employee manager, Location location) {
+        this.name = name;
+        this.manager = manager;
+        this.location = location;
+    }
 }

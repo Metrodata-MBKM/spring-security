@@ -5,8 +5,11 @@
  */
 package com.mbkm.hr.dto;
 
+import com.mbkm.hr.models.Department;
+import com.mbkm.hr.models.Job;
 import java.sql.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,17 +18,17 @@ import lombok.NoArgsConstructor;
  * @author loisceka
  */
 @Data @AllArgsConstructor @NoArgsConstructor
-public class RegisterRequest {
+@Builder
+public class EmployeeDTO {
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
     private Date hireDate;
+    private Job job;
+    private Double commisionPct;
+    private Department department;
     private Double salary;
-    private Double commissionPct;
-    private String job;
-    private Integer department;
-    private Integer manager;
-    private String username;
-    private String password;
+   
 }

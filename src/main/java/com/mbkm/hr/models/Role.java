@@ -33,4 +33,7 @@ public class Role {
     @ManyToMany
     private Set<Privilege> privileges;
 
+    public Role(String name) {
+        this.name = name;
+    }
 }

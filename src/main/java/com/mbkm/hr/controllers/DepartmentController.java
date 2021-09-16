@@ -10,15 +10,13 @@ import com.mbkm.hr.services.DepartmentService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,7 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/department")
-@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class DepartmentController implements BaseController<Department, Integer> {
 
     @Autowired
@@ -40,52 +38,52 @@ public class DepartmentController implements BaseController<Department, Integer>
 
     @Override
     @GetMapping
-    @PreAuthorize("hasAuthority('READ_DATA')")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Department> getAll() {
         return departmentService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('READ_DATA')")
-    public Department getById(Integer id) {
+//    @PreAuthorize("hasAuthority('READ_DATA')")
+    public Department getById(@PathVariable Integer id) {
         try {
             return departmentService.getById(id).get();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Department with ID: " + id + " Not Found");
         }
     }
 
     @Override
     @PostMapping
-    @PreAuthorize("hasAuthority('CREATE_DATA')")
+//    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Department save(@RequestBody Department department) {
-        if (departmentService.getById(department.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + department.getId() + " Is Already Exist");
-        } else {
+        if (departmentService.findByName(department.getName())) {
             return departmentService.save(department);
+        } else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Department with Name: " + department.getName() + " Is Already Exist");
         }
     }
 
     @Override
-    @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('UPDATE_DATA')")
+    @PutMapping("/{id}")
+//    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     public Department update(@PathVariable("id") Integer id, @RequestBody Department department) {
         if (departmentService.getById(id).isPresent()) {
             return departmentService.save(department);
         } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + department.getId() + " Not Found");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Department with ID: " + department.getId() + " Not Found");
         }
     }
 
     @Override
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('DELETE_DATA')")
+//    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public Department delete(@PathVariable Integer id) {
         if (departmentService.delete(id)) {
             return departmentService.getById(id).get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Department with ID: " + id + " Not Found");
         }
     }
 

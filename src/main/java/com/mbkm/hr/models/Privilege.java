@@ -26,4 +26,7 @@ public class Privilege {
     @Column(name = "name", length = 50)
     private String name;
 
+    public Privilege(String name) {
+        this.name = name;
+    }
 }

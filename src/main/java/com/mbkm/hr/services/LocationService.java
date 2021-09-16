@@ -8,7 +8,9 @@ package com.mbkm.hr.services;
 import com.mbkm.hr.models.Location;
 import com.mbkm.hr.repositories.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
@@ -21,5 +23,12 @@ public class LocationService extends CRUDService<LocationRepository, Location, I
     public LocationService(LocationRepository locationRepository) {
         super.repository = locationRepository;
     }
-
+    
+    public boolean findByCityName(String city) {
+        if (repository.findByCity(city) != null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data Already Exist..");
+        }
+        return true;
+    }
+    
 }

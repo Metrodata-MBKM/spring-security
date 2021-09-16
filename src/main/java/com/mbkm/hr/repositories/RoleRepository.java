@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
  * @author loisceka
  */
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Integer>{
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+
     Role findByName(String name);
 }

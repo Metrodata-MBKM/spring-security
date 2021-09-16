@@ -54,10 +54,10 @@ public class RegionController implements BaseController<Region, Integer> {
     @Override
     @PostMapping
     public Region save(@RequestBody Region region) {
-        if (regionService.getById(region.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
-        } else {
+        if (regionService.findByName(region.getName())) {
             return regionService.save(region);
+        } else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Region with Name: " + region.getName() + " Is Already Exist");
         }
     }
 

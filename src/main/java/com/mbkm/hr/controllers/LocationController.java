@@ -25,10 +25,10 @@ import org.springframework.web.server.ResponseStatusException;
  * @author loisceka
  */
 @RestController
-@RequestMapping("api/location")
+@RequestMapping("location")
 public class LocationController implements BaseController<Location, Integer> {
 
-    @Autowired
+  @Autowired
     private LocationService locationService;
 
     public LocationController(LocationService locationService) {

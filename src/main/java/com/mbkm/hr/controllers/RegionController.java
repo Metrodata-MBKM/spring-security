@@ -53,7 +53,7 @@ public class RegionController implements BaseController<Region, Integer>{
     }
 
     @PostMapping
-    public Region save(@RequestBody Region region, Authentication authentication) {
+    public Region save(@RequestBody Region region) {
         if (regionService.getById(region.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
         } else {
@@ -78,10 +78,5 @@ public class RegionController implements BaseController<Region, Integer>{
             return ("Region with ID: " + id + " Successfully deleted");
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
-    }
-
-    @Override
-    public Region save(Region object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

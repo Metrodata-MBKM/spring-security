@@ -36,6 +36,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public RegisterResponse register(@RequestBody RegisterRequest request){
+         System.out.println(request.toString());
         return authenticationService.register(request);
     }
     

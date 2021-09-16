@@ -112,7 +112,7 @@ public class EmployeeService extends CRUDService<EmployeeRepository, Employee, I
                 employees.getJob().getId(), 
                 employees.getSalary(), 
                 employees.getCommissionPct(), 
-                employees.getManagerId().getId(), 
+                employees.getManagerId().getId(),
                 employees.getDepartment().getId());
     }
        

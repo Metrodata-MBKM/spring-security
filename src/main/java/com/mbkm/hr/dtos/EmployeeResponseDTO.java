@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class EmployeeResponseDTO {
     
-    private Integer employeeId;
+    private Integer id;
     private String email;
     private String firstName;
     private String lastName;
@@ -31,7 +31,7 @@ public class EmployeeResponseDTO {
     private String managerName;
     
     public EmployeeResponseDTO(Employee e){
-        employeeId = e.getId();
+        id = e.getId();
         email = e.getEmail();
         firstName = e.getFirstName();
         lastName = e.getLastName();

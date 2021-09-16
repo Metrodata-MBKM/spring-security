@@ -86,9 +86,10 @@ public class EmployeeController implements BaseController<Employee, Integer>{
         }
 
     @Override
-    @DeleteMapping
-    public String delete(Integer id) {
-        if (employeeService.delete(id)) {
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Integer id) {
+        if (employeeService.getById(id).isPresent()) {
+            employeeService.delete(id);
             return ("Employee with ID: " + id + " Deleted Successfully");
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee ID: " + id + " Not Found");

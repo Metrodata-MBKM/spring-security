@@ -1,10 +1,12 @@
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.dto.EmployeeRequest;
+import com.metrodatambkm.security.dto.EmployeeRequestDTO;
 import com.metrodatambkm.security.dto.ProfileResponse;
 import com.metrodatambkm.security.models.credentials.AppUser;
 import com.metrodatambkm.security.models.credentials.ConfirmationToken;
+import com.metrodatambkm.security.models.hr_schema.Department;
 import com.metrodatambkm.security.models.hr_schema.Employee;
+import com.metrodatambkm.security.models.hr_schema.Job;
 import com.metrodatambkm.security.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,6 +31,9 @@ public class AppUserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder encoder;
+
+    @Autowired
+    private JobService jobService;
 
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, ConfirmationTokenService confirmationTokenService) {
@@ -88,18 +93,19 @@ public class AppUserService implements UserDetailsService {
         );
     }
 
-    public AppUser updateProfile(EmployeeRequest request) {
+    public AppUser updateProfile(EmployeeRequestDTO request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         AppUser appUser = appUserRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("User not found"));
+        Job job = jobService.findById(request.getJob());
         Employee employee = new Employee(
                 request.getFirstName(),
                 request.getLastName(),
                 request.getPhoneNumber(),
-                request.getDepartment(),
-                request.getJob(),
-                request.getManager()
+                new Department(request.getDepartment()),
+                job,
+                new Employee(request.getManager())
         );
         appUser.setEmployee(employee);
         return appUserRepository.save(appUser);

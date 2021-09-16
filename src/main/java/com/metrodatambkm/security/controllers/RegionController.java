@@ -7,14 +7,8 @@ package com.metrodatambkm.security.controllers;
 
 import com.metrodatambkm.security.models.hr_schema.Region;
 import com.metrodatambkm.security.services.RegionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,18 +17,35 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/region")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+//@PreAuthorize("hasAnyRole('ADMIN','USER')")
 public class RegionController {
-
-    Logger logger = LoggerFactory.getLogger(RegionController.class);
 
     @Autowired
     private RegionService regionService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('READ')")
+//    @PreAuthorize("hasAuthority('READ')")
     public List<Region> getAllRegion() {
-        System.out.println("Test");
         return regionService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public Region getRegion(@PathVariable("id") Long id) {
+        return regionService.getById(id);
+    }
+
+    @PostMapping
+    public Region save(@RequestBody Region region) {
+        return regionService.save(region);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteRegion(@PathVariable("id") Long id) {
+        regionService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public void updateRegion(@PathVariable("id") Long id,@RequestBody Region region) {
+        regionService.update(region);
     }
 }

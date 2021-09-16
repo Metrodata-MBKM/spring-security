@@ -6,10 +6,12 @@
 package com.metrodatambkm.security.controllers;
 
 import com.metrodatambkm.security.models.hr_schema.Job;
+import com.metrodatambkm.security.models.hr_schema.Region;
 import com.metrodatambkm.security.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Asus
@@ -19,5 +21,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class JobController {
 
     @Autowired
-    JobService jobService;
+    private JobService jobService;
+
+    @GetMapping
+    public List<Job> getAllJob() {
+        return jobService.getAll();
+    }
+
+    @PostMapping
+    public Job save(@RequestBody Job job) {
+        return jobService.save(job);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteJob(@PathVariable("id") Long id) {
+        jobService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public void updateJob(@PathVariable("id") Long id, @RequestBody Job job) {
+        jobService.update(job);
+    }
+
+    @GetMapping("/{id}")
+    public Job getJob(@PathVariable("id") Long id) {
+        return jobService.getById(id);
+    }
 }

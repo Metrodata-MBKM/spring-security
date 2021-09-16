@@ -5,22 +5,17 @@
  */
 package com.metrodatambkm.security.services;
 
-import com.metrodatambkm.security.controllers.RegionController;
 import com.metrodatambkm.security.models.hr_schema.Region;
 import com.metrodatambkm.security.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- *
  * @author Dony Tri P
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 public class RegionService {
 
     @Autowired
@@ -28,5 +23,21 @@ public class RegionService {
 
     public List<Region> getAll() {
         return regionRepository.findAll();
+    }
+
+    public Region save(Region region) {
+        return regionRepository.save(region);
+    }
+
+    public void delete(Long id) {
+        regionRepository.deleteById(id);
+    }
+
+    public void update(Region region) {
+        regionRepository.save(region);
+    }
+
+    public Region getById(Long id) {
+        return regionRepository.getById(id);
     }
 }

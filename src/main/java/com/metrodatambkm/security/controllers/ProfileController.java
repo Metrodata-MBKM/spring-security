@@ -1,6 +1,6 @@
 package com.metrodatambkm.security.controllers;
 
-import com.metrodatambkm.security.dto.EmployeeRequest;
+import com.metrodatambkm.security.dto.EmployeeRequestDTO;
 import com.metrodatambkm.security.dto.ProfileResponse;
 import com.metrodatambkm.security.models.credentials.AppUser;
 import com.metrodatambkm.security.services.AppUserService;
@@ -20,7 +20,7 @@ public class ProfileController {
     }
 
     @PutMapping
-    public AppUser updateProfile(@RequestBody EmployeeRequest request) {
+    public AppUser updateProfile(@RequestBody EmployeeRequestDTO request) {
         return userService.updateProfile(request);
     }
 }

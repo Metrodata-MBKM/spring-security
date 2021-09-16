@@ -8,8 +8,9 @@ package com.metrodatambkm.security.services;
 import com.metrodatambkm.security.models.hr_schema.Job;
 import com.metrodatambkm.security.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Asus
@@ -19,5 +20,29 @@ public class JobService {
 
 
     @Autowired
-    JobRepository jobRepository;
+    private JobRepository jobRepository;
+
+    public Job findById(Long job) {
+        return jobRepository.getById(job);
+    }
+
+    public List<Job> getAll() {
+        return jobRepository.findAll();
+    }
+
+    public Job save(Job job) {
+        return jobRepository.save(job);
+    }
+
+    public void delete(Long id) {
+        jobRepository.deleteById(id);
+    }
+
+    public void update(Job job) {
+        jobRepository.save(job);
+    }
+
+    public Job getById(Long id) {
+        return jobRepository.getById(id);
+    }
 }

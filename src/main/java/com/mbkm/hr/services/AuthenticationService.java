@@ -9,24 +9,10 @@ package com.mbkm.hr.services;
  *
  * @author Kevitha
  */
-import com.mbkm.hr.dtos.ConfirmationResponse;
-import com.mbkm.hr.dtos.LoginRequestDTO;
-import com.mbkm.hr.dtos.LoginResponseDTO;
-import com.mbkm.hr.dtos.RegisterRequest;
-import com.mbkm.hr.dtos.RegisterResponse;
+import com.mbkm.hr.dtos.*;
 import com.mbkm.hr.events.OnRegistrationCompleteEvent;
-import com.mbkm.hr.models.Employee;
-import com.mbkm.hr.models.Privilege;
-import com.mbkm.hr.models.User;
-import com.mbkm.hr.models.VerificationToken;
-import com.mbkm.hr.models.Role;
-import com.mbkm.hr.repositories.DepartmentRepository;
-import com.mbkm.hr.repositories.EmployeeRepository;
-import com.mbkm.hr.repositories.JobRepository;
-import com.mbkm.hr.repositories.RoleRepository;
-import com.mbkm.hr.repositories.UserRepository;
-import com.mbkm.hr.repositories.VerificationTokenRepository;
-import java.math.BigDecimal;
+import com.mbkm.hr.models.*;
+import com.mbkm.hr.repositories.*;
 import java.nio.charset.Charset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -75,7 +61,7 @@ public class AuthenticationService {
                 request.getLastName(),
                 request.getEmail(),
                 request.getPhoneNumber(),
-                (Date) request.getHireDate(),
+                request.getHireDate(),
                 request.getSalary(),
                 request.getCommissionPct(),
                 jobRepository.getById(request.getJob()),
@@ -92,8 +78,6 @@ public class AuthenticationService {
                 false,
                 roles,
                 newemployee);
-        
-        System.out.println("id: "+employeeRepository.findByFirstName(request.getFirstName()).getId());
         
         RegisterResponse response = new RegisterResponse().generate(userRepository.save(user));
         

@@ -57,4 +57,10 @@ public class Department {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Employee> employees;
 
+    public Department(String name, Employee manager, Location location) {
+        this.name = name;
+        this.manager = manager;
+        this.location = location;
+    }
+
 }

@@ -56,9 +56,7 @@ public class LocationController implements BaseController<Location, Integer> {
     @Override
     @PostMapping()
     public Location save(@RequestBody Location location) {
-        if (locationService.getById(location.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Data already exist !");
-        }
+        locationService.findByCity(location.getCity());
         return locationService.save(location);
     }
 

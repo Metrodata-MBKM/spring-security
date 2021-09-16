@@ -9,7 +9,7 @@ package com.mbkm.hr.dtos;
  *
  * @author Kevitha
  */
-import java.util.Date;
+import java.sql.Date;
 import javax.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;

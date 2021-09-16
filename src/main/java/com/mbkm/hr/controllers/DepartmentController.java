@@ -56,11 +56,8 @@ public class DepartmentController implements BaseController<Department, Integer>
     @Override
     @PostMapping
     public Department save(@RequestBody Department department) {
-        if (departmentService.getById(department.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Department with ID: " + department.getId() + " Is Already Exist");
-        } else {
-            return departmentService.save(department);
-        }
+        departmentService.findByName(department.getName());
+        return departmentService.save(department);
     }
 
     @Override

@@ -41,10 +41,10 @@ public class Job {
     private String title;
 
     @Column(name = "min_salary")
-    private Double min_salary;
+    private Double minSalary;
 
     @Column(name = "max_salary")
-    private Double max_salary;
+    private Double maxSalary;
 
     @JsonBackReference
     @OneToMany(mappedBy = "job", fetch = FetchType.EAGER)

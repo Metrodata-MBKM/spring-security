@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author Asus
  */
 @Repository
-public interface JobRepository extends JpaRepository<Job, String>{
-
+public interface JobRepository extends JpaRepository<Job, String> {
+    public Job findByTitle(String title);
 }

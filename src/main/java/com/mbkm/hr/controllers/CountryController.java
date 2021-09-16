@@ -39,16 +39,13 @@ public class CountryController implements BaseController<Country, Integer> {
     @Override
     @PostMapping
     public Country save(@RequestBody Country country) {
-        if (countryService.getById(country.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
-        } else {
-            return countryService.save(country);
-        }
+        countryService.findByName(country.getName());
+        return countryService.save(country);
     }
 
     @Override
     @PutMapping("/{id}")
-    public Country update(@PathVariable("id") Integer id, @RequestBody  Country country) {
+    public Country update(@PathVariable("id") Integer id, @RequestBody Country country) {
         if (countryService.getById(id).isPresent()) {
             return countryService.save(country);
         } else {

@@ -29,4 +29,10 @@ public class Region {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "region")
     private Set<Country> countries;
+
+    public Region(String name) {
+        this.name = name;
+    }
+    
+    
 }

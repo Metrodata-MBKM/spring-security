@@ -5,6 +5,8 @@
  */
 package com.mbkm.hr.controllers;
 
+import com.mbkm.hr.dtos.request.LocationRequestDTO;
+import com.mbkm.hr.dtos.response.LocationResponseDTO;
 import com.mbkm.hr.models.hrschemas.Location;
 import com.mbkm.hr.services.LocationService;
 import java.util.List;
@@ -46,6 +48,11 @@ public class LocationController implements BaseController<Location, Integer> {
         }
         return locationService.getAll();
     }
+    
+    @GetMapping("/dto")
+    public List<LocationResponseDTO> getAllLocation(){
+        return locationService.getAllLocation();
+    }
 
     @Override
     @GetMapping("/{id}")
@@ -53,6 +60,15 @@ public class LocationController implements BaseController<Location, Integer> {
     public Location getById(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             return locationService.getById(id).get();
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
+    }
+    
+    @GetMapping("/dto/{id}")
+//    @PreAuthorize("hasAuthority('READ_DATA')")
+    public LocationResponseDTO getByIdLocation(@PathVariable Integer id) {
+        if (locationService.getById(id).isPresent()) {
+            return locationService.getByIdLocation(id);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
     }
@@ -66,6 +82,12 @@ public class LocationController implements BaseController<Location, Integer> {
         }
         return locationService.save(location);
     }
+    
+    @PostMapping("/dto")
+    public LocationResponseDTO create(@RequestBody LocationRequestDTO locationRequestDTO){
+        System.out.println(locationRequestDTO.toString());
+        return locationService.create(locationRequestDTO);
+    }
 
     @Override
     @PutMapping("/{id}")
@@ -75,6 +97,13 @@ public class LocationController implements BaseController<Location, Integer> {
             return locationService.save(location);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
+    }
+    
+    @PutMapping("/dto/{id}")
+    public LocationResponseDTO update(@PathVariable("id") Integer id, 
+            @RequestBody LocationRequestDTO locationRequestDTO){
+        System.out.println(locationRequestDTO.toString());
+        return locationService.create(locationRequestDTO);
     }
 
     @Override

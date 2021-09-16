@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.dtos;
+package com.mbkm.hr.dtos.response;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class ProfileDTO {
+public class ProfileResponseDTO {
     private String username;
     private String email;
     private String firstName;

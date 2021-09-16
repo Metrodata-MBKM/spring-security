@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.events;
 
-import com.mbkm.hr.dtos.RegisterResponseDTO;
+import com.mbkm.hr.dtos.response.RegisterResponseDTO;
 import java.util.Locale;
 import org.springframework.context.ApplicationEvent;
 

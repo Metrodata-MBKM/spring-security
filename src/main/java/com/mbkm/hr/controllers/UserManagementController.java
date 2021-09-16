@@ -5,11 +5,11 @@
  */
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.dtos.ConfirmationResponseDTO;
-import com.mbkm.hr.dtos.LoginRequestDTO;
-import com.mbkm.hr.dtos.LoginResponseDTO;
-import com.mbkm.hr.dtos.RegisterRequestDTO;
-import com.mbkm.hr.dtos.RegisterResponseDTO;
+import com.mbkm.hr.dtos.response.ConfirmationResponseDTO;
+import com.mbkm.hr.dtos.request.LoginRequestDTO;
+import com.mbkm.hr.dtos.response.LoginResponseDTO;
+import com.mbkm.hr.dtos.request.RegisterRequestDTO;
+import com.mbkm.hr.dtos.response.RegisterResponseDTO;
 import com.mbkm.hr.events.OnRegistrationCompleteEvent;
 import com.mbkm.hr.repositories.AppUserRepository;
 import com.mbkm.hr.services.UserManagementService;

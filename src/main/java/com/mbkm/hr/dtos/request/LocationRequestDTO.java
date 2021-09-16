@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.dtos;
+package com.mbkm.hr.dtos.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,10 +13,14 @@ import lombok.NoArgsConstructor;
  *
  * @author hp
  */
-@Data 
+@Data
 @AllArgsConstructor 
 @NoArgsConstructor
-public class LoginRequestDTO {
-    String username;
-    String password;
+public class LocationRequestDTO {
+    private Integer id;
+    private String city;
+    private String postalCode;
+    private String province;
+    private String street;
+    private String countryId;
 }

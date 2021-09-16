@@ -1,7 +1,7 @@
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.dtos.EmployeeRequestDTO;
-import com.mbkm.hr.dtos.EmployeeResponseDTO;
+import com.mbkm.hr.dtos.request.EmployeeRequestDTO;
+import com.mbkm.hr.dtos.response.EmployeeResponseDTO;
 import com.mbkm.hr.models.hrschemas.Employee;
 import com.mbkm.hr.repositories.DepartmentRepository;
 import com.mbkm.hr.repositories.EmployeeRepository;
@@ -32,7 +32,10 @@ public class EmployeeService extends CRUDService<EmployeeRepository, Employee, I
         List<EmployeeResponseDTO> employeeDTO = new ArrayList<>();
         
         for (Employee employee : getAll()) {
-            employeeDTO.add(new EmployeeResponseDTO(employee));
+            employeeDTO.add(new EmployeeResponseDTO(employee, 
+                    employee.getJob(), 
+                    employee.getManagerId(), 
+                    employee.getDepartment()));
         }
         return employeeDTO;
     }
@@ -40,7 +43,7 @@ public class EmployeeService extends CRUDService<EmployeeRepository, Employee, I
     
     public EmployeeResponseDTO create(EmployeeRequestDTO employeeRequestDTO){
         Employee employee = new Employee(
-                null,
+                employeeRequestDTO.getId(),
                 employeeRequestDTO.getFirstName(),
                 employeeRequestDTO.getLastName(),
                 employeeRequestDTO.getEmail(),
@@ -48,15 +51,20 @@ public class EmployeeService extends CRUDService<EmployeeRepository, Employee, I
                 employeeRequestDTO.getHireDate(),
                 employeeRequestDTO.getSalary(),
                 employeeRequestDTO.getCommissionPct(),
-                jobRepository.getById(employeeRequestDTO.getJob()),
-                departmentRepository.getById(employeeRequestDTO.getDepartment()),
+                jobRepository.getById(employeeRequestDTO.getJobId()),
+                departmentRepository.getById(employeeRequestDTO.getDepartmentId()),
                 employeeRepository.getById(employeeRequestDTO.getManagerId())
         );
         System.out.println(employee.toString());
         Employee employeeResult = employeeRepository.save(employee);
         Employee employees = employeeRepository.getById(employeeResult.getId());
         
-        return new EmployeeResponseDTO(employees.getId(), 
+        return getByIdEmployee(employees.getId());
+    }
+    
+    public EmployeeResponseDTO getByIdEmployee(Integer id){
+        Employee employees = getById(id).get();
+        return new EmployeeResponseDTO(employees.getId(),
                 employees.getFirstName(), 
                 employees.getLastName(), 
                 employees.getEmail(), 
@@ -64,24 +72,9 @@ public class EmployeeService extends CRUDService<EmployeeRepository, Employee, I
                 employees.getHireDate(), 
                 employees.getSalary(), 
                 employees.getCommissionPct(), 
-                employees.getJob().getTitle(), 
-                employees.getManagerId().getFirstName(), 
-                employees.getDepartment().getName());
-    }
-    
-    public EmployeeRequestDTO getByIdEmployee(Integer id){
-        Employee employees = getById(id).get();
-        return new EmployeeRequestDTO(employees.getId(),
-                employees.getFirstName(), 
-                employees.getLastName(), 
-                employees.getEmail(), 
-                employees.getPhoneNumber(), 
-                employees.getHireDate(),
-                employees.getJob().getId(), 
-                employees.getSalary(), 
-                employees.getCommissionPct(), 
-                employees.getManagerId().getId(), 
-                employees.getDepartment().getId());
+                employees.getJob(), 
+                employees.getManagerId(), 
+                employees.getDepartment());
     }
     
 }

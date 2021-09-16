@@ -1,7 +1,7 @@
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.dtos.EmployeeRequestDTO;
-import com.mbkm.hr.dtos.EmployeeResponseDTO;
+import com.mbkm.hr.dtos.request.EmployeeRequestDTO;
+import com.mbkm.hr.dtos.response.EmployeeResponseDTO;
 import com.mbkm.hr.models.hrschemas.Employee;
 import com.mbkm.hr.services.EmployeeService;
 import com.mbkm.hr.services.JobService;
@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/employee")
-//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Autowired
@@ -33,6 +33,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
     }
     
     @GetMapping("/dto")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<EmployeeResponseDTO> getAllEmployee(){
         return employeeService.getAllEmployee();
     }
@@ -49,7 +50,8 @@ public class EmployeeController implements BaseController<Employee, Integer>{
     }
     
     @GetMapping("/dto/{id}")
-    public EmployeeRequestDTO getByIdEmployee(@PathVariable Integer id) {
+    @PreAuthorize("hasAuthority('READ_DATA')")
+    public EmployeeResponseDTO getByIdEmployee(@PathVariable Integer id) {
         try{
             return employeeService.getByIdEmployee(id);
         } catch (Exception e) {
@@ -69,6 +71,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
     }
     
     @PostMapping("/dto")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public EmployeeResponseDTO create(@RequestBody EmployeeRequestDTO employeeRequestDTO){
 //        if(employeeService.getById(employeeRequestDTO.getId()).isPresent()) {
 //            throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee with ID: " + employeeRequestDTO.getId() + " Is Already Exist");
@@ -80,6 +83,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
     }
     
     @PutMapping("/dto/{id}")
+    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public EmployeeResponseDTO update(@PathVariable("id") Integer id, 
             @RequestBody EmployeeRequestDTO employeeRequestDTO){
 //        if(!employeeService.getById(id).isPresent()) {
@@ -87,6 +91,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
 //        }else{
 //            return employeeService.create(employeeRequestDTO);
 //        }
+        System.out.println(employeeRequestDTO.toString());
         return employeeService.create(employeeRequestDTO);
     }
 
@@ -103,7 +108,7 @@ public class EmployeeController implements BaseController<Employee, Integer>{
 
     @Override
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('DELETE_DATA')")
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable("id") Integer id) {
         if (employeeService.getById(id).isPresent()) {
             employeeService.delete(id);

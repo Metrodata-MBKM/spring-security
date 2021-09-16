@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbkm.hr.dtos;
+package com.mbkm.hr.dtos.request;
 
 import java.sql.Date;
 import lombok.AllArgsConstructor;
@@ -14,19 +14,19 @@ import lombok.NoArgsConstructor;
  *
  * @author hp
  */
-@Data 
+@Data
 @AllArgsConstructor 
 @NoArgsConstructor
-public class RegisterRequestDTO {
+public class EmployeeRequestDTO {
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
     private Date hireDate;
+    private String jobId;
     private Double salary;
     private Double commissionPct;
-    private String job;
-    private Integer department;
     private Integer managerId;
-    private String username, password;
+    private Integer departmentId;
 }

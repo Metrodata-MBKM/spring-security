@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.controllers;
 
-import com.mbkm.hr.dtos.ProfileDTO;
+import com.mbkm.hr.dtos.response.ProfileResponseDTO;
 import com.mbkm.hr.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +30,7 @@ public class ProfileController {
     }
 
     @GetMapping
-    public ProfileDTO profile(Authentication auth){
+    public ProfileResponseDTO profile(Authentication auth){
         return profileService.profile(auth.getName());
     }
 }

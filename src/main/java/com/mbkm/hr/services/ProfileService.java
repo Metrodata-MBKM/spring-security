@@ -5,7 +5,7 @@
  */
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.dtos.ProfileDTO;
+import com.mbkm.hr.dtos.response.ProfileResponseDTO;
 import com.mbkm.hr.models.credentials.User;
 import com.mbkm.hr.repositories.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ public class ProfileService {
         this.userRepository = userRepository;
     }
 
-    public ProfileDTO profile(String name) {
+    public ProfileResponseDTO profile(String name) {
         User user = userRepository.findByUsernameOrEmployee_Email(name, name);
-        ProfileDTO profile = ProfileDTO 
+        ProfileResponseDTO profile = ProfileResponseDTO 
                 .builder()
                 .username(user.getUsername())
                 .email(user.getEmployee().getEmail())

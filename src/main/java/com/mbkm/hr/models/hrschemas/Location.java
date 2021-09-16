@@ -64,4 +64,23 @@ public class Location {
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "location")
     private Set<Department> departments;
+
+    public Location(String street, String postalCode, String city, String province, Country country) {
+        this.street = street;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.province = province;
+        this.country = country;
+    }
+
+    public Location(Integer id, String street, String postalCode, String city, String province, Country country) {
+        this.id = id;
+        this.street = street;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.province = province;
+        this.country = country;
+    }
+    
+    
 }

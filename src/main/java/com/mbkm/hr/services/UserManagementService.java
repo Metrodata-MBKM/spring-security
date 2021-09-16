@@ -5,11 +5,11 @@
  */
 package com.mbkm.hr.services;
 
-import com.mbkm.hr.dtos.ConfirmationResponseDTO;
-import com.mbkm.hr.dtos.LoginRequestDTO;
-import com.mbkm.hr.dtos.LoginResponseDTO;
-import com.mbkm.hr.dtos.RegisterRequestDTO;
-import com.mbkm.hr.dtos.RegisterResponseDTO;
+import com.mbkm.hr.dtos.response.ConfirmationResponseDTO;
+import com.mbkm.hr.dtos.request.LoginRequestDTO;
+import com.mbkm.hr.dtos.response.LoginResponseDTO;
+import com.mbkm.hr.dtos.request.RegisterRequestDTO;
+import com.mbkm.hr.dtos.response.RegisterResponseDTO;
 import com.mbkm.hr.events.OnRegistrationCompleteEvent;
 import com.mbkm.hr.exceptions.AlreadyExistExceptions;
 import com.mbkm.hr.exceptions.UnauthorizedExceptions;
@@ -120,9 +120,9 @@ public class UserManagementService {
             Set<Role> userRole = user.getRoles();
             Set<String> autho = new HashSet<>();
             for (Role role : userRole) {
-                autho.add(role.getName());
+                autho.add("ROLE_"+role.getName().toUpperCase());
                 for (Privilege privilege : role.getPrivileges()) {
-                    autho.add(privilege.getName());
+                    autho.add(privilege.getName().toUpperCase());
                 }
             }
             

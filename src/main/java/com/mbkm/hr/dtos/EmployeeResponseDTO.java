@@ -6,6 +6,7 @@
 package com.mbkm.hr.dtos;
 
 import com.mbkm.hr.models.Department;
+import com.mbkm.hr.models.Employee;
 import com.mbkm.hr.models.Job;
 import java.util.Date;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class EmployeeResponseDTO {
     private Double commissionPct;
     private Job job;
     private Department department;
+    private Employee manager;
     
 //    public EmployeeResponseDTO(Employee e){
 //        id=e.getId();
@@ -45,16 +47,4 @@ public class EmployeeResponseDTO {
 //        managerName=e.getManagerId().getFirstName();
 //        departmentName=e.getDepartment().getName();
 //    }
-    
-    //    private Integer id;
-//    private String firstName;
-//    private String lastName;
-//    private String email;
-//    private String phoneNumber;
-//    private Double salary;
-//    private Double commissionPct;
-//    private Date hireDate;
-//    private String jobTitle;
-//    private String managerName;
-//    private String departmentName;
 }

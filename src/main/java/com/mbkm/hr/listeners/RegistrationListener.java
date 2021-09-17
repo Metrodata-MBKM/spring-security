@@ -49,7 +49,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
 
-        //menginisialisasi email penerima, subjek, dan isi email
+        //iinisialisasi email penerima, subjek, dan isi email
         String recipientAddress = user.getEmployee().getEmail();
         String subject = "[MBKM_HR] Verification Email ";
         String confirmationUrl  = "http://localhost:8080/auth/confirm/" + token;

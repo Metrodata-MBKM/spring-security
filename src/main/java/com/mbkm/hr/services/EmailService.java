@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailService {
     
-    //menerapkan kelas JavaMailSender
+    //penerapan kelas JavaMailSender
     @Autowired
     private JavaMailSender emailSender;
     

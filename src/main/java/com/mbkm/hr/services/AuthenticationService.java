@@ -93,7 +93,7 @@ public class AuthenticationService {
                 roles,
                 newemployee);
         
-        System.out.println("id: "+employeeRepository.findByFirstName(request.getFirstName()).getId());
+//        System.out.println("id: "+employeeRepository.findByFirstName(request.getFirstName()).getId());
         
         RegisterResponse response = new RegisterResponse().generate(userRepository.save(user));
         

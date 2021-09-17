@@ -20,6 +20,7 @@ import java.util.Set;
 public class Country {  
    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "country_id", length = 3)
     private Integer id;
 
@@ -33,4 +34,9 @@ public class Country {
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Region region;
+
+    public Country(String name, Region region) {
+        this.name = name;
+        this.region = region;
+    }
 }

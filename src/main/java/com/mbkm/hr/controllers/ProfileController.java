@@ -34,6 +34,4 @@ public class ProfileController {
     public ProfileDTO profile(Authentication auth){
         return profileService.profile(auth.getName());
     }
-    
-    
 }

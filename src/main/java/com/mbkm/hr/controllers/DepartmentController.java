@@ -5,6 +5,8 @@
  */
 package com.mbkm.hr.controllers;
 
+import com.mbkm.hr.dtos.request.DepartmentRequestDTO;
+import com.mbkm.hr.dtos.response.DepartmentResponseDTO;
 import com.mbkm.hr.models.hrschemas.Department;
 import com.mbkm.hr.services.DepartmentService;
 import java.util.List;
@@ -29,7 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/department")
-//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class DepartmentController implements BaseController<Department, Integer>{
     
     @Autowired
@@ -46,16 +48,31 @@ public class DepartmentController implements BaseController<Department, Integer>
     public List<Department> getAll() {
         return departmentService.getAll();
     }
+    
+    @GetMapping("/dto")
+    @PreAuthorize("hasAuthority('READ_DATA')")
+    public List<DepartmentResponseDTO> getAllDepartment(){
+        return departmentService.getAllDepartment();
+    }
 
     @Override
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('READ_DATA')")
-    public Department getById(Integer id) {
+    @PreAuthorize("hasAuthority('READ_DATA')")
+    public Department getById(@PathVariable Integer id) {
         try {
             return departmentService.getById(id).get();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }
+    }
+    
+    @GetMapping("/dto/{id}")
+    @PreAuthorize("hasAuthority('READ_DATA')")
+    public DepartmentResponseDTO getByIdDepartment(@PathVariable Integer id) {
+        if (departmentService.getById(id).isPresent()) {
+            return departmentService.getByIdDepartment(id);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
     }
 
     @Override
@@ -69,9 +86,24 @@ public class DepartmentController implements BaseController<Department, Integer>
             return departmentService.save(department);
         }
     }
+    
+    @PostMapping("/dto")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
+    public DepartmentRequestDTO create(@RequestBody DepartmentRequestDTO departmentRequestDTO){
+        System.out.println(departmentRequestDTO.toString());
+        return departmentService.create(departmentRequestDTO);
+    }
+    
+    @PutMapping("/dto/{id}")
+    @PreAuthorize("hasAuthority('EDIT_DATA')")
+    public DepartmentRequestDTO update(@PathVariable("id") Integer id, 
+            @RequestBody DepartmentRequestDTO departmentRequestDTO){
+        System.out.println(departmentRequestDTO.toString());
+        return departmentService.create(departmentRequestDTO);
+    }
 
 //    @Override
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
 //    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public Department update(@PathVariable("id") Integer id, @RequestBody Department department) {
         if (departmentService.getById(id).isPresent()) {
@@ -83,7 +115,7 @@ public class DepartmentController implements BaseController<Department, Integer>
 
 //    @Override
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('DELETE_DATA')")
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable Integer id) {
         if (departmentService.delete(id)){
             return ("Job with ID: " + id + "Deleted Successfully");

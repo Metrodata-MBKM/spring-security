@@ -18,6 +18,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 /**
@@ -29,6 +31,8 @@ import org.springframework.lang.Nullable;
 @Data
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Department {
     @Id
@@ -41,16 +45,32 @@ public class Department {
     
     @JsonBackReference
     @Nullable
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
     private Employee manager;
     
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id", referencedColumnName = "location_id", nullable = false)
     private Location location;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<Employee> employees;
+
+    public Department(Integer id, String name, Employee manager, Location location) {
+        this.id = id;
+        this.name = name;
+        this.manager = manager;
+        this.location = location;
+    }
+//
+//    public Department(String name, Employee manager, Location location) {
+//        this.name = name;
+//        this.manager = manager;
+//        this.location = location;
+//    }
+
+    
+    
 }

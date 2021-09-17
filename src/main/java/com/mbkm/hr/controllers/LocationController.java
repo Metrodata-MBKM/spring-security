@@ -25,11 +25,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
- * @author loisceka
+ * @author hp
  */
 @RestController
 @RequestMapping("/location")
-//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
 public class LocationController implements BaseController<Location, Integer> {
 
     @Autowired
@@ -50,6 +50,7 @@ public class LocationController implements BaseController<Location, Integer> {
     }
     
     @GetMapping("/dto")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<LocationResponseDTO> getAllLocation(){
         return locationService.getAllLocation();
     }
@@ -65,7 +66,7 @@ public class LocationController implements BaseController<Location, Integer> {
     }
     
     @GetMapping("/dto/{id}")
-//    @PreAuthorize("hasAuthority('READ_DATA')")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public LocationResponseDTO getByIdLocation(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             return locationService.getByIdLocation(id);
@@ -84,6 +85,7 @@ public class LocationController implements BaseController<Location, Integer> {
     }
     
     @PostMapping("/dto")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public LocationResponseDTO create(@RequestBody LocationRequestDTO locationRequestDTO){
         System.out.println(locationRequestDTO.toString());
         return locationService.create(locationRequestDTO);
@@ -100,6 +102,7 @@ public class LocationController implements BaseController<Location, Integer> {
     }
     
     @PutMapping("/dto/{id}")
+    @PreAuthorize("hasAuthority('EDIT_DATA')")
     public LocationResponseDTO update(@PathVariable("id") Integer id, 
             @RequestBody LocationRequestDTO locationRequestDTO){
         System.out.println(locationRequestDTO.toString());
@@ -108,7 +111,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('DELETE_DATA')")
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     public String delete(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             locationService.delete(id);

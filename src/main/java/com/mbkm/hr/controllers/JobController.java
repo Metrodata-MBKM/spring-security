@@ -10,6 +10,7 @@ import com.mbkm.hr.services.JobService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/job")
-//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR', 'EMPLOYEE')")
 public class JobController implements BaseController<Job, String> {
 
     @Autowired
@@ -38,14 +39,14 @@ public class JobController implements BaseController<Job, String> {
 
     @Override
     @GetMapping
-//    @PreAuthorize("hasAuthority('READ_DATA')")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Job> getAll() {
         return jobService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('READ_DATA')")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Job getById(@PathVariable(value = "id") String id) {
         try {
             return jobService.getById(id).get();
@@ -56,7 +57,7 @@ public class JobController implements BaseController<Job, String> {
 
     @Override
     @PostMapping
-//    @PreAuthorize("hasAuthority('CREATE_DATA')")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Job save(@RequestBody Job job) {
         if (jobService.getById(job.getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Job with ID: " + job.getId() + " Is Already Exist");
@@ -67,7 +68,7 @@ public class JobController implements BaseController<Job, String> {
 
     @Override
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAuthority('UPDATE_DATA')")
+    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     public Job update(@PathVariable("id") String id, @RequestBody Job job) {
         if (!jobService.getById(id).isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + job.getId() + " Not Found");
@@ -76,12 +77,20 @@ public class JobController implements BaseController<Job, String> {
         }
     }
 
-    @Override
+//    @Override
+//    @DeleteMapping("/{id}")
+//    public Job delete(@PathVariable(value = "id") String id) {
+//        if (jobService.delete(id)) {
+//            return jobService.getById(id).get();
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
+//        }
+//    }
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('DELETE_DATA')")
-    public Job delete(@PathVariable(value = "id") String id) {
+    public String delete(@PathVariable(value = "id") String id) {
         if (jobService.delete(id)) {
-            return jobService.getById(id).get();
+            return ("Job with ID: " + id + " Deleted Successfully");
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job with ID: " + id + " Not Found");
         }

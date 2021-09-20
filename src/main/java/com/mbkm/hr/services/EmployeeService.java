@@ -8,6 +8,7 @@ package com.mbkm.hr.services;
 import com.mbkm.hr.dto.EmployeeDTO;
 import com.mbkm.hr.models.Employee;
 import com.mbkm.hr.repositories.EmployeeRepository;
+import com.mbkm.hr.repositories.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class EmployeeService {
 
     private EmployeeRepository employeeRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public EmployeeService(EmployeeRepository employeeRepository) {

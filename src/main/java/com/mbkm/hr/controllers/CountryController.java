@@ -10,6 +10,7 @@ import com.mbkm.hr.services.CountryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/country")
-//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR', 'EMPLOYEE')")
 public class CountryController implements BaseController<Country, Integer> {
 
     @Autowired
@@ -38,14 +39,14 @@ public class CountryController implements BaseController<Country, Integer> {
 
     @Override
     @GetMapping
-//    @PreAuthorize("hasAuthority('READ_DATA')")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Country> getAll() {
         return countryService.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('READ_DATA')")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Country getById(@PathVariable("id") Integer id) {
         try {
             return countryService.getById(id).get();
@@ -56,18 +57,16 @@ public class CountryController implements BaseController<Country, Integer> {
 
     @Override
     @PostMapping
-//    @PreAuthorize("hasAuthority('CREATE_DATA')")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Country save(@RequestBody Country country) {
-        if (countryService.findByName(country.getName())) {
-            return countryService.save(country);
-        } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Country with Name: " + country.getName() + " Is Already Exist");
-        }
+        countryService.findByName(country.getName());
+        return countryService.save(country);
+
     }
 
     @Override
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAuthority('UPDATE_DATA')")
+    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     public Country update(@PathVariable("id") Integer id, @RequestBody Country country) {
         if (countryService.getById(id).isPresent()) {
             return countryService.save(country);
@@ -76,13 +75,22 @@ public class CountryController implements BaseController<Country, Integer> {
         }
     }
 
+//    @Override
+//    @DeleteMapping("/{id}")
+//    public Country delete(@PathVariable("id") Integer id) {
+//        if (countryService.getById(id).isPresent()) {
+//            countryService.delete(id);
+//            return countryService.getById(id).get();
+//        }
+//        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found");
+//    }
     @Override
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('DELETE_DATA')")
-    public Country delete(@PathVariable("id") Integer id) {
+    public String delete(@PathVariable("id") Integer id) {
         if (countryService.getById(id).isPresent()) {
             countryService.delete(id);
-            return countryService.getById(id).get();
+            return "Delete Successfully!";
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found");
     }

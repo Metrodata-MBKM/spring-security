@@ -26,7 +26,7 @@ public class RegionService extends CRUDService<RegionRepository, Region, Integer
     
     public boolean findByName(String name) {
         if (repository.findByName(name) != null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data Already Exist..");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Data Already Exist..");
         }
         return true;
     }

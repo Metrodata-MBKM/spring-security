@@ -21,5 +21,6 @@ public interface BaseController<Object, ID> {
 
     Object update(ID id, Object object);
 
-    Object delete(ID id);
+    String delete(ID id);
+    
 }

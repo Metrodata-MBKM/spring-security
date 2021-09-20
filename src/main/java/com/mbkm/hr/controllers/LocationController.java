@@ -10,6 +10,7 @@ import com.mbkm.hr.services.LocationService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/location")
-//@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR', 'EMPLOYEE')")
 public class LocationController implements BaseController<Location, Integer> {
 
     @Autowired
@@ -38,7 +39,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @GetMapping()
-//    @PreAuthorize("hasAuthority('READ_DATA')")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public List<Location> getAll() {
         if (locationService.getAll().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
@@ -48,7 +49,7 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('READ_DATA')")
+    @PreAuthorize("hasAuthority('READ_DATA')")
     public Location getById(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             return locationService.getById(id).get();
@@ -58,18 +59,16 @@ public class LocationController implements BaseController<Location, Integer> {
 
     @Override
     @PostMapping()
-//    @PreAuthorize("hasAuthority('CREATE_DATA')")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     public Location save(@RequestBody Location location) {
-       if (locationService.findByCityName(location.getCity())) {
-            return locationService.save(location);
-        } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Location with Street Name: " + location.getStreet() + " Is Already Exist");
-        }
+        locationService.findByCityName(location.getCity());
+        return locationService.save(location);
+
     }
 
     @Override
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAuthority('UPDATE_DATA')")
+    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     public Location update(@PathVariable("id") Integer id, @RequestBody Location location) {
         if (locationService.getById(id).isPresent()) {
             return locationService.save(location);
@@ -77,13 +76,22 @@ public class LocationController implements BaseController<Location, Integer> {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
     }
 
+//    @Override
+//    @DeleteMapping("/{id}")
+//    public Location delete(@PathVariable Integer id) {
+//        if (locationService.getById(id).isPresent()) {
+//            locationService.delete(id);
+//            return locationService.getById(id).get();
+//        }
+//        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
+//    }
     @Override
+    @PreAuthorize("hasAuthority('DELETE_DATA')")
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('DELETE_DATA')")
-    public Location delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Integer id) {
         if (locationService.getById(id).isPresent()) {
             locationService.delete(id);
-            return locationService.getById(id).get();
+            return "ID: " + id + " Successfully deleted !";
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found !");
     }

@@ -26,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author loisceka
  */
 @RestController
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR', 'EMPLOYEE')")
 @RequestMapping("/region")
 public class RegionController implements BaseController<Region, Integer> {
 
@@ -50,15 +51,13 @@ public class RegionController implements BaseController<Region, Integer> {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
     }
-    
+
     @Override
     @PostMapping
     public Region save(@RequestBody Region region) {
-        if (regionService.findByName(region.getName())) {
-            return regionService.save(region);
-        } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Region with Name: " + region.getName() + " Is Already Exist");
-        }
+        regionService.findByName(region.getName());
+        return regionService.save(region);
+
     }
 
     @Override
@@ -70,12 +69,22 @@ public class RegionController implements BaseController<Region, Integer> {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
     }
 
+//    @Override
+//    @DeleteMapping("/{id}")
+//    public Region delete(@PathVariable("id") Integer id) {
+//        if (regionService.getById(id).isPresent()) {
+//            regionService.delete(id);
+//            return regionService.getById(id).get();
+//        }
+//        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
+//    }
     @Override
     @DeleteMapping("/{id}")
-    public Region delete(@PathVariable("id") Integer id) {
+//    @PreAuthorize("hasAuthority('DELETE_DATA')")
+    public String delete(@PathVariable("id") Integer id) {
         if (regionService.getById(id).isPresent()) {
             regionService.delete(id);
-            return regionService.getById(id).get();
+            return ("Region with ID: " + id + " Successfully deleted");
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
     }

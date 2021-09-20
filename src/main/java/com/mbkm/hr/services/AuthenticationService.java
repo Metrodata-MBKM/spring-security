@@ -71,7 +71,7 @@ public class AuthenticationService {
                 auth.getBytes(Charset.forName("US-ASCII"))
         );
 
-        String authHeader = "Basic " + new String(encodedAuth);
+        String authHeader = new String(encodedAuth);
         return authHeader;
     }
 
@@ -97,7 +97,7 @@ public class AuthenticationService {
         }
         Set<Role> roles = new HashSet<>();
         // GIVING DEFAULT ROLE
-        roles.add(roleRepository.findByName("OPERATOR"));
+        roles.add(roleRepository.findByName("EMPLOYEE"));
 
         Employee newemployee = new Employee(
                 request.getFirstName(),

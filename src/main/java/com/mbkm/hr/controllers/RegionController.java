@@ -27,58 +27,52 @@ import org.springframework.web.server.ResponseStatusException;
  * @author Dony Tri P
  */
 @RestController
+@PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR', 'EMPLOYEE')")
 @RequestMapping("/region")
-public class RegionController implements BaseController<Region, Integer>{
+public class RegionController {
+
+    private RegionService regionService;
     
     @Autowired
-    private RegionService regionService;
-
     public RegionController(RegionService regionService) {
         this.regionService = regionService;
     }
     
-    @Override
-    @GetMapping
-    public List<Region> getAll() {
-        
-        return regionService.getAll();
-    }
-
-    @Override
-    @GetMapping("/{id}")
-    public Region getById(@PathVariable("id") Integer id) {
-        if(regionService.getById(id).isPresent()){
-            return regionService.getById(id).get();
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
-    }
-
     @PostMapping
-    public Region save(@RequestBody Region region) {
-        if (regionService.getById(region.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate data!");
-        } else {
-            return regionService.save(region);
-        }
+    public Region insert(@RequestBody Region region){
+        regionService.findByName(region.getName());
+        return regionService.insertData(region);
+        
     }
-
-    @Override
     @PutMapping("/{id}")
-    public Region update(@PathVariable("id") Integer id, @RequestBody Region region) {
-        if(regionService.getById(id).isPresent()){
-            return regionService.save(region);
+    public Region update(@PathVariable Integer id, @RequestBody Region region){
+        try {
+            Region r = regionService.getById(id);
+            return regionService.updateData(id, region);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
-    }
-
-    @Override
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer id) {
-        if(regionService.getById(id).isPresent()){
-            regionService.delete(id);
-            return ("Region with ID: " + id + " Successfully deleted");
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
     }
     
+    @DeleteMapping("/{id}")
+    public Region delete(@PathVariable Integer id){
+        if(id != null){
+            return regionService.deleteData(id);
+        }
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
+    }
+    
+    @GetMapping("/{id}")
+    public Region getById(@PathVariable Integer id){
+        try {
+            return regionService.getById(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Data");
+        }
+    }
+    
+    @GetMapping
+    public List<Region> getAllReg(){
+        return regionService.getAllregion();
+    }
 }
